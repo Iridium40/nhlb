@@ -1,0 +1,62 @@
+import { Resend } from 'resend'
+import { BookingConfirmationEmail } from '../../emails/BookingConfirmation'
+import { CounselorNotificationEmail } from '../../emails/CounselorNotification'
+import { VirtualSessionInfoEmail } from '../../emails/VirtualSessionInfo'
+import type { Booking, Counselor, Client } from '@/types'
+
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY)
+}
+function from() { return process.env.RESEND_FROM_EMAIL! }
+function adminEmail() { return process.env.ADMIN_EMAIL! }
+
+export async function sendBookingConfirmation({
+  booking,
+  counselor,
+  client,
+}: {
+  booking: Booking
+  counselor: Counselor
+  client: Client
+}) {
+  await getResend().emails.send({
+    from: from(),
+    to: client.email,
+    subject: 'Your NHLB counseling session is confirmed',
+    react: BookingConfirmationEmail({ booking, counselor, client }),
+  })
+}
+
+export async function sendCounselorNotification({
+  booking,
+  counselor,
+  client,
+}: {
+  booking: Booking
+  counselor: Counselor
+  client: Client
+}) {
+  await getResend().emails.send({
+    from: from(),
+    to: adminEmail(),
+    subject: `New booking — ${client.first_name} ${client.last_name}`,
+    react: CounselorNotificationEmail({ booking, counselor, client }),
+  })
+}
+
+export async function sendVirtualSessionInfo({
+  booking,
+  counselor,
+  client,
+}: {
+  booking: Booking
+  counselor: Counselor
+  client: Client
+}) {
+  await getResend().emails.send({
+    from: from(),
+    to: client.email,
+    subject: `Your virtual session details — ${counselor.name}`,
+    react: VirtualSessionInfoEmail({ booking, counselor, client }),
+  })
+}

@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Dancing+Script:wght@600&family=Lato:wght@300;400;700&display=swap');
+
+:root {
+  --nhlb-red:         #B8311F;
+  --nhlb-red-dark:    #8B2015;
+  --nhlb-red-deep:    #6B1510;
+  --nhlb-red-hover:   #9E2919;
+  --nhlb-blush:       #D4A898;
+  --nhlb-blush-light: #F0E0D8;
+  --nhlb-cream:       #FDFAF8;
+  --nhlb-cream-dark:  #F5EDE8;
+  --nhlb-text:        #3D1A14;
+  --nhlb-muted:       #9A5A50;
+  --nhlb-border:      #E8D0C8;
+  --white:            #FFFFFF;
+}
+
+@layer base {
+  * { box-sizing: border-box; }
+  html { -webkit-font-smoothing: antialiased; }
+
+  body {
+    background-color: var(--nhlb-cream);
+    color: var(--nhlb-text);
+    font-family: 'Lato', ui-sans-serif, system-ui, sans-serif;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    color: var(--nhlb-red-dark);
+  }
+}
+
+/* ── Responsive: "Our New Home" section ── */
+@media (max-width: 768px) {
+  .nhlb-new-home-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .nhlb-new-home-grid img {
+    max-width: 100% !important;
+    height: 200px !important;
+    justify-self: stretch !important;
+  }
+}
+
+/* ── Radio card selected states ── */
+label:has(input[type="radio"]:checked) .service-type-option,
+label:has(input[type="radio"]:checked) .session-format-option {
+  border-color: var(--nhlb-red) !important;
+  background-color: var(--nhlb-red) !important;
+  color: white !important;
+}
+
+label:has(input[type="radio"]:checked) .service-type-option span,
+label:has(input[type="radio"]:checked) .session-format-option span {
+  color: white !important;
+}
+
+/* ── Utility classes ── */
+.font-display  { font-family: 'Cormorant Garamond', Georgia, serif; }
+.font-script   { font-family: 'Dancing Script', cursive; }
+.font-body     { font-family: 'Lato', ui-sans-serif, system-ui, sans-serif; }
+
+.text-brand        { color: var(--nhlb-red); }
+.text-brand-dark   { color: var(--nhlb-red-dark); }
+.text-brand-muted  { color: var(--nhlb-muted); }
+.bg-brand          { background-color: var(--nhlb-red); }
+.bg-brand-dark     { background-color: var(--nhlb-red-dark); }
+.bg-blush          { background-color: var(--nhlb-blush); }
+.bg-cream          { background-color: var(--nhlb-cream); }
+.border-brand      { border-color: var(--nhlb-border); }
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: var(--nhlb-red);
+  color: white;
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  padding: 0.875rem 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+.btn-primary:hover  { background-color: var(--nhlb-red-hover); }
+.btn-primary:active { transform: scale(0.99); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.input-brand {
+  width: 100%;
+  border: 1px solid var(--nhlb-border);
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  font-family: 'Lato', sans-serif;
+  color: var(--nhlb-text);
+  background: white;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+  outline: none;
+}
+.input-brand::placeholder { color: var(--nhlb-muted); opacity: 0.7; }
+.input-brand:focus {
+  border-color: var(--nhlb-red);
+  box-shadow: 0 0 0 3px rgba(184, 49, 31, 0.12);
+}
