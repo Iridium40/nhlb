@@ -20,17 +20,18 @@ export async function GET() {
     return NextResponse.json({ client: null })
   }
 
-  const { data: lastBooking } = await admin
-    .from('bookings')
-    .select('counselor_id, counselor:counselors(id, name, title, zoom_link, photo_url)')
-    .eq('client_id', client.id)
-    .eq('status', 'COMPLETED')
-    .order('scheduled_at', { ascending: false })
-    .limit(1)
-    .single()
+  let assignedCounselor = null
+  if (client.assigned_counselor_id) {
+    const { data } = await admin
+      .from('counselors')
+      .select('id, name, title, zoom_link, photo_url')
+      .eq('id', client.assigned_counselor_id)
+      .single()
+    assignedCounselor = data
+  }
 
   return NextResponse.json({
     client,
-    lastCounselor: lastBooking?.counselor ?? null,
+    assignedCounselor,
   })
 }

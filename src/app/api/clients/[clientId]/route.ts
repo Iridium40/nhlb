@@ -16,6 +16,16 @@ export async function GET(
 
   if (error) return NextResponse.json({ error: error.message }, { status: 404 })
 
+  let assignedCounselor = null
+  if (client.assigned_counselor_id) {
+    const { data } = await supabase
+      .from('counselors')
+      .select('id, name, title, photo_url')
+      .eq('id', client.assigned_counselor_id)
+      .single()
+    assignedCounselor = data
+  }
+
   const { data: bookings } = await supabase
     .from('bookings')
     .select('*, counselor:counselors(id, name, title)')
@@ -33,6 +43,7 @@ export async function GET(
 
   return NextResponse.json({
     client,
+    assignedCounselor,
     bookings: bookings ?? [],
     hipaaCompleted: intake?.completed_at != null,
     hipaaIntake: intake,
@@ -48,7 +59,7 @@ export async function PATCH(
   const supabase = createSupabaseAdminClient()
 
   const updates: Record<string, unknown> = {}
-  const fields = ['first_name', 'last_name', 'email', 'phone', 'service_type', 'brief_reason']
+  const fields = ['first_name', 'last_name', 'email', 'phone', 'service_type', 'brief_reason', 'assigned_counselor_id']
   for (const f of fields) {
     if (body[f] !== undefined) updates[f] = body[f]
   }

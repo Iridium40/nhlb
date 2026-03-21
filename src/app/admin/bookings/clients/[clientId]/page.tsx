@@ -5,6 +5,14 @@ import { useParams } from 'next/navigation'
 import { format } from 'date-fns'
 import type { Client, Booking, SessionNote, HipaaFormData } from '@/types'
 
+interface Counselor {
+  id: string
+  name: string
+  title: string | null
+  photo_url: string | null
+  is_active: boolean
+}
+
 const STATUS_STYLES: Record<string, React.CSSProperties> = {
   CONFIRMED: { backgroundColor: '#D1FAE5', color: '#065F46' },
   CANCELLED: { backgroundColor: '#FEE2E2', color: '#991B1B' },
@@ -78,9 +86,200 @@ function NoteEditor({ booking, clientId, existingNote, onSaved }: {
   )
 }
 
+function CounselorReassign({ client, assignedCounselor, onReassigned }: {
+  client: Client
+  assignedCounselor: Counselor | null
+  onReassigned: () => void
+}) {
+  const [counselors, setCounselors] = useState<Counselor[]>([])
+  const [showPicker, setShowPicker] = useState(false)
+  const [selectedId, setSelectedId] = useState(client.assigned_counselor_id ?? '')
+  const [saving, setSaving] = useState(false)
+
+  useEffect(() => {
+    if (showPicker && counselors.length === 0) {
+      fetch('/api/counselors').then(r => r.json()).then(j => setCounselors(j.counselors ?? []))
+    }
+  }, [showPicker, counselors.length])
+
+  const save = async () => {
+    if (selectedId === (client.assigned_counselor_id ?? '')) {
+      setShowPicker(false)
+      return
+    }
+    setSaving(true)
+    await fetch(`/api/clients/${client.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ assigned_counselor_id: selectedId || null }),
+    })
+    setSaving(false)
+    setShowPicker(false)
+    onReassigned()
+  }
+
+  return (
+    <div style={{
+      background: 'white', border: '1px solid var(--nhlb-border)',
+      borderRadius: 12, padding: '24px', marginBottom: 24,
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: assignedCounselor ? 16 : 0 }}>
+        <h3 style={{
+          fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem',
+          fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0,
+        }}>
+          Assigned Counselor
+        </h3>
+        <button onClick={() => { setShowPicker(!showPicker); setSelectedId(client.assigned_counselor_id ?? '') }} style={{
+          background: 'none', border: '1px solid var(--nhlb-border)', borderRadius: 6,
+          padding: '6px 14px', cursor: 'pointer', fontFamily: 'Lato, sans-serif',
+          fontSize: '0.75rem', fontWeight: 700, color: 'var(--nhlb-red)',
+        }}>
+          {showPicker ? 'Cancel' : assignedCounselor ? 'Reassign' : 'Assign'}
+        </button>
+      </div>
+
+      {assignedCounselor && !showPicker && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <div style={{
+            width: 48, height: 48, borderRadius: '50%', overflow: 'hidden', flexShrink: 0,
+            backgroundColor: '#F3F4F6', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            border: '2px solid var(--nhlb-blush-light)',
+          }}>
+            {assignedCounselor.photo_url ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img src={assignedCounselor.photo_url} alt={assignedCounselor.name}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
+              </svg>
+            )}
+          </div>
+          <div>
+            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0 }}>
+              {assignedCounselor.name}
+            </p>
+            {assignedCounselor.title && (
+              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: 0 }}>
+                {assignedCounselor.title}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {!assignedCounselor && !showPicker && (
+        <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', margin: '12px 0 0', fontStyle: 'italic' }}>
+          No counselor assigned yet. This client can book with any available counselor.
+        </p>
+      )}
+
+      {showPicker && (
+        <div style={{ marginTop: 12 }}>
+          {counselors.length === 0 ? (
+            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)' }}>Loading counselors...</p>
+          ) : (
+            <>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 16 }}>
+                {counselors.filter(c => c.is_active).map(c => {
+                  const isSelected = selectedId === c.id
+                  return (
+                    <button
+                      key={c.id}
+                      onClick={() => setSelectedId(c.id)}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 12,
+                        padding: '12px 16px', borderRadius: 10, cursor: 'pointer',
+                        border: isSelected ? '2px solid var(--nhlb-red)' : '1px solid var(--nhlb-border)',
+                        background: isSelected ? 'var(--nhlb-cream)' : 'white',
+                        textAlign: 'left', transition: 'all 0.12s',
+                      }}
+                    >
+                      <div style={{
+                        width: 40, height: 40, borderRadius: '50%', overflow: 'hidden', flexShrink: 0,
+                        backgroundColor: '#F3F4F6', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        border: isSelected ? '2px solid var(--nhlb-red)' : '1px solid var(--nhlb-blush-light)',
+                      }}>
+                        {c.photo_url ? (
+                          /* eslint-disable-next-line @next/next/no-img-element */
+                          <img src={c.photo_url} alt={c.name}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        ) : (
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
+                          </svg>
+                        )}
+                      </div>
+                      <div>
+                        <p style={{ fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem', color: 'var(--nhlb-text)', margin: 0 }}>
+                          {c.name}
+                        </p>
+                        {c.title && (
+                          <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)', margin: 0 }}>
+                            {c.title}
+                          </p>
+                        )}
+                      </div>
+                      {isSelected && (
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--nhlb-red)" strokeWidth="2.5"
+                          strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: 'auto' }}>
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      )}
+                    </button>
+                  )
+                })}
+
+                <button
+                  onClick={() => setSelectedId('')}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 12,
+                    padding: '12px 16px', borderRadius: 10, cursor: 'pointer',
+                    border: selectedId === '' ? '2px solid var(--nhlb-red)' : '1px solid var(--nhlb-border)',
+                    background: selectedId === '' ? 'var(--nhlb-cream)' : 'white',
+                    textAlign: 'left', transition: 'all 0.12s',
+                  }}
+                >
+                  <div style={{
+                    width: 40, height: 40, borderRadius: '50%', flexShrink: 0,
+                    backgroundColor: 'var(--nhlb-cream-dark)', display: 'flex',
+                    alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <span style={{ fontSize: '1rem', color: 'var(--nhlb-muted)' }}>—</span>
+                  </div>
+                  <p style={{ fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem', color: 'var(--nhlb-muted)', margin: 0 }}>
+                    Unassign (allow any counselor)
+                  </p>
+                  {selectedId === '' && (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--nhlb-red)" strokeWidth="2.5"
+                      strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: 'auto' }}>
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  )}
+                </button>
+              </div>
+
+              <button onClick={save} disabled={saving} style={{
+                padding: '10px 24px', borderRadius: 8, border: 'none', cursor: 'pointer',
+                backgroundColor: 'var(--nhlb-red)', color: 'white',
+                fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.85rem',
+                opacity: saving ? 0.6 : 1, width: '100%',
+              }}>
+                {saving ? 'Saving...' : 'Save Assignment'}
+              </button>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function ClientDetailPage() {
   const { clientId } = useParams<{ clientId: string }>()
   const [client, setClient] = useState<Client | null>(null)
+  const [assignedCounselor, setAssignedCounselor] = useState<Counselor | null>(null)
   const [bookings, setBookings] = useState<Booking[]>([])
   const [notes, setNotes] = useState<SessionNote[]>([])
   const [hipaaCompleted, setHipaaCompleted] = useState(false)
@@ -98,6 +297,7 @@ export default function ClientDetailPage() {
     const clientJson = await clientRes.json()
     const notesJson = await notesRes.json()
     setClient(clientJson.client)
+    setAssignedCounselor(clientJson.assignedCounselor ?? null)
     setBookings(clientJson.bookings ?? [])
     setHipaaCompleted(clientJson.hipaaCompleted ?? false)
     setHipaaData(clientJson.hipaaIntake?.form_data ?? null)
@@ -205,6 +405,13 @@ export default function ClientDetailPage() {
             </div>
           )}
         </div>
+
+        {/* Assigned Counselor — with reassignment */}
+        <CounselorReassign
+          client={client}
+          assignedCounselor={assignedCounselor}
+          onReassigned={load}
+        />
 
         {/* HIPAA Intake Data */}
         {hipaaCompleted && hipaaData && (

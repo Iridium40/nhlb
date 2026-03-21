@@ -80,6 +80,14 @@ export async function POST(req: NextRequest) {
 
     if (bookingError) throw bookingError
 
+    // Assign counselor to client if not already assigned
+    if (client && !client.assigned_counselor_id) {
+      await supabase
+        .from('clients')
+        .update({ assigned_counselor_id: data.counselor_id })
+        .eq('id', clientId)
+    }
+
     // Record love offering in donations table for financial reporting
     if (data.donation_amount_cents > 0) {
       await supabase.from('donations').insert({

@@ -64,16 +64,17 @@ CREATE TABLE availability_slots (
 
 -- ── Clients ──
 CREATE TABLE clients (
-  id                UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  first_name        TEXT NOT NULL,
-  last_name         TEXT NOT NULL,
-  email             TEXT NOT NULL,
-  phone             TEXT,
-  service_type      TEXT NOT NULL,
-  brief_reason      TEXT,
-  supabase_user_id  UUID,
-  stripe_customer_id TEXT,
-  created_at        TIMESTAMPTZ DEFAULT NOW()
+  id                    UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  first_name            TEXT NOT NULL,
+  last_name             TEXT NOT NULL,
+  email                 TEXT NOT NULL,
+  phone                 TEXT,
+  service_type          TEXT NOT NULL,
+  brief_reason          TEXT,
+  supabase_user_id      UUID,
+  stripe_customer_id    TEXT,
+  assigned_counselor_id UUID REFERENCES counselors(id) ON DELETE SET NULL,
+  created_at            TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- ── Bookings ──

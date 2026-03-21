@@ -35,6 +35,7 @@ export interface Client {
   brief_reason: string | null
   supabase_user_id: string | null
   stripe_customer_id: string | null
+  assigned_counselor_id: string | null
   created_at: string
 }
 

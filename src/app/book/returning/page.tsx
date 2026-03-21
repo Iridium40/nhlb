@@ -50,7 +50,7 @@ function ReturningClientInner() {
   // Lookup
   const [email, setEmail] = useState('')
   const [client, setClient] = useState<Client | null>(null)
-  const [lastCounselor, setLastCounselor] = useState<Counselor | null>(null)
+  const [assignedCounselor, setAssignedCounselor] = useState<Counselor | null>(null)
   const [lookingUp, setLookingUp] = useState(false)
 
   useEffect(() => {
@@ -62,7 +62,7 @@ function ReturningClientInner() {
         if (json.client) {
           setClient(json.client)
           setEmail(json.client.email)
-          setLastCounselor(json.lastCounselor ?? null)
+          setAssignedCounselor(json.assignedCounselor ?? null)
           setStep('schedule')
         } else if (autoLogin) {
           setStep('lookup')
@@ -97,19 +97,19 @@ function ReturningClientInner() {
       return
     }
     setClient(json.clients[0])
-    setLastCounselor(json.lastCounselor ?? null)
+    setAssignedCounselor(json.assignedCounselor ?? null)
     setLookingUp(false)
     setStep('schedule')
   }
 
   const loadSlots = useCallback(async () => {
     setLoadingSlots(true)
-    const counselorParam = lastCounselor ? `&counselorId=${lastCounselor.id}` : ''
+    const counselorParam = assignedCounselor ? `&counselorId=${assignedCounselor.id}` : ''
     const res = await fetch(`/api/booking/availability?newClient=false${counselorParam}`)
     const json = await res.json()
     setSlots(json.slots ?? [])
     setLoadingSlots(false)
-  }, [lastCounselor])
+  }, [assignedCounselor])
 
   useEffect(() => {
     if (step === 'schedule') loadSlots()
@@ -158,15 +158,6 @@ function ReturningClientInner() {
     acc[key].push(slot)
     return acc
   }, {})
-
-  const groupByCounselor = (daySlots: TimeSlot[]) => {
-    const map: Record<string, TimeSlot[]> = {}
-    for (const s of daySlots) {
-      if (!map[s.counselorId]) map[s.counselorId] = []
-      map[s.counselorId].push(s)
-    }
-    return Object.values(map)
-  }
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)' }}>
@@ -236,7 +227,7 @@ function ReturningClientInner() {
             <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
               Welcome back, {client.first_name}!
             </h2>
-            {lastCounselor && (
+            {assignedCounselor && (
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
                 <div style={{
                   width: 40, height: 40, borderRadius: '50%', overflow: 'hidden',
@@ -244,9 +235,9 @@ function ReturningClientInner() {
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   border: '2px solid var(--nhlb-border)',
                 }}>
-                  {lastCounselor.photo_url ? (
+                  {assignedCounselor.photo_url ? (
                     /* eslint-disable-next-line @next/next/no-img-element */
-                    <img src={lastCounselor.photo_url} alt={lastCounselor.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src={assignedCounselor.photo_url} alt={assignedCounselor.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   ) : (
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -255,7 +246,7 @@ function ReturningClientInner() {
                   )}
                 </div>
                 <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', margin: 0 }}>
-                  Scheduling with <strong style={{ color: 'var(--nhlb-red-dark)' }}>{lastCounselor.name}</strong>
+                  Scheduling with <strong style={{ color: 'var(--nhlb-red-dark)' }}>{assignedCounselor.name}</strong>
                 </p>
               </div>
             )}
@@ -264,7 +255,7 @@ function ReturningClientInner() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 24 }}>
               {([
                 { v: 'IN_PERSON' as const, emoji: '🏠', label: 'In Person' },
-                { v: 'VIRTUAL' as const, emoji: '💻', label: 'Virtual', disabled: !lastCounselor?.zoom_link },
+                { v: 'VIRTUAL' as const, emoji: '💻', label: 'Virtual', disabled: !assignedCounselor?.zoom_link },
               ]).map(({ v, emoji, label, disabled }) => (
                 <button key={v} onClick={() => !disabled && setSessionType(v)}
                   disabled={disabled}
@@ -298,56 +289,27 @@ function ReturningClientInner() {
                       letterSpacing: '0.1em', textTransform: 'uppercase',
                       color: 'var(--nhlb-muted)', marginBottom: 10,
                     }}>{day}</p>
-                    {groupByCounselor(daySlots).map(counselorSlots => {
-                      const first = counselorSlots[0]
-                      return (
-                        <div key={first.counselorId} style={{ marginBottom: 14 }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-                            <div style={{
-                              width: 28, height: 28, borderRadius: '50%', overflow: 'hidden',
-                              backgroundColor: '#F3F4F6', flexShrink: 0,
-                              display: 'flex', alignItems: 'center', justifyContent: 'center',
-                              border: '1px solid var(--nhlb-border)',
-                            }}>
-                              {first.counselorPhotoUrl ? (
-                                /* eslint-disable-next-line @next/next/no-img-element */
-                                <img src={first.counselorPhotoUrl} alt={first.counselorName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                              ) : (
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                  <circle cx="12" cy="7" r="4" />
-                                </svg>
-                              )}
-                            </div>
-                            <span style={{
-                              fontFamily: 'Lato, sans-serif', fontSize: '0.8rem',
-                              fontWeight: 600, color: 'var(--nhlb-text)',
-                            }}>{first.counselorName}</span>
-                          </div>
-                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
-                            {counselorSlots.map(slot => (
-                              <button key={slot.start} onClick={() => selectSlot(slot)} style={{
-                                padding: '10px 4px', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-                                backgroundColor: 'white', fontFamily: 'Lato, sans-serif',
-                                fontSize: '0.8rem', color: 'var(--nhlb-text)', cursor: 'pointer', transition: 'all 0.12s',
-                              }}
-                              onMouseEnter={e => {
-                                (e.currentTarget).style.backgroundColor = 'var(--nhlb-red)'
-                                ;(e.currentTarget).style.color = 'white'
-                                ;(e.currentTarget).style.borderColor = 'var(--nhlb-red)'
-                              }}
-                              onMouseLeave={e => {
-                                (e.currentTarget).style.backgroundColor = 'white'
-                                ;(e.currentTarget).style.color = 'var(--nhlb-text)'
-                                ;(e.currentTarget).style.borderColor = 'var(--nhlb-border)'
-                              }}>
-                                {format(new Date(slot.start), 'h:mm a')}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )
-                    })}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
+                      {daySlots.map(slot => (
+                        <button key={slot.start} onClick={() => selectSlot(slot)} style={{
+                          padding: '10px 4px', border: '1px solid var(--nhlb-border)', borderRadius: 8,
+                          backgroundColor: 'white', fontFamily: 'Lato, sans-serif',
+                          fontSize: '0.8rem', color: 'var(--nhlb-text)', cursor: 'pointer', transition: 'all 0.12s',
+                        }}
+                        onMouseEnter={e => {
+                          (e.currentTarget).style.backgroundColor = 'var(--nhlb-red)'
+                          ;(e.currentTarget).style.color = 'white'
+                          ;(e.currentTarget).style.borderColor = 'var(--nhlb-red)'
+                        }}
+                        onMouseLeave={e => {
+                          (e.currentTarget).style.backgroundColor = 'white'
+                          ;(e.currentTarget).style.color = 'var(--nhlb-text)'
+                          ;(e.currentTarget).style.borderColor = 'var(--nhlb-border)'
+                        }}>
+                          {format(new Date(slot.start), 'h:mm a')}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 ))}
               </div>
