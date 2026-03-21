@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect, useCallback, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { format } from 'date-fns'
 import type { Client, Counselor, TimeSlot } from '@/types'
 
@@ -27,16 +27,54 @@ const S = {
 }
 
 export default function ReturningClientPage() {
+  return (
+    <Suspense fallback={
+      <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
+      </div>
+    }>
+      <ReturningClientInner />
+    </Suspense>
+  )
+}
+
+function ReturningClientInner() {
   const router = useRouter()
-  const [step, setStep] = useState<Step>('lookup')
+  const searchParams = useSearchParams()
+  const autoLogin = searchParams.get('auto') === '1'
+  const [step, setStep] = useState<Step>(autoLogin ? 'schedule' : 'lookup')
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [sessionChecked, setSessionChecked] = useState(false)
 
   // Lookup
   const [email, setEmail] = useState('')
   const [client, setClient] = useState<Client | null>(null)
   const [lastCounselor, setLastCounselor] = useState<Counselor | null>(null)
   const [lookingUp, setLookingUp] = useState(false)
+
+  useEffect(() => {
+    if (sessionChecked) return
+    const checkSession = async () => {
+      try {
+        const res = await fetch('/api/auth/client-session')
+        const json = await res.json()
+        if (json.client) {
+          setClient(json.client)
+          setEmail(json.client.email)
+          setLastCounselor(json.lastCounselor ?? null)
+          setStep('schedule')
+        } else if (autoLogin) {
+          setStep('lookup')
+        }
+      } catch {
+        if (autoLogin) setStep('lookup')
+      } finally {
+        setSessionChecked(true)
+      }
+    }
+    checkSession()
+  }, [autoLogin, sessionChecked])
 
   // Schedule
   const [sessionType, setSessionType] = useState<'IN_PERSON' | 'VIRTUAL'>('IN_PERSON')
