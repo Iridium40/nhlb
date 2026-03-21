@@ -293,6 +293,34 @@ function CounselorCard({ counselor, onEdit, onRefresh }: {
 }) {
   const [expanded, setExpanded] = useState(false)
   const [showLoginForm, setShowLoginForm] = useState(false)
+  const [uploading, setUploading] = useState(false)
+  const [photoError, setPhotoError] = useState<string | null>(null)
+
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploading(true)
+    setPhotoError(null)
+    const form = new FormData()
+    form.append('file', file)
+    const res = await fetch(`/api/counselors/${counselor.id}/photo`, { method: 'POST', body: form })
+    if (!res.ok) {
+      const json = await res.json()
+      setPhotoError(json.error ?? 'Upload failed')
+    } else {
+      onRefresh()
+    }
+    setUploading(false)
+    e.target.value = ''
+  }
+
+  const handlePhotoRemove = async () => {
+    if (!confirm('Remove this profile photo?')) return
+    setUploading(true)
+    await fetch(`/api/counselors/${counselor.id}/photo`, { method: 'DELETE' })
+    onRefresh()
+    setUploading(false)
+  }
 
   const handleDelete = async () => {
     if (!confirm(`Delete ${counselor.name}?`)) return
@@ -309,20 +337,44 @@ function CounselorCard({ counselor, onEdit, onRefresh }: {
     }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', gap: 16, flex: 1 }}>
-          <div style={{
-            width: 56, height: 56, borderRadius: '50%', overflow: 'hidden',
-            backgroundColor: '#F3F4F6', flexShrink: 0,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            border: '2px solid var(--nhlb-border)',
-          }}>
-            {counselor.photo_url ? (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img src={counselor.photo_url} alt={counselor.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            ) : (
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
+          <div style={{ flexShrink: 0, textAlign: 'center' }}>
+            <label style={{
+              width: 56, height: 56, borderRadius: '50%', overflow: 'hidden',
+              backgroundColor: '#F3F4F6', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              border: '2px solid var(--nhlb-border)', cursor: uploading ? 'wait' : 'pointer',
+              position: 'relative', opacity: uploading ? 0.5 : 1,
+            }}>
+              {counselor.photo_url ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img src={counselor.photo_url} alt={counselor.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              ) : (
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
+                </svg>
+              )}
+              <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handlePhotoUpload}
+                disabled={uploading} style={{ display: 'none' }} />
+            </label>
+            <div style={{ display: 'flex', gap: 4, justifyContent: 'center', marginTop: 4 }}>
+              <label style={{
+                fontFamily: 'Lato, sans-serif', fontSize: '0.6rem', color: 'var(--nhlb-red)',
+                cursor: 'pointer', fontWeight: 700,
+              }}>
+                {uploading ? '...' : counselor.photo_url ? 'Change' : 'Upload'}
+                <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handlePhotoUpload}
+                  disabled={uploading} style={{ display: 'none' }} />
+              </label>
+              {counselor.photo_url && (
+                <button onClick={handlePhotoRemove} disabled={uploading} style={{
+                  background: 'none', border: 'none', padding: 0, cursor: 'pointer',
+                  fontFamily: 'Lato, sans-serif', fontSize: '0.6rem', color: '#DC2626', fontWeight: 700,
+                }}>Remove</button>
+              )}
+            </div>
+            {photoError && (
+              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.6rem', color: '#DC2626', margin: '4px 0 0', maxWidth: 80 }}>
+                {photoError}
+              </p>
             )}
           </div>
           <div style={{ flex: 1 }}>

@@ -153,7 +153,26 @@ export default function CounselorProfilePage() {
       <CounselorNav />
 
       <div style={{ maxWidth: 700, margin: '0 auto', padding: '32px 24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, alignItems: 'center', marginBottom: 20 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+          <div style={{ display: 'flex', gap: 10 }}>
+            <a href="/counselor/availability" style={{
+              padding: '9px 18px', borderRadius: 8, border: '1px solid var(--nhlb-border)',
+              backgroundColor: 'white', color: 'var(--nhlb-text)',
+              fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
+              textDecoration: 'none',
+            }}>
+              Manage Availability
+            </a>
+            <a href="/counselor" style={{
+              padding: '9px 18px', borderRadius: 8, border: '1px solid var(--nhlb-border)',
+              backgroundColor: 'white', color: 'var(--nhlb-text)',
+              fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
+              textDecoration: 'none',
+            }}>
+              View Schedule
+            </a>
+          </div>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           {saved && <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#065F46', fontWeight: 700 }}>Saved</span>}
           <button onClick={handleSave} disabled={saving} style={{
             padding: '8px 20px', borderRadius: 8, border: 'none',
@@ -163,6 +182,7 @@ export default function CounselorProfilePage() {
           }}>
             {saving ? 'Saving...' : 'Save Changes'}
           </button>
+          </div>
         </div>
 
         {error && (
@@ -341,25 +361,6 @@ export default function CounselorProfilePage() {
           )}
         </div>
 
-        {/* Quick links */}
-        <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 8 }}>
-          <a href="/counselor/availability" style={{
-            padding: '10px 20px', borderRadius: 8, border: '1px solid var(--nhlb-border)',
-            backgroundColor: 'white', color: 'var(--nhlb-text)',
-            fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
-            textDecoration: 'none',
-          }}>
-            Manage Availability
-          </a>
-          <a href="/counselor" style={{
-            padding: '10px 20px', borderRadius: 8, border: '1px solid var(--nhlb-border)',
-            backgroundColor: 'white', color: 'var(--nhlb-text)',
-            fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
-            textDecoration: 'none',
-          }}>
-            View Schedule
-          </a>
-        </div>
       </div>
     </div>
   )
