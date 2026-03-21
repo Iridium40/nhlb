@@ -34,6 +34,10 @@ export default function AdminBookingsPage() {
   const [view, setView] = useState<ViewMode>('list')
   const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }))
   const [monthDate, setMonthDate] = useState(() => new Date())
+  const [completeModal, setCompleteModal] = useState<Booking | null>(null)
+  const [completeNotes, setCompleteNotes] = useState('')
+  const [completing, setCompleting] = useState(false)
+  const [toast, setToast] = useState<string | null>(null)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -52,6 +56,28 @@ export default function AdminBookingsPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status }),
     })
+    load()
+  }
+
+  const showToast = (msg: string) => {
+    setToast(msg)
+    setTimeout(() => setToast(null), 3500)
+  }
+
+  const handleComplete = async () => {
+    if (!completeModal) return
+    setCompleting(true)
+    const payload: Record<string, string> = { status: 'COMPLETED' }
+    if (completeNotes.trim()) payload.notes = completeNotes.trim()
+    await fetch(`/api/booking/${completeModal.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+    setCompleting(false)
+    setCompleteModal(null)
+    setCompleteNotes('')
+    showToast(`Session for ${completeModal.client?.first_name} ${completeModal.client?.last_name} marked as completed.`)
     load()
   }
 
@@ -384,7 +410,7 @@ export default function AdminBookingsPage() {
                         </div>
                         <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
                           {b.status === 'CONFIRMED' && (
-                            <button onClick={() => updateStatus(b.id, 'COMPLETED')} style={{
+                            <button onClick={() => { setCompleteModal(b); setCompleteNotes('') }} style={{
                               padding: '7px 14px', borderRadius: 8, border: 'none', cursor: 'pointer',
                               backgroundColor: 'var(--nhlb-muted)', color: 'white',
                               fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.75rem',
@@ -413,6 +439,96 @@ export default function AdminBookingsPage() {
           </>
         )}
       </div>
+
+      {/* ── Complete Booking Modal ── */}
+      {completeModal && (
+        <div style={{
+          position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.4)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          zIndex: 9999, padding: 24,
+        }} onClick={() => { if (!completing) { setCompleteModal(null); setCompleteNotes('') } }}>
+          <div onClick={e => e.stopPropagation()} style={{
+            background: 'white', borderRadius: 16, padding: '32px',
+            maxWidth: 480, width: '100%', boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
+          }}>
+            <h3 style={{
+              fontFamily: 'Cormorant Garamond, serif', fontSize: '1.4rem',
+              fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 8px',
+            }}>
+              Complete Session
+            </h3>
+            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', margin: '0 0 20px', lineHeight: 1.5 }}>
+              <strong>{completeModal.client?.first_name} {completeModal.client?.last_name}</strong>
+              &ensp;&middot;&ensp;{format(new Date(completeModal.scheduled_at), 'EEE, MMM d \'at\' h:mm a')}
+              &ensp;&middot;&ensp;{completeModal.counselor?.name}
+            </p>
+
+            <div style={{ marginBottom: 20 }}>
+              <label style={{
+                display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.7rem',
+                fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase',
+                color: 'var(--nhlb-muted)', marginBottom: 6,
+              }}>Session Notes (optional)</label>
+              <textarea
+                value={completeNotes}
+                onChange={e => setCompleteNotes(e.target.value)}
+                placeholder="Summary of the session, client progress, follow-up actions..."
+                rows={4}
+                style={{
+                  width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
+                  padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
+                  color: 'var(--nhlb-text)', background: 'var(--nhlb-cream)', outline: 'none',
+                  resize: 'vertical', boxSizing: 'border-box',
+                }}
+              />
+            </div>
+
+            <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+              <button
+                onClick={() => { setCompleteModal(null); setCompleteNotes('') }}
+                disabled={completing}
+                style={{
+                  padding: '10px 20px', borderRadius: 8, cursor: 'pointer',
+                  border: '1px solid var(--nhlb-border)', backgroundColor: 'white',
+                  color: 'var(--nhlb-muted)', fontFamily: 'Lato, sans-serif',
+                  fontWeight: 700, fontSize: '0.85rem',
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleComplete}
+                disabled={completing}
+                style={{
+                  padding: '10px 20px', borderRadius: 8, border: 'none', cursor: 'pointer',
+                  backgroundColor: '#065F46', color: 'white',
+                  fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.85rem',
+                  opacity: completing ? 0.6 : 1,
+                }}
+              >
+                {completing ? 'Completing...' : 'Mark as Completed'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Success Toast ── */}
+      {toast && (
+        <div style={{
+          position: 'fixed', bottom: 32, left: '50%', transform: 'translateX(-50%)',
+          backgroundColor: '#065F46', color: 'white', padding: '14px 28px',
+          borderRadius: 12, fontFamily: 'Lato, sans-serif', fontSize: '0.875rem',
+          fontWeight: 700, boxShadow: '0 8px 30px rgba(0,0,0,0.18)', zIndex: 10000,
+          display: 'flex', alignItems: 'center', gap: 10,
+          animation: 'fadeInUp 0.25s ease-out',
+        }}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+          {toast}
+        </div>
+      )}
     </div>
   )
 }
