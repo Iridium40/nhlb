@@ -216,6 +216,10 @@ export default function CounselorDashboard() {
           </h1>
         </div>
         <nav style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          <a href="/counselor/profile" style={{
+            fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700,
+            color: 'var(--nhlb-red)', textDecoration: 'none',
+          }}>My Profile</a>
           <a href="/counselor/availability" style={{
             fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700,
             color: 'var(--nhlb-red)', textDecoration: 'none',
