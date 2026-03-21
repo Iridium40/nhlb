@@ -299,7 +299,24 @@ function CounselorCard({ counselor, onEdit, onRefresh }: {
       borderRadius: 12, padding: '20px 24px', marginBottom: 12,
     }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-        <div style={{ flex: 1 }}>
+        <div style={{ display: 'flex', gap: 16, flex: 1 }}>
+          <div style={{
+            width: 56, height: 56, borderRadius: '50%', overflow: 'hidden',
+            backgroundColor: '#F3F4F6', flexShrink: 0,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            border: '2px solid var(--nhlb-border)',
+          }}>
+            {counselor.photo_url ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img src={counselor.photo_url} alt={counselor.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            ) : (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            )}
+          </div>
+          <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
             <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0 }}>
               {counselor.name}
@@ -336,6 +353,7 @@ function CounselorCard({ counselor, onEdit, onRefresh }: {
               ))}
             </div>
           )}
+        </div>
         </div>
         <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
           {!hasLogin && (

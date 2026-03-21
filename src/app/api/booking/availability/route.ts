@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
   // Get available counselors + their windows
   let counselorQuery = supabase
     .from('counselors')
-    .select('id, name')
+    .select('id, name, photo_url')
     .eq('is_active', true)
   if (counselorId) counselorQuery = counselorQuery.eq('id', counselorId)
   const { data: counselors } = await counselorQuery
@@ -80,8 +80,8 @@ export async function GET(req: NextRequest) {
   const BUSINESS_HOUR_END = 17   // 5 PM
 
   // Generate 1hr slots for next 14 days
-  const slots: { start: string; counselorId: string; counselorName: string }[] = []
-  const counselorMap = Object.fromEntries(counselors.map(c => [c.id, c.name]))
+  const slots: { start: string; counselorId: string; counselorName: string; counselorPhotoUrl: string | null }[] = []
+  const counselorMap = Object.fromEntries(counselors.map(c => [c.id, { name: c.name, photo_url: c.photo_url }]))
 
   for (let d = 0; d <= 14; d++) {
     const day = addDays(now, d)
@@ -106,7 +106,8 @@ export async function GET(req: NextRequest) {
         slots.push({
           start: iso,
           counselorId: w.counselor_id,
-          counselorName: counselorMap[w.counselor_id] ?? '',
+          counselorName: counselorMap[w.counselor_id]?.name ?? '',
+          counselorPhotoUrl: counselorMap[w.counselor_id]?.photo_url ?? null,
         })
       }
     }

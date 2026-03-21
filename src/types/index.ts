@@ -89,6 +89,7 @@ export interface TimeSlot {
   start: string
   counselorId: string
   counselorName: string
+  counselorPhotoUrl?: string | null
 }
 
 export interface CounselorBlockedDate {

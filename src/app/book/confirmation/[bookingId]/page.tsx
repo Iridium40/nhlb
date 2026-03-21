@@ -34,6 +34,16 @@ export default async function ConfirmationPage({
         No Heart Left Behind &mdash; Booking Confirmed
       </div>
 
+      <header style={{
+        backgroundColor: 'white', borderBottom: '1px solid var(--nhlb-blush-light)',
+        padding: '0 40px', display: 'flex', alignItems: 'center', height: 56,
+      }}>
+        <a href="/book" style={{
+          fontFamily: 'Lato, sans-serif', fontSize: '0.85rem',
+          color: 'var(--nhlb-muted)', textDecoration: 'none',
+        }}>&larr; Back to Home</a>
+      </header>
+
       <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '60px 24px' }}>
         <div style={{ maxWidth: 520, width: '100%', textAlign: 'center' }}>
           {/* Check circle */}
