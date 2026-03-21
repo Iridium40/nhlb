@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { format } from 'date-fns'
 
@@ -14,6 +14,18 @@ type Booking = {
 }
 
 export default function CancelBookingPage() {
+  return (
+    <Suspense fallback={
+      <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
+      </div>
+    }>
+      <CancelBookingInner />
+    </Suspense>
+  )
+}
+
+function CancelBookingInner() {
   const params = useSearchParams()
   const bookingId = params.get('id') ?? ''
   const prefillEmail = params.get('email') ?? ''
