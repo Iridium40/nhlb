@@ -255,7 +255,7 @@ export default function ClientDetailPage() {
                       </p>
                     </div>
 
-                    {b.status === 'COMPLETED' && (
+                    {b.status !== 'CANCELLED' && (
                       <button onClick={() => setExpandedBooking(isExpanded ? null : b.id)} style={{
                         background: 'none', border: 'none', cursor: 'pointer',
                         fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', fontWeight: 700,
@@ -266,7 +266,7 @@ export default function ClientDetailPage() {
                     )}
                   </div>
 
-                  {isExpanded && b.status === 'COMPLETED' && (
+                  {isExpanded && b.status !== 'CANCELLED' && (
                     <NoteEditor
                       booking={b}
                       clientId={client.id}

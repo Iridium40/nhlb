@@ -4,7 +4,13 @@ import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { format, startOfWeek, addDays, isSameDay, isToday, isBefore } from 'date-fns'
 import { createSupabaseBrowserClient } from '@/lib/supabase-browser'
-import type { Counselor, Booking } from '@/types'
+import type { Counselor, Booking, SessionNote } from '@/types'
+
+interface EnrichedBooking extends Booking {
+  session_note?: SessionNote | null
+  previous_note?: { content: string; private_notes: string } | null
+  previous_session_date?: string | null
+}
 
 const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
   CONFIRMED: { bg: '#D1FAE5', text: '#065F46' },
@@ -12,15 +18,130 @@ const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
   COMPLETED: { bg: 'var(--nhlb-cream-dark)', text: 'var(--nhlb-muted)' },
 }
 
-const HOURS = Array.from({ length: 10 }, (_, i) => i + 8) // 8am–5pm
+const HOURS = Array.from({ length: 10 }, (_, i) => i + 8)
+
+function SessionNoteEditor({ booking, onSaved }: {
+  booking: EnrichedBooking
+  onSaved: () => void
+}) {
+  const existing = booking.session_note
+  const [content, setContent] = useState(existing?.content ?? '')
+  const [privateNotes, setPrivateNotes] = useState(existing?.private_notes ?? '')
+  const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
+
+  const save = async () => {
+    setSaving(true)
+    setSaved(false)
+    await fetch('/api/counselor/notes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ booking_id: booking.id, content, private_notes: privateNotes }),
+    })
+    setSaving(false)
+    setSaved(true)
+    setTimeout(() => setSaved(false), 2000)
+    onSaved()
+  }
+
+  return (
+    <div style={{
+      marginTop: 12, padding: '16px 18px',
+      backgroundColor: 'var(--nhlb-cream-dark)', border: '1px solid var(--nhlb-blush-light)',
+      borderRadius: 10,
+    }}>
+      <p style={{ fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem', color: 'var(--nhlb-muted)', letterSpacing: '0.06em', margin: '0 0 10px' }}>
+        SESSION NOTES {existing ? '(editing)' : '(new)'}
+      </p>
+      <div style={{ marginBottom: 10 }}>
+        <label style={{ display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, color: 'var(--nhlb-muted)', letterSpacing: '0.06em', marginBottom: 4 }}>
+          Notes
+        </label>
+        <textarea value={content} onChange={e => setContent(e.target.value)}
+          style={{
+            width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
+            padding: '10px 14px', fontSize: '0.85rem', fontFamily: 'Lato, sans-serif',
+            color: 'var(--nhlb-text)', background: 'white', outline: 'none', resize: 'none',
+          }} rows={3}
+          placeholder="Session summary, goals discussed, homework assigned..." />
+      </div>
+      <div style={{ marginBottom: 10 }}>
+        <label style={{ display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, color: 'var(--nhlb-muted)', letterSpacing: '0.06em', marginBottom: 4 }}>
+          Private Notes (only you see these)
+        </label>
+        <textarea value={privateNotes} onChange={e => setPrivateNotes(e.target.value)}
+          style={{
+            width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
+            padding: '10px 14px', fontSize: '0.85rem', fontFamily: 'Lato, sans-serif',
+            color: 'var(--nhlb-text)', background: 'white', outline: 'none', resize: 'none',
+          }} rows={2}
+          placeholder="Clinical observations, treatment plan notes..." />
+      </div>
+      <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+        <button onClick={save} disabled={saving} style={{
+          padding: '8px 18px', borderRadius: 8, border: 'none', cursor: 'pointer',
+          backgroundColor: 'var(--nhlb-red)', color: 'white',
+          fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
+          opacity: saving ? 0.6 : 1,
+        }}>
+          {saving ? 'Saving...' : existing ? 'Update Notes' : 'Save Notes'}
+        </button>
+        {saved && <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#065F46' }}>Saved</span>}
+      </div>
+    </div>
+  )
+}
+
+function PreviousNotes({ booking }: { booking: EnrichedBooking }) {
+  const [expanded, setExpanded] = useState(false)
+  if (!booking.previous_note?.content) return null
+
+  return (
+    <div style={{
+      marginTop: 8, padding: '10px 14px',
+      backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: 8,
+    }}>
+      <button onClick={() => setExpanded(!expanded)} style={{
+        background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+        fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', fontWeight: 700,
+        color: '#1D4ED8',
+      }}>
+        {expanded ? '▾' : '▸'} Previous Session Notes
+        {booking.previous_session_date && (
+          <span style={{ fontWeight: 400, marginLeft: 6 }}>
+            ({format(new Date(booking.previous_session_date), 'MMM d, yyyy')})
+          </span>
+        )}
+      </button>
+      {expanded && (
+        <div style={{ marginTop: 8 }}>
+          <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#1E3A5F', lineHeight: 1.5, margin: '0 0 4px', whiteSpace: 'pre-wrap' }}>
+            {booking.previous_note.content}
+          </p>
+          {booking.previous_note.private_notes && (
+            <div style={{ marginTop: 6, paddingTop: 6, borderTop: '1px solid #BFDBFE' }}>
+              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, color: '#1D4ED8', margin: '0 0 2px', letterSpacing: '0.06em' }}>
+                PRIVATE
+              </p>
+              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#1E3A5F', lineHeight: 1.5, margin: 0, fontStyle: 'italic', whiteSpace: 'pre-wrap' }}>
+                {booking.previous_note.private_notes}
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default function CounselorDashboard() {
   const router = useRouter()
   const [counselor, setCounselor] = useState<Counselor | null>(null)
-  const [bookings, setBookings] = useState<Booking[]>([])
+  const [bookings, setBookings] = useState<EnrichedBooking[]>([])
   const [loading, setLoading] = useState(true)
   const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }))
   const [view, setView] = useState<'week' | 'list'>('week')
+  const [expandedNotes, setExpandedNotes] = useState<string | null>(null)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -299,57 +420,100 @@ export default function CounselorDashboard() {
               bookings.filter(b => {
                 const d = new Date(b.scheduled_at)
                 return d >= weekDays[0] && d <= addDays(weekDays[6], 1) && b.status !== 'CANCELLED'
-              }).map(b => (
-                <div key={b.id} style={{
-                  background: 'white', border: '1px solid var(--nhlb-border)',
-                  borderRadius: 10, padding: '16px 20px',
-                  borderLeft: `4px solid ${b.type === 'VIRTUAL' ? '#3B82F6' : 'var(--nhlb-red)'}`,
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-                    <div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                        <span style={{ fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.9rem', color: 'var(--nhlb-red-dark)' }}>
-                          {format(new Date(b.scheduled_at), 'EEE, MMM d')} at {format(new Date(b.scheduled_at), 'h:mm a')}
-                        </span>
-                        <span style={{
-                          ...STATUS_COLORS[b.status],
-                          backgroundColor: STATUS_COLORS[b.status]?.bg,
-                          color: STATUS_COLORS[b.status]?.text,
-                          padding: '2px 8px', borderRadius: 20, fontSize: '0.65rem', fontWeight: 700,
-                          fontFamily: 'Lato, sans-serif', textTransform: 'capitalize',
-                        }}>
-                          {b.status.toLowerCase()}
-                        </span>
+              }).map(b => {
+                const isNotesOpen = expandedNotes === b.id
+                const hasNotes = !!b.session_note?.content
+                return (
+                  <div key={b.id} style={{
+                    background: 'white', border: '1px solid var(--nhlb-border)',
+                    borderRadius: 10, padding: '16px 20px',
+                    borderLeft: `4px solid ${b.type === 'VIRTUAL' ? '#3B82F6' : 'var(--nhlb-red)'}`,
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                          <span style={{ fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.9rem', color: 'var(--nhlb-red-dark)' }}>
+                            {format(new Date(b.scheduled_at), 'EEE, MMM d')} at {format(new Date(b.scheduled_at), 'h:mm a')}
+                          </span>
+                          <span style={{
+                            backgroundColor: STATUS_COLORS[b.status]?.bg,
+                            color: STATUS_COLORS[b.status]?.text,
+                            padding: '2px 8px', borderRadius: 20, fontSize: '0.65rem', fontWeight: 700,
+                            fontFamily: 'Lato, sans-serif', textTransform: 'capitalize',
+                          }}>
+                            {b.status.toLowerCase()}
+                          </span>
+                          {hasNotes && (
+                            <span style={{
+                              padding: '2px 8px', borderRadius: 20, fontSize: '0.6rem', fontWeight: 700,
+                              fontFamily: 'Lato, sans-serif', backgroundColor: '#FEF3C7', color: '#92400E',
+                            }}>
+                              Has Notes
+                            </span>
+                          )}
+                        </div>
+                        <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '1rem', fontWeight: 700, color: 'var(--nhlb-text)', margin: '0 0 2px' }}>
+                          {b.client?.first_name} {b.client?.last_name}
+                        </p>
+                        <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: 0 }}>
+                          {b.type === 'VIRTUAL' ? '💻 Virtual' : '🏠 In Person'}
+                          {' · '}{b.client?.service_type}
+                          {b.client?.email ? ` · ${b.client.email}` : ''}
+                          {b.client?.phone ? ` · ${b.client.phone}` : ''}
+                        </p>
                       </div>
-                      <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '1rem', fontWeight: 700, color: 'var(--nhlb-text)', margin: '0 0 2px' }}>
-                        {b.client?.first_name} {b.client?.last_name}
-                      </p>
-                      <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: 0 }}>
-                        {b.type === 'VIRTUAL' ? '💻 Virtual' : '🏠 In Person'}
-                        {' · '}{b.client?.service_type}
-                        {b.client?.email ? ` · ${b.client.email}` : ''}
-                        {b.client?.phone ? ` · ${b.client.phone}` : ''}
-                      </p>
-                    </div>
-                    <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-                      {b.status === 'CONFIRMED' && (
-                        <button onClick={() => updateBooking(b.id, 'COMPLETED')} style={{
-                          padding: '6px 12px', borderRadius: 6, border: 'none',
-                          backgroundColor: '#065F46', color: 'white',
+                      <div style={{ display: 'flex', gap: 6, flexShrink: 0, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                        <button onClick={() => setExpandedNotes(isNotesOpen ? null : b.id)} style={{
+                          padding: '6px 12px', borderRadius: 6,
+                          border: `1px solid ${hasNotes ? '#FEF3C7' : 'var(--nhlb-border)'}`,
+                          backgroundColor: hasNotes ? '#FEF3C7' : 'white',
+                          color: hasNotes ? '#92400E' : 'var(--nhlb-muted)',
                           fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem', cursor: 'pointer',
-                        }}>Complete</button>
-                      )}
-                      {b.status === 'CONFIRMED' && (
-                        <button onClick={() => updateBooking(b.id, 'CANCELLED')} style={{
-                          padding: '6px 12px', borderRadius: 6, border: '1px solid #FECACA',
-                          backgroundColor: 'white', color: '#DC2626',
-                          fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem', cursor: 'pointer',
-                        }}>Cancel</button>
-                      )}
+                        }}>
+                          {isNotesOpen ? 'Close Notes' : hasNotes ? 'Edit Notes' : 'Add Notes'}
+                        </button>
+                        {b.status === 'CONFIRMED' && (
+                          <button onClick={() => updateBooking(b.id, 'COMPLETED')} style={{
+                            padding: '6px 12px', borderRadius: 6, border: 'none',
+                            backgroundColor: '#065F46', color: 'white',
+                            fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem', cursor: 'pointer',
+                          }}>Complete</button>
+                        )}
+                        {b.status === 'CONFIRMED' && (
+                          <button onClick={() => updateBooking(b.id, 'CANCELLED')} style={{
+                            padding: '6px 12px', borderRadius: 6, border: '1px solid #FECACA',
+                            backgroundColor: 'white', color: '#DC2626',
+                            fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem', cursor: 'pointer',
+                          }}>Cancel</button>
+                        )}
+                      </div>
                     </div>
+
+                    {/* Previous session notes for upcoming sessions */}
+                    {b.status === 'CONFIRMED' && <PreviousNotes booking={b} />}
+
+                    {/* Inline note preview when collapsed */}
+                    {!isNotesOpen && hasNotes && (
+                      <div style={{
+                        marginTop: 10, padding: '10px 14px',
+                        backgroundColor: 'var(--nhlb-cream-dark)', borderRadius: 8,
+                      }}>
+                        <p style={{
+                          fontFamily: 'Lato, sans-serif', fontSize: '0.8rem',
+                          color: 'var(--nhlb-text)', margin: 0, lineHeight: 1.5,
+                        }}>
+                          {(b.session_note?.content ?? '').length > 150
+                            ? b.session_note!.content.slice(0, 150) + '...'
+                            : b.session_note?.content}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Notes editor when expanded */}
+                    {isNotesOpen && <SessionNoteEditor booking={b} onSaved={load} />}
                   </div>
-                </div>
-              ))
+                )
+              })
             )}
           </div>
         )}

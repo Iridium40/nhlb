@@ -26,12 +26,32 @@ export async function GET(req: NextRequest) {
 
   const { data: bookings, error } = await admin
     .from('bookings')
-    .select('*, client:clients(first_name, last_name, email, phone, service_type)')
+    .select('*, client:clients(id, first_name, last_name, email, phone, service_type), session_note:session_notes(id, content, private_notes, updated_at)')
     .eq('counselor_id', counselor.id)
     .gte('scheduled_at', rangeStart.toISOString())
     .lte('scheduled_at', rangeEnd.toISOString())
     .order('scheduled_at', { ascending: true })
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-  return NextResponse.json({ bookings: bookings ?? [], counselorId: counselor.id })
+
+  // For each upcoming booking, find the most recent previous session note for the same client
+  const enriched = (bookings ?? []).map(b => {
+    const clientId = b.client?.id
+    if (!clientId) return { ...b, previous_note: null }
+    const pastNotes = (bookings ?? [])
+      .filter(ob =>
+        ob.client?.id === clientId &&
+        ob.id !== b.id &&
+        new Date(ob.scheduled_at) < new Date(b.scheduled_at) &&
+        ob.session_note?.content
+      )
+      .sort((a, z) => new Date(z.scheduled_at).getTime() - new Date(a.scheduled_at).getTime())
+    return {
+      ...b,
+      previous_note: pastNotes[0]?.session_note ?? null,
+      previous_session_date: pastNotes[0]?.scheduled_at ?? null,
+    }
+  })
+
+  return NextResponse.json({ bookings: enriched, counselorId: counselor.id })
 }
