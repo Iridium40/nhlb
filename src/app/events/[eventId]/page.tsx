@@ -127,7 +127,14 @@ export default function EventDetailPage() {
       </header>
 
       <div style={{ maxWidth: 640, margin: '0 auto', padding: '40px 24px 80px' }}>
-        {/* Event details */}
+        {event.image_url && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={event.image_url}
+            alt={event.title}
+            style={{ width: '100%', height: 260, objectFit: 'cover', borderRadius: 12, display: 'block', marginBottom: 24 }}
+          />
+        )}
         <h1 style={{
           fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem',
           fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 8px',

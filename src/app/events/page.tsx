@@ -81,56 +81,65 @@ export default async function EventsPage() {
               <Link key={event.id} href={`/events/${event.id}`} style={{ textDecoration: 'none' }}>
                 <div style={{
                   background: 'white', border: '1px solid var(--nhlb-border)',
-                  borderRadius: 12, padding: '24px', transition: 'border-color 0.15s',
+                  borderRadius: 12, overflow: 'hidden', transition: 'border-color 0.15s',
                   cursor: 'pointer',
-                }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16 }}>
-                    <div style={{ flex: 1 }}>
-                      <h2 style={{
-                        fontFamily: 'Cormorant Garamond, serif', fontSize: '1.4rem',
-                        fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px',
-                      }}>
-                        {event.title}
-                      </h2>
-                      <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-text)', margin: '0 0 4px' }}>
-                        📅 {format(new Date(event.event_date), 'EEEE, MMMM d, yyyy')} at {format(new Date(event.event_date), 'h:mm a')}
-                      </p>
-                      {event.location && (
-                        <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>
-                          📍 {event.location}
-                        </p>
-                      )}
-                      {event.description && (
-                        <p style={{
-                          fontFamily: 'Lato, sans-serif', fontSize: '0.85rem',
-                          color: 'var(--nhlb-muted)', margin: '8px 0 0', lineHeight: 1.5,
+                }}>
+                  {event.image_url && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={event.image_url}
+                      alt={event.title}
+                      style={{ width: '100%', height: 200, objectFit: 'cover', display: 'block' }}
+                    />
+                  )}
+                  <div style={{ padding: '24px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16 }}>
+                      <div style={{ flex: 1 }}>
+                        <h2 style={{
+                          fontFamily: 'Cormorant Garamond, serif', fontSize: '1.4rem',
+                          fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px',
                         }}>
-                          {event.description.length > 150 ? event.description.slice(0, 150) + '...' : event.description}
+                          {event.title}
+                        </h2>
+                        <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-text)', margin: '0 0 4px' }}>
+                          📅 {format(new Date(event.event_date), 'EEEE, MMMM d, yyyy')} at {format(new Date(event.event_date), 'h:mm a')}
                         </p>
-                      )}
-                    </div>
-                    <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                      {event.registration_fee_cents > 0 ? (
-                        <p style={{
-                          fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '1.1rem',
-                          color: 'var(--nhlb-red-dark)', margin: '0 0 2px',
-                        }}>
-                          ${(event.registration_fee_cents / 100).toFixed(2)}
-                        </p>
-                      ) : (
-                        <p style={{
-                          fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.85rem',
-                          color: '#065F46', margin: '0 0 2px',
-                        }}>
-                          Free
-                        </p>
-                      )}
-                      {event.registration_fee_cents > 0 && (
-                        <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)', margin: 0 }}>
-                          {event.fee_label}
-                        </p>
-                      )}
+                        {event.location && (
+                          <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>
+                            📍 {event.location}
+                          </p>
+                        )}
+                        {event.description && (
+                          <p style={{
+                            fontFamily: 'Lato, sans-serif', fontSize: '0.85rem',
+                            color: 'var(--nhlb-muted)', margin: '8px 0 0', lineHeight: 1.5,
+                          }}>
+                            {event.description.length > 150 ? event.description.slice(0, 150) + '...' : event.description}
+                          </p>
+                        )}
+                      </div>
+                      <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                        {event.registration_fee_cents > 0 ? (
+                          <p style={{
+                            fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '1.1rem',
+                            color: 'var(--nhlb-red-dark)', margin: '0 0 2px',
+                          }}>
+                            ${(event.registration_fee_cents / 100).toFixed(2)}
+                          </p>
+                        ) : (
+                          <p style={{
+                            fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.85rem',
+                            color: '#065F46', margin: '0 0 2px',
+                          }}>
+                            Free
+                          </p>
+                        )}
+                        {event.registration_fee_cents > 0 && (
+                          <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)', margin: 0 }}>
+                            {event.fee_label}
+                          </p>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>

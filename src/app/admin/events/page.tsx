@@ -94,6 +94,68 @@ function EventForm({ event, onSaved, onCancel }: {
   )
 }
 
+function EventPhotoControls({ event, onUpdated }: { event: Event; onUpdated: () => void }) {
+  const [uploading, setUploading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploading(true)
+    setError(null)
+    const fd = new FormData()
+    fd.append('file', file)
+    const res = await fetch(`/api/events/${event.id}/photo`, { method: 'POST', body: fd })
+    if (!res.ok) {
+      const json = await res.json()
+      setError(json.error ?? 'Upload failed')
+    } else {
+      onUpdated()
+    }
+    setUploading(false)
+    e.target.value = ''
+  }
+
+  const handleRemove = async () => {
+    setUploading(true)
+    setError(null)
+    await fetch(`/api/events/${event.id}/photo`, { method: 'DELETE' })
+    onUpdated()
+    setUploading(false)
+  }
+
+  return (
+    <div style={{ flexShrink: 0, textAlign: 'center' }}>
+      <label style={{
+        display: 'block', width: 80, height: 56, borderRadius: 8, overflow: 'hidden',
+        cursor: uploading ? 'default' : 'pointer', border: '1px solid var(--nhlb-border)',
+        background: 'var(--nhlb-cream)',
+      }}>
+        {event.image_url ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={event.image_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        ) : (
+          <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontSize: '1.4rem', color: 'var(--nhlb-muted)' }}>🖼</span>
+        )}
+        <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleUpload} disabled={uploading} style={{ display: 'none' }} />
+      </label>
+      <div style={{ display: 'flex', gap: 4, justifyContent: 'center', marginTop: 4 }}>
+        <label style={{ fontSize: '0.65rem', color: 'var(--nhlb-red)', cursor: 'pointer', fontFamily: 'Lato, sans-serif' }}>
+          {uploading ? '...' : event.image_url ? 'Change' : 'Upload'}
+          <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleUpload} disabled={uploading} style={{ display: 'none' }} />
+        </label>
+        {event.image_url && (
+          <button onClick={handleRemove} disabled={uploading} style={{
+            background: 'none', border: 'none', padding: 0, fontSize: '0.65rem',
+            color: '#DC2626', cursor: 'pointer', fontFamily: 'Lato, sans-serif',
+          }}>Remove</button>
+        )}
+      </div>
+      {error && <p style={{ fontSize: '0.6rem', color: '#DC2626', margin: '2px 0 0', fontFamily: 'Lato, sans-serif' }}>{error}</p>}
+    </div>
+  )
+}
+
 export default function AdminEventsPage() {
   const [events, setEvents] = useState<Event[]>([])
   const [loading, setLoading] = useState(true)
@@ -146,7 +208,8 @@ export default function AdminEventsPage() {
                   background: 'white', border: '1px solid var(--nhlb-border)',
                   borderRadius: 12, padding: '20px 24px',
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
+                    <EventPhotoControls event={ev} onUpdated={load} />
                     <div style={{ flex: 1 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                         <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0 }}>
