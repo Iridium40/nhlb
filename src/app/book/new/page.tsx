@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { format, isSameDay } from 'date-fns'
+import { format } from 'date-fns'
 import type { TimeSlot } from '@/types'
 
 type Step = 'info' | 'schedule' | 'payment'
@@ -136,22 +136,19 @@ export default function NewClientBookingPage() {
     }
   }
 
-  // Group slots by day, then by counselor within each day
-  const groupedSlots = slots.reduce<Record<string, TimeSlot[]>>((acc, slot) => {
+  // Deduplicate slots by time — for new clients, just show available times.
+  // When multiple counselors offer the same slot, keep one (first match).
+  const deduped = slots.reduce<TimeSlot[]>((acc, slot) => {
+    if (!acc.some(s => s.start === slot.start)) acc.push(slot)
+    return acc
+  }, [])
+
+  const groupedSlots = deduped.reduce<Record<string, TimeSlot[]>>((acc, slot) => {
     const key = format(new Date(slot.start), 'EEE, MMM d')
     if (!acc[key]) acc[key] = []
     acc[key].push(slot)
     return acc
   }, {})
-
-  const groupByCounselor = (daySlots: TimeSlot[]) => {
-    const map: Record<string, TimeSlot[]> = {}
-    for (const s of daySlots) {
-      if (!map[s.counselorId]) map[s.counselorId] = []
-      map[s.counselorId].push(s)
-    }
-    return Object.values(map)
-  }
 
   const stepLabels = ['Your Info', 'Choose a Time', 'Love Offering']
   const stepIndex = step === 'info' ? 0 : step === 'schedule' ? 1 : 2
@@ -292,58 +289,29 @@ export default function NewClientBookingPage() {
                       letterSpacing: '0.1em', textTransform: 'uppercase',
                       color: 'var(--nhlb-muted)', marginBottom: 10,
                     }}>{day}</p>
-                    {groupByCounselor(daySlots).map(counselorSlots => {
-                      const first = counselorSlots[0]
-                      return (
-                        <div key={first.counselorId} style={{ marginBottom: 14 }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-                            <div style={{
-                              width: 28, height: 28, borderRadius: '50%', overflow: 'hidden',
-                              backgroundColor: '#F3F4F6', flexShrink: 0,
-                              display: 'flex', alignItems: 'center', justifyContent: 'center',
-                              border: '1px solid var(--nhlb-border)',
-                            }}>
-                              {first.counselorPhotoUrl ? (
-                                /* eslint-disable-next-line @next/next/no-img-element */
-                                <img src={first.counselorPhotoUrl} alt={first.counselorName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                              ) : (
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                  <circle cx="12" cy="7" r="4" />
-                                </svg>
-                              )}
-                            </div>
-                            <span style={{
-                              fontFamily: 'Lato, sans-serif', fontSize: '0.8rem',
-                              fontWeight: 600, color: 'var(--nhlb-text)',
-                            }}>{first.counselorName}</span>
-                          </div>
-                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
-                            {counselorSlots.map(slot => (
-                              <button key={slot.start} onClick={() => selectSlot(slot)} style={{
-                                padding: '10px 4px',
-                                border: '1px solid var(--nhlb-border)', borderRadius: 8,
-                                backgroundColor: 'white', fontFamily: 'Lato, sans-serif',
-                                fontSize: '0.8rem', color: 'var(--nhlb-text)',
-                                cursor: 'pointer', transition: 'all 0.12s',
-                              }}
-                              onMouseEnter={e => {
-                                (e.currentTarget).style.backgroundColor = 'var(--nhlb-red)'
-                                ;(e.currentTarget).style.color = 'white'
-                                ;(e.currentTarget).style.borderColor = 'var(--nhlb-red)'
-                              }}
-                              onMouseLeave={e => {
-                                (e.currentTarget).style.backgroundColor = 'white'
-                                ;(e.currentTarget).style.color = 'var(--nhlb-text)'
-                                ;(e.currentTarget).style.borderColor = 'var(--nhlb-border)'
-                              }}>
-                                {format(new Date(slot.start), 'h:mm a')}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )
-                    })}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
+                      {daySlots.map(slot => (
+                        <button key={slot.start} onClick={() => selectSlot(slot)} style={{
+                          padding: '10px 4px',
+                          border: '1px solid var(--nhlb-border)', borderRadius: 8,
+                          backgroundColor: 'white', fontFamily: 'Lato, sans-serif',
+                          fontSize: '0.8rem', color: 'var(--nhlb-text)',
+                          cursor: 'pointer', transition: 'all 0.12s',
+                        }}
+                        onMouseEnter={e => {
+                          (e.currentTarget).style.backgroundColor = 'var(--nhlb-red)'
+                          ;(e.currentTarget).style.color = 'white'
+                          ;(e.currentTarget).style.borderColor = 'var(--nhlb-red)'
+                        }}
+                        onMouseLeave={e => {
+                          (e.currentTarget).style.backgroundColor = 'white'
+                          ;(e.currentTarget).style.color = 'var(--nhlb-text)'
+                          ;(e.currentTarget).style.borderColor = 'var(--nhlb-border)'
+                        }}>
+                          {format(new Date(slot.start), 'h:mm a')}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -362,26 +330,41 @@ export default function NewClientBookingPage() {
             <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
               Love Offering
             </h2>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
-              <div style={{
-                width: 48, height: 48, borderRadius: '50%', overflow: 'hidden',
-                backgroundColor: '#F3F4F6', flexShrink: 0,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                border: '2px solid var(--nhlb-border)',
-              }}>
-                {selectedSlot.counselorPhotoUrl ? (
-                  /* eslint-disable-next-line @next/next/no-img-element */
-                  <img src={selectedSlot.counselorPhotoUrl} alt={selectedSlot.counselorName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                ) : (
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                  </svg>
-                )}
+            <div style={{
+              background: 'white', border: '1px solid var(--nhlb-border)',
+              borderRadius: 12, padding: '20px', marginBottom: 20,
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                <div style={{
+                  width: 56, height: 56, borderRadius: '50%', overflow: 'hidden',
+                  backgroundColor: '#F3F4F6', flexShrink: 0,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  border: '2px solid var(--nhlb-border)',
+                }}>
+                  {selectedSlot.counselorPhotoUrl ? (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img src={selectedSlot.counselorPhotoUrl} alt={selectedSlot.counselorName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </svg>
+                  )}
+                </div>
+                <div>
+                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px', textTransform: 'uppercase' }}>
+                    Your Counselor
+                  </p>
+                  <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0 }}>
+                    {selectedSlot.counselorName}
+                  </p>
+                </div>
               </div>
-              <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', lineHeight: 1.7, margin: 0 }}>
-                Your session is on <strong style={{ color: 'var(--nhlb-red-dark)' }}>{format(new Date(selectedSlot.start), 'EEE, MMM d')} at {format(new Date(selectedSlot.start), 'h:mm a')}</strong> with {selectedSlot.counselorName}.
-              </p>
+              <div style={{ borderTop: '1px solid var(--nhlb-border)', marginTop: 14, paddingTop: 14 }}>
+                <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', margin: 0 }}>
+                  <strong style={{ color: 'var(--nhlb-red-dark)' }}>{format(new Date(selectedSlot.start), 'EEEE, MMMM d')}</strong> at <strong style={{ color: 'var(--nhlb-red-dark)' }}>{format(new Date(selectedSlot.start), 'h:mm a')}</strong> &middot; In-person
+                </p>
+              </div>
             </div>
             <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', lineHeight: 1.7, marginBottom: 24 }}>
               We ask for a minimum $10 love offering. Give what you have decided in your heart.
