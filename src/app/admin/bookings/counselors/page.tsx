@@ -193,18 +193,80 @@ function CounselorForm({ counselor, onSaved, onCancel }: {
   )
 }
 
+function CreateLoginForm({ counselor, onDone }: { counselor: Counselor; onDone: () => void }) {
+  const [loginEmail, setLoginEmail] = useState(counselor.email ?? '')
+  const [loginPassword, setLoginPassword] = useState('')
+  const [creating, setCreating] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
+
+  const handleCreate = async () => {
+    setError(null)
+    setCreating(true)
+    const res = await fetch('/api/counselors/create-login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ counselorId: counselor.id, email: loginEmail, password: loginPassword }),
+    })
+    const json = await res.json()
+    setCreating(false)
+    if (!res.ok) { setError(json.error); return }
+    setSuccess(true)
+    setTimeout(onDone, 1500)
+  }
+
+  if (success) return (
+    <div style={{
+      marginTop: 12, padding: '12px 16px', backgroundColor: '#D1FAE5',
+      borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: '#065F46',
+    }}>
+      Login created! {counselor.name} can now sign in at <strong>/counselor/login</strong>
+    </div>
+  )
+
+  return (
+    <div style={{ marginTop: 12, padding: '16px', backgroundColor: 'var(--nhlb-cream-dark)', borderRadius: 8 }}>
+      <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 10px' }}>
+        CREATE COUNSELOR LOGIN
+      </p>
+      {error && (
+        <div style={{ marginBottom: 10, padding: '8px 12px', backgroundColor: '#FEF2F2', border: '1px solid #FECACA', borderRadius: 6, fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#B91C1C' }}>
+          {error}
+        </div>
+      )}
+      <div style={{ display: 'flex', gap: 8, alignItems: 'end', flexWrap: 'wrap' }}>
+        <div style={{ flex: 1, minWidth: 160 }}>
+          <label style={S.label}>Email</label>
+          <input type="email" value={loginEmail} onChange={e => setLoginEmail(e.target.value)} style={S.input} placeholder="counselor@noheartleftbehind.com" />
+        </div>
+        <div style={{ flex: 1, minWidth: 160 }}>
+          <label style={S.label}>Password</label>
+          <input type="password" value={loginPassword} onChange={e => setLoginPassword(e.target.value)} style={S.input} placeholder="Min 6 characters" />
+        </div>
+        <button onClick={handleCreate} disabled={creating || !loginEmail || loginPassword.length < 6}
+          style={{ ...S.btn('#065F46', 'white'), opacity: creating || !loginEmail || loginPassword.length < 6 ? 0.5 : 1 }}>
+          {creating ? 'Creating...' : 'Create Login'}
+        </button>
+      </div>
+    </div>
+  )
+}
+
 function CounselorCard({ counselor, onEdit, onRefresh }: {
   counselor: Counselor
   onEdit: () => void
   onRefresh: () => void
 }) {
   const [expanded, setExpanded] = useState(false)
+  const [showLoginForm, setShowLoginForm] = useState(false)
 
   const handleDelete = async () => {
     if (!confirm(`Delete ${counselor.name}?`)) return
     await fetch(`/api/counselors/${counselor.id}`, { method: 'DELETE' })
     onRefresh()
   }
+
+  const hasLogin = !!counselor.supabase_user_id
 
   return (
     <div style={{
@@ -225,6 +287,14 @@ function CounselorCard({ counselor, onEdit, onRefresh }: {
             }}>
               {counselor.is_active ? 'Active' : 'Inactive'}
             </span>
+            <span style={{
+              padding: '2px 10px', borderRadius: 20, fontSize: '0.65rem', fontWeight: 700,
+              fontFamily: 'Lato, sans-serif',
+              backgroundColor: hasLogin ? '#EFF6FF' : '#FEF3C7',
+              color: hasLogin ? '#1D4ED8' : '#92400E',
+            }}>
+              {hasLogin ? 'Has Login' : 'No Login'}
+            </span>
           </div>
           <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: '0 0 6px' }}>{counselor.title}</p>
           {counselor.email && <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: '2px 0' }}>{counselor.email}</p>}
@@ -243,21 +313,32 @@ function CounselorCard({ counselor, onEdit, onRefresh }: {
           )}
         </div>
         <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+          {!hasLogin && (
+            <button onClick={() => setShowLoginForm(!showLoginForm)} style={S.btn('#065F46', 'white')}>
+              Create Login
+            </button>
+          )}
           <button onClick={onEdit} style={S.btn('var(--nhlb-cream-dark)', 'var(--nhlb-text)')}>Edit</button>
           <button onClick={handleDelete} style={S.btn('white', '#DC2626')}>Delete</button>
         </div>
       </div>
 
-      <button
-        onClick={() => setExpanded(!expanded)}
-        style={{
-          background: 'none', border: 'none', cursor: 'pointer',
-          fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700,
-          color: 'var(--nhlb-red)', padding: 0, marginTop: 12,
-        }}
-      >
-        {expanded ? '▾ Hide availability' : '▸ Manage availability hours'}
-      </button>
+      {showLoginForm && !hasLogin && (
+        <CreateLoginForm counselor={counselor} onDone={() => { setShowLoginForm(false); onRefresh() }} />
+      )}
+
+      <div style={{ display: 'flex', gap: 16, marginTop: 12 }}>
+        <button
+          onClick={() => setExpanded(!expanded)}
+          style={{
+            background: 'none', border: 'none', cursor: 'pointer',
+            fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700,
+            color: 'var(--nhlb-red)', padding: 0,
+          }}
+        >
+          {expanded ? '▾ Hide availability' : '▸ Manage availability hours'}
+        </button>
+      </div>
       {expanded && <AvailabilityEditor counselorId={counselor.id} />}
     </div>
   )

@@ -12,6 +12,7 @@ export interface Counselor {
   zoom_link: string | null
   specialties: string[]
   is_active: boolean
+  supabase_user_id: string | null
   created_at: string
 }
 

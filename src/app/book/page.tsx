@@ -97,10 +97,18 @@ export default function BookLandingPage() {
         </div>
       </main>
 
-      <footer style={{ backgroundColor: 'var(--nhlb-blush)', padding: '24px 48px', color: 'white' }}>
+      <footer style={{ backgroundColor: 'var(--nhlb-blush)', padding: '24px 48px', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
         <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', margin: 0 }}>
           No Heart Left Behind &copy; {new Date().getFullYear()} &ensp;&middot;&ensp; 985-264-8808 &ensp;&middot;&ensp; reconnectus@yahoo.com
         </p>
+        <div style={{ display: 'flex', gap: 16 }}>
+          <Link href="/counselor/login" style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}>
+            Counselor Login
+          </Link>
+          <Link href="/admin/bookings" style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}>
+            Admin
+          </Link>
+        </div>
       </footer>
     </div>
   )
