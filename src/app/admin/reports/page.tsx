@@ -50,6 +50,7 @@ export default function AdminReportsPage() {
   const [dateFrom, setDateFrom] = useState(() => startOfYear(new Date()).toISOString().slice(0, 10))
   const [dateTo, setDateTo] = useState('')
   const [tab, setTab] = useState<'settlement' | 'counselors' | 'trends'>('settlement')
+  const [counselorFilter, setCounselorFilter] = useState<string>('all')
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -64,6 +65,26 @@ export default function AdminReportsPage() {
   }, [dateFrom, dateTo])
 
   useEffect(() => { load() }, [load])
+
+  // Derived filtered data when a counselor is selected
+  const counselorNames = data?.counselor_stats.map(c => c.counselor_name) ?? []
+  const filtered: ReportData | null = data && counselorFilter !== 'all'
+    ? (() => {
+        const stat = data.counselor_stats.find(c => c.counselor_name === counselorFilter)
+        const counselingRevenue = stat?.total_revenue_cents ?? 0
+        const counselingCount = stat?.donation_count ?? 0
+        return {
+          counselor_stats: stat ? [stat] : [],
+          fund_totals: {
+            ...Object.fromEntries(Object.entries(data.fund_totals).map(([k]) => [k, { total_cents: 0, count: 0 }])),
+            COUNSELING: { total_cents: counselingRevenue, count: counselingCount },
+          },
+          grand_total_cents: counselingRevenue,
+          total_donations: counselingCount,
+          monthly: data.monthly.map(m => ({ ...m, OPERATIONS: 0, EVENTS: 0, GENERAL: 0 })),
+        }
+      })()
+    : data
 
   const exportUrl = (type: string) => {
     const params = new URLSearchParams({ type })
@@ -147,6 +168,27 @@ export default function AdminReportsPage() {
             <label style={S.label}>TO</label>
             <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} style={S.dateInput} />
           </div>
+          {counselorNames.length > 0 && (
+            <div>
+              <label style={S.label}>COUNSELOR</label>
+              <select
+                value={counselorFilter}
+                onChange={e => setCounselorFilter(e.target.value)}
+                style={{
+                  ...S.dateInput,
+                  cursor: 'pointer',
+                  minWidth: 160,
+                  borderColor: counselorFilter !== 'all' ? 'var(--nhlb-red)' : undefined,
+                  color: counselorFilter !== 'all' ? 'var(--nhlb-red-dark)' : undefined,
+                  fontWeight: counselorFilter !== 'all' ? 700 : 400,
+                }}>
+                <option value="all">All Counselors</option>
+                {counselorNames.map(n => (
+                  <option key={n} value={n}>{n}</option>
+                ))}
+              </select>
+            </div>
+          )}
           <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
             {QUICK_RANGES.map(r => (
               <button key={r.label} onClick={() => {
@@ -167,22 +209,43 @@ export default function AdminReportsPage() {
           </div>
         </div>
 
-        {loading || !data ? (
+        {loading || !filtered ? (
           <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>Loading reports...</p>
         ) : (
           <>
+            {/* Counselor filter indicator */}
+            {counselorFilter !== 'all' && (
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16,
+                padding: '10px 16px', background: '#FDF2F2', border: '1px solid var(--nhlb-border)',
+                borderRadius: 8,
+              }}>
+                <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-red-dark)', fontWeight: 700 }}>
+                  Showing: {counselorFilter}
+                </span>
+                <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)' }}>
+                  (counseling revenue only)
+                </span>
+                <button onClick={() => setCounselorFilter('all')} style={{
+                  marginLeft: 'auto', padding: '4px 10px', borderRadius: 6, border: '1px solid var(--nhlb-border)',
+                  backgroundColor: 'white', color: 'var(--nhlb-muted)',
+                  fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer',
+                }}>Clear filter</button>
+              </div>
+            )}
+
             {/* Grand totals row */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: 12, marginBottom: 20 }}>
               <div style={{ ...S.card, textAlign: 'center', borderLeft: '4px solid var(--nhlb-red)' }}>
                 <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0 }}>
-                  {dollars(data.grand_total_cents)}
+                  {dollars(filtered.grand_total_cents)}
                 </p>
                 <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '4px 0 0' }}>
-                  TOTAL REVENUE ({data.total_donations} transactions)
+                  {counselorFilter !== 'all' ? 'COUNSELING REVENUE' : 'TOTAL REVENUE'} ({filtered.total_donations} transactions)
                 </p>
               </div>
               {funds.map(f => {
-                const fd = data.fund_totals[f]
+                const fd = filtered.fund_totals[f]
                 return (
                   <div key={f} style={{ ...S.card, textAlign: 'center', borderLeft: `4px solid ${FUND_COLORS[f].text}` }}>
                     <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.5rem', fontWeight: 600, color: FUND_COLORS[f].text, margin: 0 }}>
@@ -230,8 +293,8 @@ export default function AdminReportsPage() {
                     </thead>
                     <tbody>
                       {funds.map((f, i) => {
-                        const fd = data.fund_totals[f]
-                        const pct = data.grand_total_cents > 0 ? ((fd?.total_cents ?? 0) / data.grand_total_cents * 100) : 0
+                        const fd = filtered.fund_totals[f]
+                        const pct = filtered.grand_total_cents > 0 ? ((fd?.total_cents ?? 0) / filtered.grand_total_cents * 100) : 0
                         return (
                           <tr key={f} style={{ borderTop: i > 0 ? '1px solid var(--nhlb-border)' : 'none' }}>
                             <td style={S.td}>
@@ -258,8 +321,8 @@ export default function AdminReportsPage() {
                       })}
                       <tr style={{ borderTop: '2px solid var(--nhlb-red-dark)' }}>
                         <td style={{ ...S.td, fontWeight: 700, color: 'var(--nhlb-red-dark)' }}>Total</td>
-                        <td style={{ ...S.td, fontWeight: 700, color: 'var(--nhlb-red-dark)' }}>{dollars(data.grand_total_cents)}</td>
-                        <td style={{ ...S.td, fontWeight: 700, color: 'var(--nhlb-red-dark)' }}>{data.total_donations}</td>
+                        <td style={{ ...S.td, fontWeight: 700, color: 'var(--nhlb-red-dark)' }}>{dollars(filtered.grand_total_cents)}</td>
+                        <td style={{ ...S.td, fontWeight: 700, color: 'var(--nhlb-red-dark)' }}>{filtered.total_donations}</td>
                         <td style={S.td} />
                       </tr>
                     </tbody>
@@ -294,7 +357,7 @@ export default function AdminReportsPage() {
                 <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.2rem', color: 'var(--nhlb-red-dark)', margin: '0 0 16px' }}>
                   Revenue by Counselor
                 </h2>
-                {data.counselor_stats.length === 0 ? (
+                {filtered.counselor_stats.length === 0 ? (
                   <p style={{ textAlign: 'center', padding: 32, fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem', color: 'var(--nhlb-muted)' }}>
                     No booking data for this period
                   </p>
@@ -309,7 +372,7 @@ export default function AdminReportsPage() {
                         </tr>
                       </thead>
                       <tbody>
-                        {data.counselor_stats.map((c, i) => (
+                        {filtered.counselor_stats.map((c, i) => (
                           <tr key={c.counselor_id} style={{ borderTop: i > 0 ? '1px solid var(--nhlb-border)' : 'none' }}>
                             <td style={{ ...S.td, fontWeight: 700 }}>{c.counselor_name}</td>
                             <td style={S.td}>{c.total_sessions}</td>
@@ -349,21 +412,21 @@ export default function AdminReportsPage() {
                         ))}
                         <tr style={{ borderTop: '2px solid var(--nhlb-red-dark)' }}>
                           <td style={{ ...S.td, fontWeight: 700, color: 'var(--nhlb-red-dark)' }}>Totals</td>
-                          <td style={{ ...S.td, fontWeight: 700 }}>{data.counselor_stats.reduce((s, c) => s + c.total_sessions, 0)}</td>
-                          <td style={{ ...S.td, fontWeight: 700 }}>{data.counselor_stats.reduce((s, c) => s + c.completed_sessions, 0)}</td>
-                          <td style={{ ...S.td, fontWeight: 700 }}>{data.counselor_stats.reduce((s, c) => s + c.cancelled_sessions, 0)}</td>
+                          <td style={{ ...S.td, fontWeight: 700 }}>{filtered.counselor_stats.reduce((s, c) => s + c.total_sessions, 0)}</td>
+                          <td style={{ ...S.td, fontWeight: 700 }}>{filtered.counselor_stats.reduce((s, c) => s + c.completed_sessions, 0)}</td>
+                          <td style={{ ...S.td, fontWeight: 700 }}>{filtered.counselor_stats.reduce((s, c) => s + c.cancelled_sessions, 0)}</td>
                           <td style={S.td} />
                           <td style={{ ...S.td, fontWeight: 700, color: 'var(--nhlb-red-dark)' }}>
-                            {dollars(data.counselor_stats.reduce((s, c) => s + c.total_revenue_cents, 0))}
+                            {dollars(filtered.counselor_stats.reduce((s, c) => s + c.total_revenue_cents, 0))}
                           </td>
                           <td style={{ ...S.td, fontWeight: 700 }}>
                             {(() => {
-                              const allDonations = data.counselor_stats.reduce((s, c) => s + c.donation_count, 0)
-                              const allRevenue = data.counselor_stats.reduce((s, c) => s + c.total_revenue_cents, 0)
+                              const allDonations = filtered.counselor_stats.reduce((s, c) => s + c.donation_count, 0)
+                              const allRevenue = filtered.counselor_stats.reduce((s, c) => s + c.total_revenue_cents, 0)
                               return allDonations > 0 ? dollars(Math.round(allRevenue / allDonations)) : '$0.00'
                             })()}
                           </td>
-                          <td style={{ ...S.td, fontWeight: 700 }}>{data.counselor_stats.reduce((s, c) => s + c.donation_count, 0)}</td>
+                          <td style={{ ...S.td, fontWeight: 700 }}>{filtered.counselor_stats.reduce((s, c) => s + c.donation_count, 0)}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -378,7 +441,7 @@ export default function AdminReportsPage() {
                 <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.2rem', color: 'var(--nhlb-red-dark)', margin: '0 0 16px' }}>
                   Monthly Revenue Trends
                 </h2>
-                {data.monthly.length === 0 ? (
+                {filtered.monthly.length === 0 ? (
                   <p style={{ textAlign: 'center', padding: 32, fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem', color: 'var(--nhlb-muted)' }}>
                     No data for this period
                   </p>
@@ -399,12 +462,12 @@ export default function AdminReportsPage() {
                       </div>
 
                       {(() => {
-                        const maxMonth = Math.max(...data.monthly.map(m =>
+                        const maxMonth = Math.max(...filtered.monthly.map(m =>
                           funds.reduce((s, f) => s + (Number(m[f] ?? 0)), 0)
                         ))
                         return (
                           <div style={{ display: 'flex', gap: 6, alignItems: 'flex-end', height: 200, padding: '0 0 24px' }}>
-                            {data.monthly.map(m => {
+                            {filtered.monthly.map(m => {
                               const total = funds.reduce((s, f) => s + Number(m[f] ?? 0), 0)
                               return (
                                 <div key={m.month} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 0 }}>
@@ -454,7 +517,7 @@ export default function AdminReportsPage() {
                           </tr>
                         </thead>
                         <tbody>
-                          {data.monthly.map((m, i) => {
+                          {filtered.monthly.map((m, i) => {
                             const total = funds.reduce((s, f) => s + Number(m[f] ?? 0), 0)
                             return (
                               <tr key={m.month} style={{ borderTop: i > 0 ? '1px solid var(--nhlb-border)' : 'none' }}>

@@ -75,6 +75,10 @@ export async function GET(req: NextRequest) {
     })
   }
 
+  // Business hours: never offer slots outside this range regardless of availability_slots data
+  const BUSINESS_HOUR_START = 9  // 9 AM
+  const BUSINESS_HOUR_END = 17   // 5 PM
+
   // Generate 1hr slots for next 14 days
   const slots: { start: string; counselorId: string; counselorName: string }[] = []
   const counselorMap = Object.fromEntries(counselors.map(c => [c.id, c.name]))
@@ -86,8 +90,8 @@ export async function GET(req: NextRequest) {
     for (const w of windows ?? []) {
       if (w.day_of_week !== dow) continue
 
-      const startHour = parseInt(w.start_time.split(':')[0])
-      const endHour = parseInt(w.end_time.split(':')[0])
+      const startHour = Math.max(parseInt(w.start_time.split(':')[0]), BUSINESS_HOUR_START)
+      const endHour = Math.min(parseInt(w.end_time.split(':')[0]), BUSINESS_HOUR_END)
 
       for (let h = startHour; h < endHour; h++) {
         const slotTime = setMinutes(setHours(startOfDay(day), h), 0)
