@@ -56,6 +56,25 @@ export async function GET(req: NextRequest) {
     (booked ?? []).map(b => `${b.counselor_id}_${b.scheduled_at}`)
   )
 
+  // Get blocked dates
+  const { data: blocked } = await supabase
+    .from('counselor_blocked_dates')
+    .select('counselor_id, blocked_date, start_time, end_time')
+    .in('counselor_id', ids)
+    .gte('blocked_date', format(startOfDay(now), 'yyyy-MM-dd'))
+    .lte('blocked_date', format(rangeEnd, 'yyyy-MM-dd'))
+
+  const isBlocked = (counselorId: string, date: Date, hour: number): boolean => {
+    const dateStr = format(date, 'yyyy-MM-dd')
+    return (blocked ?? []).some(b => {
+      if (b.counselor_id !== counselorId || b.blocked_date !== dateStr) return false
+      if (!b.start_time && !b.end_time) return true
+      const bStart = b.start_time ? parseInt(b.start_time.split(':')[0]) : 0
+      const bEnd = b.end_time ? parseInt(b.end_time.split(':')[0]) : 24
+      return hour >= bStart && hour < bEnd
+    })
+  }
+
   // Generate 1hr slots for next 14 days
   const slots: { start: string; counselorId: string; counselorName: string }[] = []
   const counselorMap = Object.fromEntries(counselors.map(c => [c.id, c.name]))
@@ -78,6 +97,7 @@ export async function GET(req: NextRequest) {
         const iso = slotTime.toISOString()
         const key = `${w.counselor_id}_${iso}`
         if (bookedSet.has(key)) continue
+        if (isBlocked(w.counselor_id, day, h)) continue
 
         slots.push({
           start: iso,

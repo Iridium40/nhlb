@@ -90,6 +90,16 @@ export interface TimeSlot {
   counselorName: string
 }
 
+export interface CounselorBlockedDate {
+  id: string
+  counselor_id: string
+  blocked_date: string
+  start_time: string | null
+  end_time: string | null
+  reason: string | null
+  created_at: string
+}
+
 // ── Events ──
 
 export interface Event {
