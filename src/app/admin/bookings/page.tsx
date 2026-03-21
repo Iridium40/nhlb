@@ -73,6 +73,14 @@ export default function AdminBookingsPage() {
             fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700,
             color: 'var(--nhlb-red)', textDecoration: 'none',
           }}>Counselors</a>
+          <a href="/admin/events" style={{
+            fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700,
+            color: 'var(--nhlb-red)', textDecoration: 'none',
+          }}>Events</a>
+          <a href="/admin/donations" style={{
+            fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700,
+            color: 'var(--nhlb-red)', textDecoration: 'none',
+          }}>Donations</a>
         </nav>
       </header>
 
