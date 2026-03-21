@@ -124,6 +124,15 @@ export default function CounselorLoginPage() {
             }} className="btn-primary">
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
+
+            <div style={{ textAlign: 'center', marginTop: 14 }}>
+              <a href="/counselor/forgot-password" style={{
+                fontFamily: 'Lato, sans-serif', fontSize: '0.8rem',
+                color: 'var(--nhlb-red)', textDecoration: 'none',
+              }}>
+                Forgot your password?
+              </a>
+            </div>
           </div>
 
           <p style={{

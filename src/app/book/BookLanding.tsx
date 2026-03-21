@@ -300,6 +300,15 @@ export default function BookLanding() {
                 }}>
                   {loggingIn ? 'Signing in...' : 'Sign In'}
                 </button>
+
+                <div style={{ textAlign: 'center', marginTop: 14 }}>
+                  <Link href="/book/forgot-password" style={{
+                    fontFamily: 'Lato, sans-serif', fontSize: '0.8rem',
+                    color: 'var(--nhlb-red)', textDecoration: 'none',
+                  }}>
+                    Forgot your password?
+                  </Link>
+                </div>
               </div>
 
               <button onClick={() => { setView('guest'); setLoginError(null) }} style={{
