@@ -44,6 +44,11 @@ export function CounselorNotificationEmail({ booking, counselor, client }: Props
           </Section>
 
           <Hr style={{ margin: '20px 0' }} />
+          <Section style={{ background: '#EAF5EE', borderRadius: 6, padding: '10px 14px', marginBottom: 16 }}>
+            <Text style={{ color: '#065F46', fontSize: 12, margin: 0 }}>
+              📅 A calendar file (session.ics) is attached — open it to add this session to your calendar.
+            </Text>
+          </Section>
           <Text style={{ color: '#999', fontSize: 12 }}>
             Booking ID: {booking.id}
           </Text>

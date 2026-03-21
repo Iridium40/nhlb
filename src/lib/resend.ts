@@ -3,6 +3,7 @@ import { BookingConfirmationEmail } from '../../emails/BookingConfirmation'
 import { CounselorNotificationEmail } from '../../emails/CounselorNotification'
 import { VirtualSessionInfoEmail } from '../../emails/VirtualSessionInfo'
 import { HipaaIntakeEmail } from '../../emails/HipaaIntakeEmail'
+import { generateICS } from '@/lib/ics'
 import type { Booking, Counselor, Client } from '@/types'
 
 function getResend() {
@@ -23,11 +24,21 @@ export async function sendBookingConfirmation({
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
     : 'http://localhost:3000'
+
+  const icsContent = generateICS({ booking, counselor, client, perspective: 'client' })
+
   await getResend().emails.send({
     from: from(),
     to: client.email,
     subject: 'Your NHLB counseling session is confirmed',
     react: BookingConfirmationEmail({ booking, counselor, client, baseUrl }),
+    attachments: [
+      {
+        filename: 'session.ics',
+        content: Buffer.from(icsContent).toString('base64'),
+        contentType: 'text/calendar; method=PUBLISH',
+      },
+    ],
   })
 }
 
@@ -40,11 +51,25 @@ export async function sendCounselorNotification({
   counselor: Counselor
   client: Client
 }) {
+  const icsContent = generateICS({ booking, counselor, client, perspective: 'counselor' })
+
+  const recipients = [adminEmail()]
+  if (counselor.email && counselor.email !== adminEmail()) {
+    recipients.push(counselor.email)
+  }
+
   await getResend().emails.send({
     from: from(),
-    to: adminEmail(),
+    to: recipients,
     subject: `New booking — ${client.first_name} ${client.last_name}`,
     react: CounselorNotificationEmail({ booking, counselor, client }),
+    attachments: [
+      {
+        filename: 'session.ics',
+        content: Buffer.from(icsContent).toString('base64'),
+        contentType: 'text/calendar; method=PUBLISH',
+      },
+    ],
   })
 }
 

@@ -83,6 +83,13 @@ export function BookingConfirmationEmail({ booking, counselor, client, baseUrl =
 
           <Hr style={{ borderColor: '#F0E0D8', margin: '24px 0' }} />
 
+          <Section style={{ background: '#EAF5EE', borderRadius: 6, padding: '12px 16px', marginBottom: 16 }}>
+            <Text style={{ color: '#065F46', fontSize: 13, fontFamily: 'Arial, sans-serif', margin: 0, lineHeight: '20px' }}>
+              📅 A calendar file (session.ics) is attached to this email.
+              Open it to add this appointment to your calendar.
+            </Text>
+          </Section>
+
           <Section>
             <Text style={{ color: '#555', fontSize: 13, fontFamily: 'Arial, sans-serif', lineHeight: '20px' }}>
               Need to cancel? You can cancel online up to 24 hours before your appointment.
