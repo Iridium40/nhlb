@@ -28,6 +28,8 @@ export default function CounselorProfilePage() {
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [zoomLink, setZoomLink] = useState('')
+  const [zoomMeetingId, setZoomMeetingId] = useState('')
+  const [zoomPasscode, setZoomPasscode] = useState('')
   const [photoUrl, setPhotoUrl] = useState('')
   const [specialties, setSpecialties] = useState<string[]>([])
 
@@ -43,6 +45,8 @@ export default function CounselorProfilePage() {
     setEmail(c.email ?? '')
     setPhone(c.phone ?? '')
     setZoomLink(c.zoom_link ?? '')
+    setZoomMeetingId(c.zoom_meeting_id ?? '')
+    setZoomPasscode(c.zoom_passcode ?? '')
     setPhotoUrl(c.photo_url ?? '')
     setSpecialties(c.specialties ?? [])
     setLoading(false)
@@ -60,6 +64,8 @@ export default function CounselorProfilePage() {
       body: JSON.stringify({
         name, title, bio, email, phone,
         zoom_link: zoomLink,
+        zoom_meeting_id: zoomMeetingId || null,
+        zoom_passcode: zoomPasscode || null,
         specialties,
       }),
     })
@@ -264,12 +270,30 @@ export default function CounselorProfilePage() {
             </div>
           </div>
           <div>
-            <label style={S.label}>Virtual Session Link (Zoom, etc.)</label>
+            <label style={S.label}>Zoom Link</label>
             <input value={zoomLink} onChange={e => setZoomLink(e.target.value)} style={S.input}
               placeholder="https://zoom.us/j/..." />
             <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)', margin: '6px 0 0', fontStyle: 'italic' }}>
-              This link is shared with clients who book virtual sessions with you.
+              Your personal Zoom meeting room link
             </p>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+            <div>
+              <label style={S.label}>Meeting ID</label>
+              <input value={zoomMeetingId} onChange={e => setZoomMeetingId(e.target.value)} style={S.input}
+                placeholder="636 585 7340" />
+              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)', margin: '6px 0 0', fontStyle: 'italic' }}>
+                Your Zoom meeting ID number
+              </p>
+            </div>
+            <div>
+              <label style={S.label}>Passcode</label>
+              <input value={zoomPasscode} onChange={e => setZoomPasscode(e.target.value)} style={S.input}
+                placeholder="202020" />
+              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)', margin: '6px 0 0', fontStyle: 'italic' }}>
+                Meeting passcode (if required)
+              </p>
+            </div>
           </div>
         </div>
 

@@ -109,11 +109,34 @@ export default async function ConfirmationPage({
               </div>
             )}
 
-            {booking.type === 'VIRTUAL' && booking.counselor?.zoom_link && (
+            {booking.type === 'VIRTUAL' && (
               <div style={{ borderTop: '1px solid var(--nhlb-border)', paddingTop: 16 }}>
-                <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-text)', margin: '0 0 8px' }}>
-                  💻 Your virtual session link will be emailed before your appointment.
+                <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: 'var(--nhlb-text)', margin: '0 0 8px' }}>
+                  💻 Virtual Session Details
                 </p>
+                {booking.counselor?.zoom_link && (
+                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', margin: '0 0 4px' }}>
+                    <strong>Join:</strong>{' '}
+                    <a href={booking.counselor.zoom_link} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--nhlb-red)' }}>
+                      {booking.counselor.zoom_link}
+                    </a>
+                  </p>
+                )}
+                {booking.counselor?.zoom_meeting_id && (
+                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', margin: '0 0 4px' }}>
+                    <strong>Meeting ID:</strong> {booking.counselor.zoom_meeting_id}
+                  </p>
+                )}
+                {booking.counselor?.zoom_passcode && (
+                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', margin: '0 0 4px' }}>
+                    <strong>Passcode:</strong> {booking.counselor.zoom_passcode}
+                  </p>
+                )}
+                {!booking.counselor?.zoom_link && (
+                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', margin: 0, fontStyle: 'italic' }}>
+                    Your counselor will send a meeting link before your session.
+                  </p>
+                )}
               </div>
             )}
           </div>

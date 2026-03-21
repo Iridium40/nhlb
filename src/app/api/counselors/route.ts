@@ -25,6 +25,8 @@ export async function POST(req: NextRequest) {
       email: body.email ?? null,
       phone: body.phone ?? null,
       zoom_link: body.zoom_link ?? null,
+      zoom_meeting_id: body.zoom_meeting_id ?? null,
+      zoom_passcode: body.zoom_passcode ?? null,
       specialties: body.specialties ?? [],
       is_active: body.is_active ?? true,
     })

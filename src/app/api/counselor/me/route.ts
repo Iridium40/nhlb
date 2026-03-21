@@ -27,7 +27,7 @@ export async function GET() {
   return NextResponse.json({ counselor, userId: user.id })
 }
 
-const ALLOWED_FIELDS = ['name', 'title', 'bio', 'email', 'phone', 'zoom_link', 'specialties', 'photo_url'] as const
+const ALLOWED_FIELDS = ['name', 'title', 'bio', 'email', 'phone', 'zoom_link', 'zoom_meeting_id', 'zoom_passcode', 'specialties', 'photo_url'] as const
 
 export async function PATCH(req: NextRequest) {
   const result = await getAuthenticatedCounselor()

@@ -60,10 +60,22 @@ export function BookingConfirmationEmail({ booking, counselor, client, baseUrl =
                 💻 Virtual session
               </Text>
               {counselor.zoom_link ? (
-                <Text style={{ color: '#555', fontSize: 13, margin: '0 0 4px' }}>
-                  <strong>Join link:</strong>{' '}
-                  <a href={counselor.zoom_link} style={{ color: '#B8311F' }}>{counselor.zoom_link}</a>
-                </Text>
+                <>
+                  <Text style={{ color: '#555', fontSize: 13, margin: '0 0 4px' }}>
+                    <strong>Join link:</strong>{' '}
+                    <a href={counselor.zoom_link} style={{ color: '#B8311F' }}>{counselor.zoom_link}</a>
+                  </Text>
+                  {counselor.zoom_meeting_id && (
+                    <Text style={{ color: '#555', fontSize: 13, margin: '4px 0 0' }}>
+                      <strong>Meeting ID:</strong> {counselor.zoom_meeting_id}
+                    </Text>
+                  )}
+                  {counselor.zoom_passcode && (
+                    <Text style={{ color: '#555', fontSize: 13, margin: '4px 0 0' }}>
+                      <strong>Passcode:</strong> {counselor.zoom_passcode}
+                    </Text>
+                  )}
+                </>
               ) : (
                 <Text style={{ color: '#9A5A50', fontSize: 13, margin: 0, fontStyle: 'italic' }}>
                   Your counselor will send a secure video link before your session.

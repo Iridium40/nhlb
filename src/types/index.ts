@@ -10,6 +10,8 @@ export interface Counselor {
   email: string | null
   phone: string | null
   zoom_link: string | null
+  zoom_meeting_id: string | null
+  zoom_passcode: string | null
   specialties: string[]
   is_active: boolean
   supabase_user_id: string | null

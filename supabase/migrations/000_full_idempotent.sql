@@ -48,6 +48,8 @@ CREATE TABLE counselors (
   email            TEXT,
   phone            TEXT,
   zoom_link        TEXT,
+  zoom_meeting_id  TEXT,
+  zoom_passcode    TEXT,
   supabase_user_id UUID UNIQUE,
   created_at       TIMESTAMPTZ DEFAULT NOW()
 );

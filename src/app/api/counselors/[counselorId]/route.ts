@@ -27,7 +27,7 @@ export async function PATCH(
   const supabase = createSupabaseAdminClient()
 
   const updates: Record<string, unknown> = {}
-  const fields = ['name', 'title', 'bio', 'email', 'phone', 'zoom_link', 'specialties', 'is_active']
+  const fields = ['name', 'title', 'bio', 'email', 'phone', 'zoom_link', 'zoom_meeting_id', 'zoom_passcode', 'specialties', 'is_active']
   for (const f of fields) {
     if (body[f] !== undefined) updates[f] = body[f]
   }

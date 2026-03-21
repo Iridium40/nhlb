@@ -141,6 +141,8 @@ function CounselorForm({ counselor, onSaved, onCancel }: {
   const [email, setEmail] = useState(counselor?.email ?? '')
   const [phone, setPhone] = useState(counselor?.phone ?? '')
   const [zoomLink, setZoomLink] = useState(counselor?.zoom_link ?? '')
+  const [zoomMeetingId, setZoomMeetingId] = useState(counselor?.zoom_meeting_id ?? '')
+  const [zoomPasscode, setZoomPasscode] = useState(counselor?.zoom_passcode ?? '')
   const [specialties, setSpecialties] = useState(counselor?.specialties?.join(', ') ?? '')
   const [isActive, setIsActive] = useState(counselor?.is_active ?? true)
   const [saving, setSaving] = useState(false)
@@ -153,6 +155,8 @@ function CounselorForm({ counselor, onSaved, onCancel }: {
       email: email || null,
       phone: phone || null,
       zoom_link: zoomLink || null,
+      zoom_meeting_id: zoomMeetingId || null,
+      zoom_passcode: zoomPasscode || null,
       specialties: specialties.split(',').map(s => s.trim()).filter(Boolean),
       is_active: isActive,
     }
@@ -178,6 +182,10 @@ function CounselorForm({ counselor, onSaved, onCancel }: {
         <div><label style={S.label}>Phone</label><input value={phone} onChange={e => setPhone(e.target.value)} style={S.input} /></div>
       </div>
       <div style={{ marginBottom: 16 }}><label style={S.label}>Zoom Link</label><input value={zoomLink} onChange={e => setZoomLink(e.target.value)} style={S.input} placeholder="https://zoom.us/j/..." /></div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
+        <div><label style={S.label}>Meeting ID</label><input value={zoomMeetingId} onChange={e => setZoomMeetingId(e.target.value)} style={S.input} placeholder="636 585 7340" /></div>
+        <div><label style={S.label}>Passcode</label><input value={zoomPasscode} onChange={e => setZoomPasscode(e.target.value)} style={S.input} placeholder="202020" /></div>
+      </div>
       <div style={{ marginBottom: 16 }}><label style={S.label}>Bio</label><textarea value={bio} onChange={e => setBio(e.target.value)} style={{ ...S.input, resize: 'none' }} rows={3} /></div>
       <div style={{ marginBottom: 16 }}><label style={S.label}>Specialties (comma-separated)</label><input value={specialties} onChange={e => setSpecialties(e.target.value)} style={S.input} placeholder="marriage, family, trauma" /></div>
       <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', marginBottom: 20 }}>
@@ -343,6 +351,13 @@ function CounselorCard({ counselor, onEdit, onRefresh }: {
           {counselor.email && <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: '2px 0' }}>{counselor.email}</p>}
           {counselor.phone && <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: '2px 0' }}>{counselor.phone}</p>}
           {counselor.zoom_link && <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: '#1D4ED8', margin: '2px 0', wordBreak: 'break-all' }}>Zoom: {counselor.zoom_link}</p>}
+          {(counselor.zoom_meeting_id || counselor.zoom_passcode) && (
+            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)', margin: '2px 0' }}>
+              {counselor.zoom_meeting_id && <>ID: {counselor.zoom_meeting_id}</>}
+              {counselor.zoom_meeting_id && counselor.zoom_passcode && ' · '}
+              {counselor.zoom_passcode && <>Passcode: {counselor.zoom_passcode}</>}
+            </p>
+          )}
           {counselor.specialties?.length > 0 && (
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginTop: 8 }}>
               {counselor.specialties.map(s => (

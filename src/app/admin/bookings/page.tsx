@@ -407,6 +407,15 @@ export default function AdminBookingsPage() {
                             {b.client?.email}{b.client?.phone ? ` · ${b.client.phone}` : ''}
                             {b.donation_amount_cents > 0 ? ` · $${(b.donation_amount_cents / 100).toFixed(2)} donation` : ''}
                           </p>
+                          {b.type === 'VIRTUAL' && b.counselor?.zoom_link && (
+                            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: '#1D4ED8', margin: '4px 0 0' }}>
+                              <a href={b.counselor.zoom_link} target="_blank" rel="noopener noreferrer" style={{ color: '#1D4ED8', textDecoration: 'none' }}>
+                                Join Zoom
+                              </a>
+                              {b.counselor.zoom_meeting_id && <> · ID: {b.counselor.zoom_meeting_id}</>}
+                              {b.counselor.zoom_passcode && <> · Passcode: {b.counselor.zoom_passcode}</>}
+                            </p>
+                          )}
                         </div>
                         <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
                           {b.status === 'CONFIRMED' && (
