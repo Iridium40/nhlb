@@ -1,0 +1,62 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { createSupabaseAdminClient } from '@/lib/supabase'
+
+export async function GET(
+  _req: NextRequest,
+  { params }: { params: Promise<{ clientId: string }> }
+) {
+  const { clientId } = await params
+  const supabase = createSupabaseAdminClient()
+
+  const { data: client, error } = await supabase
+    .from('clients')
+    .select('*')
+    .eq('id', clientId)
+    .single()
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 404 })
+
+  const { data: bookings } = await supabase
+    .from('bookings')
+    .select('*, counselor:counselors(id, name, title)')
+    .eq('client_id', clientId)
+    .order('scheduled_at', { ascending: false })
+
+  const { data: intakes } = await supabase
+    .from('hipaa_intakes')
+    .select('id, completed_at, created_at')
+    .eq('client_id', clientId)
+    .order('created_at', { ascending: false })
+    .limit(1)
+
+  return NextResponse.json({
+    client,
+    bookings: bookings ?? [],
+    hipaaCompleted: intakes?.[0]?.completed_at != null,
+  })
+}
+
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ clientId: string }> }
+) {
+  const { clientId } = await params
+  const body = await req.json()
+  const supabase = createSupabaseAdminClient()
+
+  const updates: Record<string, unknown> = {}
+  const fields = ['first_name', 'last_name', 'email', 'phone', 'service_type', 'brief_reason']
+  for (const f of fields) {
+    if (body[f] !== undefined) updates[f] = body[f]
+  }
+
+  const { data, error } = await supabase
+    .from('clients')
+    .update(updates)
+    .eq('id', clientId)
+    .select()
+    .single()
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  return NextResponse.json({ client: data })
+}

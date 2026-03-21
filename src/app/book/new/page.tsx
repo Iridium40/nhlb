@@ -1,0 +1,412 @@
+'use client'
+
+import { useState, useEffect, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
+import { format, isSameDay } from 'date-fns'
+import type { TimeSlot } from '@/types'
+
+type Step = 'info' | 'schedule' | 'payment'
+
+const S = {
+  input: {
+    width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
+    padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
+    color: 'var(--nhlb-text)', background: 'white', outline: 'none',
+  } as React.CSSProperties,
+  label: {
+    display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.75rem',
+    fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' as const,
+    color: 'var(--nhlb-muted)', marginBottom: 6,
+  } as React.CSSProperties,
+  btn: {
+    width: '100%', backgroundColor: 'var(--nhlb-red)', color: 'white',
+    fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem',
+    letterSpacing: '0.05em', padding: '14px 24px', borderRadius: 8,
+    border: 'none', cursor: 'pointer',
+  } as React.CSSProperties,
+}
+
+export default function NewClientBookingPage() {
+  const router = useRouter()
+  const [step, setStep] = useState<Step>('info')
+  const [error, setError] = useState<string | null>(null)
+  const [submitting, setSubmitting] = useState(false)
+
+  // Step 1: client info
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+  const [serviceType, setServiceType] = useState('individual')
+  const [reason, setReason] = useState('')
+
+  // Step 2: schedule
+  const [slots, setSlots] = useState<TimeSlot[]>([])
+  const [loadingSlots, setLoadingSlots] = useState(false)
+  const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null)
+
+  // Step 3: payment
+  const [donationAmount, setDonationAmount] = useState('25')
+  const [stripeReady, setStripeReady] = useState(false)
+  const [devMode, setDevMode] = useState(false)
+
+  const loadSlots = useCallback(async () => {
+    setLoadingSlots(true)
+    const res = await fetch('/api/booking/availability?newClient=true')
+    const json = await res.json()
+    setSlots(json.slots ?? [])
+    setLoadingSlots(false)
+  }, [])
+
+  useEffect(() => {
+    if (step === 'schedule') loadSlots()
+  }, [step, loadSlots])
+
+  const goToSchedule = () => {
+    if (!firstName.trim() || !lastName.trim() || !email.trim()) {
+      setError('Please fill in your name and email.')
+      return
+    }
+    setError(null)
+    setStep('schedule')
+  }
+
+  const selectSlot = (slot: TimeSlot) => {
+    setSelectedSlot(slot)
+    setStep('payment')
+  }
+
+  const handleBooking = async () => {
+    if (!selectedSlot) return
+    setSubmitting(true)
+    setError(null)
+
+    const amountCents = Math.round((parseFloat(donationAmount) || 0) * 100)
+
+    // If Stripe is configured and amount >= $10, create payment intent first
+    if (amountCents >= 1000 && !devMode) {
+      try {
+        const piRes = await fetch('/api/stripe/create-payment-intent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amountCents,
+            clientEmail: email,
+            clientName: `${firstName} ${lastName}`,
+          }),
+        })
+        const piJson = await piRes.json()
+        if (piJson.devMode) {
+          setDevMode(true)
+        }
+        // In full implementation, Stripe Elements would handle the card here
+        // For now, proceed with booking creation
+      } catch {
+        // Continue without payment in dev
+      }
+    }
+
+    try {
+      const res = await fetch('/api/booking/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          first_name: firstName,
+          last_name: lastName,
+          email,
+          phone: phone || undefined,
+          service_type: serviceType,
+          brief_reason: reason || undefined,
+          counselor_id: selectedSlot.counselorId,
+          scheduled_at: selectedSlot.start,
+          type: 'IN_PERSON',
+          donation_amount_cents: amountCents,
+        }),
+      })
+      const json = await res.json()
+      if (!res.ok) {
+        setError(json.error ?? 'Could not create booking')
+        setSubmitting(false)
+        return
+      }
+      router.push(`/book/confirmation/${json.bookingId}`)
+    } catch {
+      setError('Something went wrong. Please try again.')
+      setSubmitting(false)
+    }
+  }
+
+  // Group slots by day
+  const groupedSlots = slots.reduce<Record<string, TimeSlot[]>>((acc, slot) => {
+    const key = format(new Date(slot.start), 'EEE, MMM d')
+    if (!acc[key]) acc[key] = []
+    acc[key].push(slot)
+    return acc
+  }, {})
+
+  const stepLabels = ['Your Info', 'Choose a Time', 'Love Offering']
+  const stepIndex = step === 'info' ? 0 : step === 'schedule' ? 1 : 2
+
+  return (
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)' }}>
+      <div style={{
+        backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
+        textAlign: 'center', fontSize: '0.8rem', letterSpacing: '0.05em',
+        padding: '8px 16px', fontFamily: 'Lato, sans-serif',
+      }}>
+        New Client &mdash; In-Person Session
+      </div>
+
+      <header style={{
+        backgroundColor: 'white', borderBottom: '1px solid var(--nhlb-blush-light)',
+        padding: '0 40px', display: 'flex', alignItems: 'center', height: 64,
+      }}>
+        <a href="/book" style={{
+          fontFamily: 'Lato, sans-serif', fontSize: '0.85rem',
+          color: 'var(--nhlb-muted)', textDecoration: 'none',
+        }}>&larr; Back</a>
+        <h1 style={{
+          fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem',
+          fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 0 20px',
+        }}>Book Your First Session</h1>
+      </header>
+
+      <div style={{ maxWidth: 620, margin: '0 auto', padding: '40px 24px 80px' }}>
+
+        {/* Progress */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 40 }}>
+          {stepLabels.map((label, i) => (
+            <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 4, flex: i < 2 ? 1 : 'none' }}>
+              <div style={{
+                width: 28, height: 28, borderRadius: '50%', flexShrink: 0,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '0.75rem', fontWeight: 700, fontFamily: 'Lato, sans-serif',
+                backgroundColor: i < stepIndex ? '#2D7A4F' : i === stepIndex ? 'var(--nhlb-red)' : 'var(--nhlb-blush-light)',
+                color: i <= stepIndex ? 'white' : 'var(--nhlb-muted)',
+              }}>
+                {i < stepIndex ? '✓' : i + 1}
+              </div>
+              <span style={{
+                fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', whiteSpace: 'nowrap',
+                color: i === stepIndex ? 'var(--nhlb-red-dark)' : 'var(--nhlb-muted)',
+                fontWeight: i === stepIndex ? 700 : 400,
+              }}>{label}</span>
+              {i < 2 && <div style={{ flex: 1, height: 1, backgroundColor: 'var(--nhlb-border)', marginLeft: 4 }} />}
+            </div>
+          ))}
+        </div>
+
+        {error && (
+          <div style={{
+            marginBottom: 24, padding: '14px 16px',
+            backgroundColor: '#FEF2F2', border: '1px solid #FECACA',
+            borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: '#B91C1C',
+          }}>
+            {error}
+          </div>
+        )}
+
+        {/* Step 1: Info */}
+        {step === 'info' && (
+          <div>
+            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
+              Tell us about yourself
+            </h2>
+            <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', marginBottom: 28 }}>
+              All information is kept private and confidential.
+            </p>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+              <div><label style={S.label}>First name *</label><input value={firstName} onChange={e => setFirstName(e.target.value)} style={S.input} className="input-brand" placeholder="Jane" /></div>
+              <div><label style={S.label}>Last name *</label><input value={lastName} onChange={e => setLastName(e.target.value)} style={S.input} className="input-brand" placeholder="Smith" /></div>
+            </div>
+            <div style={{ marginBottom: 16 }}><label style={S.label}>Email *</label><input type="email" value={email} onChange={e => setEmail(e.target.value)} style={S.input} className="input-brand" placeholder="jane@example.com" /></div>
+            <div style={{ marginBottom: 16 }}><label style={S.label}>Phone</label><input type="tel" value={phone} onChange={e => setPhone(e.target.value)} style={S.input} className="input-brand" placeholder="(985) 555-0100" /></div>
+
+            <div style={{ marginBottom: 16 }}>
+              <label style={S.label}>Type of counseling</label>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+                {([
+                  { v: 'individual', emoji: '🙏', label: 'Individual' },
+                  { v: 'marriage', emoji: '💑', label: 'Marriage' },
+                  { v: 'family', emoji: '👨‍👩‍👧', label: 'Family' },
+                ] as const).map(({ v, emoji, label }) => (
+                  <button key={v} onClick={() => setServiceType(v)} style={{
+                    padding: '12px 8px', textAlign: 'center', cursor: 'pointer',
+                    border: `2px solid ${serviceType === v ? 'var(--nhlb-red)' : 'var(--nhlb-border)'}`,
+                    backgroundColor: serviceType === v ? 'var(--nhlb-red)' : 'white',
+                    color: serviceType === v ? 'white' : 'var(--nhlb-text)',
+                    borderRadius: 10, transition: 'all 0.12s',
+                  }}>
+                    <span style={{ fontSize: '1.3rem', display: 'block', marginBottom: 4 }}>{emoji}</span>
+                    <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700 }}>{label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ marginBottom: 28 }}>
+              <label style={S.label}>Reason for seeking counseling <span style={{ fontWeight: 400, textTransform: 'none', opacity: 0.7 }}>(optional)</span></label>
+              <textarea value={reason} onChange={e => setReason(e.target.value)} rows={3}
+                style={{ ...S.input, resize: 'none' }} className="input-brand"
+                placeholder="Feel free to share as little or as much as you'd like..." />
+            </div>
+
+            <button onClick={goToSchedule} style={S.btn} className="btn-primary">Continue &rarr;</button>
+          </div>
+        )}
+
+        {/* Step 2: Schedule */}
+        {step === 'schedule' && (
+          <div>
+            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
+              Choose a time
+            </h2>
+            <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', marginBottom: 28 }}>
+              In-person &middot; 60 minutes &middot; 430 N. Jefferson Ave, Covington
+            </p>
+
+            {loadingSlots ? (
+              <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>
+                Loading available times...
+              </p>
+            ) : Object.keys(groupedSlots).length === 0 ? (
+              <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>
+                No available slots right now. Please check back later.
+              </p>
+            ) : (
+              <div style={{ maxHeight: '56vh', overflowY: 'auto', paddingRight: 4, marginBottom: 28 }}>
+                {Object.entries(groupedSlots).map(([day, daySlots]) => (
+                  <div key={day} style={{ marginBottom: 20 }}>
+                    <p style={{
+                      fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                      letterSpacing: '0.1em', textTransform: 'uppercase',
+                      color: 'var(--nhlb-muted)', marginBottom: 8,
+                    }}>{day}</p>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
+                      {daySlots.map(slot => (
+                        <button key={slot.start} onClick={() => selectSlot(slot)} style={{
+                          padding: '10px 4px',
+                          border: '1px solid var(--nhlb-border)', borderRadius: 8,
+                          backgroundColor: 'white', fontFamily: 'Lato, sans-serif',
+                          fontSize: '0.8rem', color: 'var(--nhlb-text)',
+                          cursor: 'pointer', transition: 'all 0.12s',
+                        }}
+                        onMouseEnter={e => {
+                          (e.currentTarget).style.backgroundColor = 'var(--nhlb-red)'
+                          ;(e.currentTarget).style.color = 'white'
+                          ;(e.currentTarget).style.borderColor = 'var(--nhlb-red)'
+                        }}
+                        onMouseLeave={e => {
+                          (e.currentTarget).style.backgroundColor = 'white'
+                          ;(e.currentTarget).style.color = 'var(--nhlb-text)'
+                          ;(e.currentTarget).style.borderColor = 'var(--nhlb-border)'
+                        }}>
+                          {format(new Date(slot.start), 'h:mm a')}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <button onClick={() => setStep('info')} style={{
+              background: 'none', border: 'none', fontFamily: 'Lato, sans-serif',
+              fontSize: '0.875rem', color: 'var(--nhlb-muted)', cursor: 'pointer', padding: 0,
+            }}>&larr; Back</button>
+          </div>
+        )}
+
+        {/* Step 3: Payment / Love Offering */}
+        {step === 'payment' && selectedSlot && (
+          <div>
+            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
+              Love Offering
+            </h2>
+            <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', lineHeight: 1.7, marginBottom: 8 }}>
+              Your session is on <strong style={{ color: 'var(--nhlb-red-dark)' }}>{format(new Date(selectedSlot.start), 'EEE, MMM d')} at {format(new Date(selectedSlot.start), 'h:mm a')}</strong> with {selectedSlot.counselorName}.
+            </p>
+            <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', lineHeight: 1.7, marginBottom: 24 }}>
+              We ask for a minimum $10 love offering. Give what you have decided in your heart.
+            </p>
+
+            <blockquote style={{
+              borderLeft: '3px solid var(--nhlb-blush)', paddingLeft: 16, margin: '0 0 28px',
+              fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic',
+              fontSize: '1.05rem', color: 'var(--nhlb-muted)', lineHeight: 1.6,
+            }}>
+              &ldquo;Each of you should give what you have decided in your heart to give, not reluctantly or under compulsion, for God loves a cheerful giver.&rdquo;
+              <cite style={{ display: 'block', fontStyle: 'normal', fontSize: '0.85rem', marginTop: 6, color: 'var(--nhlb-blush)' }}>
+                &mdash; 2 Corinthians 9:7
+              </cite>
+            </blockquote>
+
+            <div style={{ marginBottom: 20 }}>
+              <label style={S.label}>Select an amount</label>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 8, marginBottom: 10 }}>
+                {['10', '25', '50', '75', '100'].map(amt => (
+                  <button key={amt} onClick={() => setDonationAmount(amt)} style={{
+                    padding: '10px 4px',
+                    border: `1px solid ${donationAmount === amt ? 'var(--nhlb-red)' : 'var(--nhlb-border)'}`,
+                    borderRadius: 8,
+                    backgroundColor: donationAmount === amt ? 'var(--nhlb-red)' : 'white',
+                    color: donationAmount === amt ? 'white' : 'var(--nhlb-text)',
+                    fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem',
+                    cursor: 'pointer', transition: 'all 0.12s',
+                  }}>
+                    ${amt}
+                  </button>
+                ))}
+              </div>
+              <div style={{ position: 'relative' }}>
+                <span style={{
+                  position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)',
+                  fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)',
+                }}>$</span>
+                <input type="number" min="10" step="1" value={donationAmount}
+                  onChange={e => setDonationAmount(e.target.value)}
+                  style={{ ...S.input, paddingLeft: 28 }} className="input-brand"
+                  placeholder="Minimum $10" />
+              </div>
+              {parseFloat(donationAmount) < 10 && donationAmount !== '' && (
+                <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: '#B91C1C', marginTop: 4 }}>
+                  Minimum donation is $10
+                </p>
+              )}
+            </div>
+
+            {!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY && (
+              <div style={{
+                marginBottom: 20, padding: '14px 16px',
+                backgroundColor: '#FEF3C7', border: '1px solid #FCD34D',
+                borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#92400E',
+              }}>
+                Payment integration pending &mdash; booking will proceed without payment in dev mode.
+              </div>
+            )}
+
+            <button
+              onClick={handleBooking}
+              disabled={submitting || parseFloat(donationAmount) < 10}
+              style={{
+                ...S.btn,
+                opacity: submitting || parseFloat(donationAmount) < 10 ? 0.5 : 1,
+                cursor: submitting || parseFloat(donationAmount) < 10 ? 'not-allowed' : 'pointer',
+              }}
+              className="btn-primary"
+            >
+              {submitting ? 'Booking...' : `Confirm & Give $${parseFloat(donationAmount || '10').toFixed(2)}`}
+            </button>
+
+            <button onClick={() => { setStep('schedule'); setSelectedSlot(null) }} style={{
+              display: 'block', margin: '16px auto 0', background: 'none', border: 'none',
+              fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)',
+              cursor: 'pointer', padding: 0,
+            }}>&larr; Choose a different time</button>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}

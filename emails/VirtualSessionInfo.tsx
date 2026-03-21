@@ -16,7 +16,6 @@ export function VirtualSessionInfoEmail({ booking, counselor }: Props) {
       <Head />
       <Body style={{ fontFamily: 'Georgia, serif', background: '#FDFAF8', padding: '40px 0' }}>
         <Container style={{ background: '#fff', borderRadius: 8, padding: '40px', maxWidth: 520 }}>
-
           <Heading style={{ color: '#8B2015', fontFamily: 'Georgia, serif', fontSize: 24, marginBottom: 4 }}>
             Your virtual session is ready
           </Heading>
@@ -54,9 +53,9 @@ export function VirtualSessionInfoEmail({ booking, counselor }: Props) {
               💻 How to join your session
             </Text>
 
-            {booking.meeting_link && (
+            {counselor.zoom_link && (
               <Button
-                href={booking.meeting_link}
+                href={counselor.zoom_link}
                 style={{
                   display: 'block',
                   backgroundColor: '#B8311F', color: '#ffffff',
@@ -73,31 +72,13 @@ export function VirtualSessionInfoEmail({ booking, counselor }: Props) {
 
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <tbody>
-                <tr>
-                  <td style={{ fontFamily: 'Arial, sans-serif', fontSize: 12, color: '#9A5A50', paddingBottom: 8, width: '36%' }}>
-                    Meeting link
-                  </td>
-                  <td style={{ fontFamily: 'Arial, sans-serif', fontSize: 12, color: '#3D1A14', paddingBottom: 8, wordBreak: 'break-all' as const }}>
-                    {booking.meeting_link}
-                  </td>
-                </tr>
-                {booking.meeting_id && (
+                {counselor.zoom_link && (
                   <tr>
-                    <td style={{ fontFamily: 'Arial, sans-serif', fontSize: 12, color: '#9A5A50', paddingBottom: 8 }}>
-                      Meeting ID
+                    <td style={{ fontFamily: 'Arial, sans-serif', fontSize: 12, color: '#9A5A50', paddingBottom: 8, width: '36%' }}>
+                      Zoom link
                     </td>
-                    <td style={{ fontFamily: 'Arial, sans-serif', fontSize: 12, color: '#3D1A14', paddingBottom: 8, fontWeight: 'bold', letterSpacing: '0.05em' }}>
-                      {booking.meeting_id}
-                    </td>
-                  </tr>
-                )}
-                {booking.meeting_passcode && (
-                  <tr>
-                    <td style={{ fontFamily: 'Arial, sans-serif', fontSize: 12, color: '#9A5A50' }}>
-                      Passcode
-                    </td>
-                    <td style={{ fontFamily: 'Arial, sans-serif', fontSize: 12, color: '#3D1A14', fontWeight: 'bold', letterSpacing: '0.1em' }}>
-                      {booking.meeting_passcode}
+                    <td style={{ fontFamily: 'Arial, sans-serif', fontSize: 12, color: '#3D1A14', paddingBottom: 8, wordBreak: 'break-all' as const }}>
+                      {counselor.zoom_link}
                     </td>
                   </tr>
                 )}
@@ -118,7 +99,7 @@ export function VirtualSessionInfoEmail({ booking, counselor }: Props) {
               &bull; Test your audio and video a few minutes early
             </Text>
             <Text style={{ color: '#666', fontSize: 13, fontFamily: 'Arial, sans-serif', margin: '4px 0', lineHeight: 1.5 }}>
-              &bull; Have the link handy &mdash; it&apos;s unique to your session
+              &bull; Have the link handy &mdash; it&apos;s unique to your counselor
             </Text>
           </Section>
 

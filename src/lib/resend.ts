@@ -2,6 +2,7 @@ import { Resend } from 'resend'
 import { BookingConfirmationEmail } from '../../emails/BookingConfirmation'
 import { CounselorNotificationEmail } from '../../emails/CounselorNotification'
 import { VirtualSessionInfoEmail } from '../../emails/VirtualSessionInfo'
+import { HipaaIntakeEmail } from '../../emails/HipaaIntakeEmail'
 import type { Booking, Counselor, Client } from '@/types'
 
 function getResend() {
@@ -58,5 +59,20 @@ export async function sendVirtualSessionInfo({
     to: client.email,
     subject: `Your virtual session details — ${counselor.name}`,
     react: VirtualSessionInfoEmail({ booking, counselor, client }),
+  })
+}
+
+export async function sendHipaaIntakeEmail({
+  client,
+  intakeUrl,
+}: {
+  client: Client
+  intakeUrl: string
+}) {
+  await getResend().emails.send({
+    from: from(),
+    to: client.email,
+    subject: 'Please complete your NHLB intake form',
+    react: HipaaIntakeEmail({ client, intakeUrl }),
   })
 }
