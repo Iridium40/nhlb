@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { format, addDays } from 'date-fns'
 import type { CounselorAvailability, CounselorBlockedDate } from '@/types'
+import CounselorNav from '@/components/counselor/CounselorNav'
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 const HOURS = Array.from({ length: 12 }, (_, i) => {
@@ -134,27 +135,7 @@ export default function CounselorAvailabilityPage() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)' }}>
-      <div style={{
-        backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
-        textAlign: 'center', fontSize: '0.75rem', letterSpacing: '0.05em',
-        padding: '7px 16px', fontFamily: 'Lato, sans-serif',
-      }}>
-        Counselor Portal
-      </div>
-
-      <header style={{
-        backgroundColor: 'white', borderBottom: '1px solid var(--nhlb-blush-light)',
-        padding: '0 40px', display: 'flex', alignItems: 'center', height: 64,
-      }}>
-        <a href="/counselor" style={{
-          fontFamily: 'Lato, sans-serif', fontSize: '0.85rem',
-          color: 'var(--nhlb-muted)', textDecoration: 'none',
-        }}>&larr; My Schedule</a>
-        <h1 style={{
-          fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem',
-          fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 0 20px',
-        }}>Availability &amp; Time Off</h1>
-      </header>
+      <CounselorNav />
 
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '32px 24px' }}>
 

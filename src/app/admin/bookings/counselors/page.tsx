@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import type { Counselor, CounselorAvailability } from '@/types'
+import AdminNav from '@/components/admin/AdminNav'
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 const HOURS = Array.from({ length: 12 }, (_, i) => {
@@ -405,35 +406,14 @@ export default function CounselorsPage() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)' }}>
-      <div style={{
-        backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
-        textAlign: 'center', fontSize: '0.75rem', letterSpacing: '0.05em',
-        padding: '7px 16px', fontFamily: 'Lato, sans-serif',
-      }}>
-        No Heart Left Behind &mdash; Admin
-      </div>
-
-      <header style={{
-        backgroundColor: 'white', borderBottom: '1px solid var(--nhlb-blush-light)',
-        padding: '0 40px', display: 'flex', alignItems: 'center',
-        justifyContent: 'space-between', height: 64,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <a href="/admin/bookings" style={{
-            fontFamily: 'Lato, sans-serif', fontSize: '0.8rem',
-            color: 'var(--nhlb-muted)', textDecoration: 'none',
-          }}>&larr; Bookings</a>
-          <h1 style={{
-            fontFamily: 'Cormorant Garamond, serif', fontSize: '1.4rem',
-            fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0,
-          }}>Counselors</h1>
-        </div>
-        <button onClick={() => { setShowForm(true); setEditingId(null) }} style={S.btn('var(--nhlb-red)', 'white')}>
-          + Add Counselor
-        </button>
-      </header>
+      <AdminNav />
 
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '32px 24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 20 }}>
+          <button onClick={() => { setShowForm(true); setEditingId(null) }} style={S.btn('var(--nhlb-red)', 'white')}>
+            + Add Counselor
+          </button>
+        </div>
         {showForm && !editingId && (
           <CounselorForm
             onSaved={() => { setShowForm(false); load() }}

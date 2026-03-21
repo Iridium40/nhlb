@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { format } from 'date-fns'
 import type { Event } from '@/types'
+import AdminNav from '@/components/admin/AdminNav'
 
 const S = {
   label: {
@@ -117,35 +118,14 @@ export default function AdminEventsPage() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)' }}>
-      <div style={{
-        backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
-        textAlign: 'center', fontSize: '0.75rem', letterSpacing: '0.05em',
-        padding: '7px 16px', fontFamily: 'Lato, sans-serif',
-      }}>
-        No Heart Left Behind &mdash; Admin
-      </div>
-
-      <header style={{
-        backgroundColor: 'white', borderBottom: '1px solid var(--nhlb-blush-light)',
-        padding: '0 40px', display: 'flex', alignItems: 'center',
-        justifyContent: 'space-between', height: 64,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <a href="/admin/bookings" style={{
-            fontFamily: 'Lato, sans-serif', fontSize: '0.8rem',
-            color: 'var(--nhlb-muted)', textDecoration: 'none',
-          }}>&larr; Bookings</a>
-          <h1 style={{
-            fontFamily: 'Cormorant Garamond, serif', fontSize: '1.4rem',
-            fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0,
-          }}>Events</h1>
-        </div>
-        <button onClick={() => { setShowForm(true); setEditingId(null) }} style={S.btn('var(--nhlb-red)', 'white')}>
-          + Create Event
-        </button>
-      </header>
+      <AdminNav />
 
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '32px 24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 20 }}>
+          <button onClick={() => { setShowForm(true); setEditingId(null) }} style={S.btn('var(--nhlb-red)', 'white')}>
+            + Create Event
+          </button>
+        </div>
         {showForm && !editingId && (
           <EventForm onSaved={() => { setShowForm(false); load() }} onCancel={() => setShowForm(false)} />
         )}

@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import type { Counselor } from '@/types'
+import CounselorNav from '@/components/counselor/CounselorNav'
 
 const SPECIALTY_OPTIONS = [
   'Individual Counseling', 'Couples Counseling', 'Family Counseling',
@@ -143,30 +144,10 @@ export default function CounselorProfilePage() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)' }}>
-      <div style={{
-        backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
-        textAlign: 'center', fontSize: '0.75rem', letterSpacing: '0.05em',
-        padding: '7px 16px', fontFamily: 'Lato, sans-serif',
-      }}>
-        Counselor Portal
-      </div>
+      <CounselorNav />
 
-      <header style={{
-        backgroundColor: 'white', borderBottom: '1px solid var(--nhlb-blush-light)',
-        padding: '0 40px', display: 'flex', alignItems: 'center',
-        justifyContent: 'space-between', height: 64, flexWrap: 'wrap', gap: 12,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <a href="/counselor" style={{
-            fontFamily: 'Lato, sans-serif', fontSize: '0.8rem',
-            color: 'var(--nhlb-muted)', textDecoration: 'none',
-          }}>&larr; Dashboard</a>
-          <h1 style={{
-            fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem',
-            fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0,
-          }}>My Profile</h1>
-        </div>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+      <div style={{ maxWidth: 700, margin: '0 auto', padding: '32px 24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, alignItems: 'center', marginBottom: 20 }}>
           {saved && <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#065F46', fontWeight: 700 }}>Saved</span>}
           <button onClick={handleSave} disabled={saving} style={{
             padding: '8px 20px', borderRadius: 8, border: 'none',
@@ -177,9 +158,6 @@ export default function CounselorProfilePage() {
             {saving ? 'Saving...' : 'Save Changes'}
           </button>
         </div>
-      </header>
-
-      <div style={{ maxWidth: 700, margin: '0 auto', padding: '32px 24px' }}>
 
         {error && (
           <div style={{

@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { useParams } from 'next/navigation'
 import { format } from 'date-fns'
 import type { Client, Booking, SessionNote, HipaaFormData } from '@/types'
+import AdminNav from '@/components/admin/AdminNav'
 
 interface Counselor {
   id: string
@@ -322,23 +323,7 @@ export default function ClientDetailPage() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)' }}>
-      <div style={{
-        backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
-        textAlign: 'center', fontSize: '0.75rem', letterSpacing: '0.05em',
-        padding: '7px 16px', fontFamily: 'Lato, sans-serif',
-      }}>
-        No Heart Left Behind &mdash; Client Record
-      </div>
-
-      <header style={{
-        backgroundColor: 'white', borderBottom: '1px solid var(--nhlb-blush-light)',
-        padding: '0 40px', display: 'flex', alignItems: 'center', height: 64,
-      }}>
-        <a href="/admin/bookings/clients" style={{
-          fontFamily: 'Lato, sans-serif', fontSize: '0.8rem',
-          color: 'var(--nhlb-muted)', textDecoration: 'none',
-        }}>&larr; All Clients</a>
-      </header>
+      <AdminNav />
 
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '32px 24px' }}>
 

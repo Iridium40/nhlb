@@ -3,8 +3,8 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { format, startOfWeek, addDays, isSameDay, isToday, isBefore } from 'date-fns'
-import { createSupabaseBrowserClient } from '@/lib/supabase-browser'
 import type { Counselor, Booking, SessionNote } from '@/types'
+import CounselorNav from '@/components/counselor/CounselorNav'
 
 interface EnrichedBooking extends Booking {
   session_note?: SessionNote | null
@@ -158,11 +158,6 @@ export default function CounselorDashboard() {
 
   useEffect(() => { load() }, [load])
 
-  const handleLogout = async () => {
-    const supabase = createSupabaseBrowserClient()
-    await supabase.auth.signOut()
-    router.push('/counselor/login')
-  }
 
   const updateBooking = async (bookingId: string, status: string) => {
     await fetch(`/api/booking/${bookingId}`, {
@@ -189,48 +184,7 @@ export default function CounselorDashboard() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)' }}>
-      <div style={{
-        backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
-        textAlign: 'center', fontSize: '0.75rem', letterSpacing: '0.05em',
-        padding: '7px 16px', fontFamily: 'Lato, sans-serif',
-      }}>
-        Counselor Portal
-      </div>
-
-      <header style={{
-        backgroundColor: 'white', borderBottom: '1px solid var(--nhlb-blush-light)',
-        padding: '0 40px', display: 'flex', alignItems: 'center',
-        justifyContent: 'space-between', height: 64, flexWrap: 'wrap', gap: 12,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://images.squarespace-cdn.com/content/v1/5e82146501b2e061b5579be0/1587480392593-WRDXDIU2H6V7O9536SHX/NHLBlogo.png?format=300w"
-            alt="NHLB" style={{ height: 36, width: 'auto' }}
-          />
-          <h1 style={{
-            fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem',
-            fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0,
-          }}>
-            {counselor?.name}&apos;s Schedule
-          </h1>
-        </div>
-        <nav style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-          <a href="/counselor/profile" style={{
-            fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700,
-            color: 'var(--nhlb-red)', textDecoration: 'none',
-          }}>My Profile</a>
-          <a href="/counselor/availability" style={{
-            fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700,
-            color: 'var(--nhlb-red)', textDecoration: 'none',
-          }}>Availability &amp; Time Off</a>
-          <button onClick={handleLogout} style={{
-            padding: '6px 14px', borderRadius: 6, border: '1px solid var(--nhlb-border)',
-            backgroundColor: 'white', color: 'var(--nhlb-muted)',
-            fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', cursor: 'pointer',
-          }}>Sign Out</button>
-        </nav>
-      </header>
+      <CounselorNav />
 
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '24px 24px' }}>
 

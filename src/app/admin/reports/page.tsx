@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { format, startOfYear, subDays, startOfMonth, subMonths } from 'date-fns'
 import type { Fund } from '@/types'
 import { FUND_LABELS, FUND_COLORS } from '@/types'
+import AdminNav from '@/components/admin/AdminNav'
 
 interface CounselorStat {
   counselor_id: string
@@ -110,30 +111,11 @@ export default function AdminReportsPage() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)' }}>
-      <div style={{
-        backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
-        textAlign: 'center', fontSize: '0.75rem', letterSpacing: '0.05em',
-        padding: '7px 16px', fontFamily: 'Lato, sans-serif',
-      }}>
-        No Heart Left Behind &mdash; Reports
-      </div>
+      <AdminNav />
 
-      <header style={{
-        backgroundColor: 'white', borderBottom: '1px solid var(--nhlb-blush-light)',
-        padding: '0 40px', display: 'flex', alignItems: 'center',
-        justifyContent: 'space-between', height: 64, flexWrap: 'wrap', gap: 12,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <a href="/admin/bookings" style={{
-            fontFamily: 'Lato, sans-serif', fontSize: '0.8rem',
-            color: 'var(--nhlb-muted)', textDecoration: 'none',
-          }}>&larr; Dashboard</a>
-          <h1 style={{
-            fontFamily: 'Cormorant Garamond, serif', fontSize: '1.4rem',
-            fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0,
-          }}>Financial Reports</h1>
-        </div>
-        <div style={{ display: 'flex', gap: 8 }}>
+      <div style={{ maxWidth: 1060, margin: '0 auto', padding: '24px 24px' }}>
+
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginBottom: 20 }}>
           <a href={exportUrl('settlement')} style={{
             padding: '8px 14px', borderRadius: 8, border: '1px solid var(--nhlb-border)',
             backgroundColor: 'white', color: 'var(--nhlb-text)',
@@ -151,9 +133,6 @@ export default function AdminReportsPage() {
             Export Counselor CSV
           </a>
         </div>
-      </header>
-
-      <div style={{ maxWidth: 1060, margin: '0 auto', padding: '24px 24px' }}>
 
         {/* Date filters */}
         <div style={{

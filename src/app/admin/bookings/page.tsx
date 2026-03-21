@@ -6,6 +6,7 @@ import {
   isSameDay, isSameMonth, isToday, getDay,
 } from 'date-fns'
 import type { Booking } from '@/types'
+import AdminNav from '@/components/admin/AdminNav'
 
 const STATUS_STYLES: Record<string, React.CSSProperties> = {
   CONFIRMED: { backgroundColor: '#D1FAE5', color: '#065F46' },
@@ -92,54 +93,7 @@ export default function AdminBookingsPage() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)' }}>
-      <div style={{
-        backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
-        textAlign: 'center', fontSize: '0.75rem', letterSpacing: '0.05em',
-        padding: '7px 16px', fontFamily: 'Lato, sans-serif',
-      }}>
-        No Heart Left Behind &mdash; Admin Dashboard
-      </div>
-
-      <header style={{
-        backgroundColor: 'white', borderBottom: '1px solid var(--nhlb-blush-light)',
-        padding: '0 40px', display: 'flex', alignItems: 'center',
-        justifyContent: 'space-between', height: 64, flexWrap: 'wrap', gap: 12,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://images.squarespace-cdn.com/content/v1/5e82146501b2e061b5579be0/1587480392593-WRDXDIU2H6V7O9536SHX/NHLBlogo.png?format=300w"
-            alt="NHLB" style={{ height: 40, width: 'auto' }}
-          />
-          <h1 style={{
-            fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem',
-            fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0,
-          }}>Bookings</h1>
-        </div>
-
-        <nav style={{ display: 'flex', gap: 12 }}>
-          <a href="/admin/bookings/clients" style={{
-            fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700,
-            color: 'var(--nhlb-red)', textDecoration: 'none',
-          }}>Clients</a>
-          <a href="/admin/bookings/counselors" style={{
-            fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700,
-            color: 'var(--nhlb-red)', textDecoration: 'none',
-          }}>Counselors</a>
-          <a href="/admin/events" style={{
-            fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700,
-            color: 'var(--nhlb-red)', textDecoration: 'none',
-          }}>Events</a>
-          <a href="/admin/donations" style={{
-            fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700,
-            color: 'var(--nhlb-red)', textDecoration: 'none',
-          }}>Donations</a>
-          <a href="/admin/reports" style={{
-            fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700,
-            color: 'var(--nhlb-red)', textDecoration: 'none',
-          }}>Reports</a>
-        </nav>
-      </header>
+      <AdminNav />
 
       <div style={{ maxWidth: view === 'list' ? 900 : 1100, margin: '0 auto', padding: '32px 24px', transition: 'max-width 0.2s' }}>
 

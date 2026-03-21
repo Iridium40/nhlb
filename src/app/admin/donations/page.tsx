@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { format, subDays, startOfYear } from 'date-fns'
 import type { Donation, Fund } from '@/types'
 import { FUND_LABELS, FUND_COLORS } from '@/types'
+import AdminNav from '@/components/admin/AdminNav'
 
 const QUICK_RANGES = [
   { label: 'This Year', from: () => startOfYear(new Date()).toISOString() },
@@ -52,40 +53,20 @@ export default function AdminDonationsPage() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)' }}>
-      <div style={{
-        backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
-        textAlign: 'center', fontSize: '0.75rem', letterSpacing: '0.05em',
-        padding: '7px 16px', fontFamily: 'Lato, sans-serif',
-      }}>
-        No Heart Left Behind &mdash; Financial Reports
-      </div>
-
-      <header style={{
-        backgroundColor: 'white', borderBottom: '1px solid var(--nhlb-blush-light)',
-        padding: '0 40px', display: 'flex', alignItems: 'center',
-        justifyContent: 'space-between', height: 64, flexWrap: 'wrap', gap: 12,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <a href="/admin/bookings" style={{
-            fontFamily: 'Lato, sans-serif', fontSize: '0.8rem',
-            color: 'var(--nhlb-muted)', textDecoration: 'none',
-          }}>&larr; Bookings</a>
-          <h1 style={{
-            fontFamily: 'Cormorant Garamond, serif', fontSize: '1.4rem',
-            fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0,
-          }}>Donations &amp; Financials</h1>
-        </div>
-        <a href={exportUrl()} style={{
-          padding: '8px 18px', borderRadius: 8,
-          backgroundColor: 'var(--nhlb-red)', color: 'white',
-          fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
-          textDecoration: 'none',
-        }}>
-          Export CSV for Taxes ↓
-        </a>
-      </header>
+      <AdminNav />
 
       <div style={{ maxWidth: 960, margin: '0 auto', padding: '32px 24px' }}>
+
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 20 }}>
+          <a href={exportUrl()} style={{
+            padding: '8px 18px', borderRadius: 8,
+            backgroundColor: 'var(--nhlb-red)', color: 'white',
+            fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
+            textDecoration: 'none',
+          }}>
+            Export CSV for Taxes
+          </a>
+        </div>
 
         {/* Fund summary cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12, marginBottom: 24 }}>
