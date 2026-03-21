@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useParams } from 'next/navigation'
 import { format } from 'date-fns'
-import type { Client, Booking, SessionNote } from '@/types'
+import type { Client, Booking, SessionNote, HipaaFormData } from '@/types'
 
 const STATUS_STYLES: Record<string, React.CSSProperties> = {
   CONFIRMED: { backgroundColor: '#D1FAE5', color: '#065F46' },
@@ -31,7 +31,6 @@ function NoteEditor({ booking, clientId, existingNote, onSaved }: {
   onSaved: () => void
 }) {
   const [content, setContent] = useState(existingNote?.content ?? '')
-  const [privateNotes, setPrivateNotes] = useState(existingNote?.private_notes ?? '')
   const [saving, setSaving] = useState(false)
 
   const save = async () => {
@@ -43,7 +42,6 @@ function NoteEditor({ booking, clientId, existingNote, onSaved }: {
         booking_id: booking.id,
         counselor_id: booking.counselor_id,
         content,
-        private_notes: privateNotes,
       }),
     })
     setSaving(false)
@@ -60,17 +58,14 @@ function NoteEditor({ booking, clientId, existingNote, onSaved }: {
         SESSION NOTES
       </p>
       <div style={{ marginBottom: 12 }}>
-        <label style={S.label}>Notes (shared)</label>
+        <label style={S.label}>Notes</label>
         <textarea value={content} onChange={e => setContent(e.target.value)}
           style={{ ...S.input, resize: 'none' }} rows={3}
           placeholder="Session summary, goals discussed, progress..." />
       </div>
-      <div style={{ marginBottom: 12 }}>
-        <label style={S.label}>Private notes (counselor only)</label>
-        <textarea value={privateNotes} onChange={e => setPrivateNotes(e.target.value)}
-          style={{ ...S.input, resize: 'none' }} rows={2}
-          placeholder="Internal observations, treatment plan notes..." />
-      </div>
+      <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)', fontStyle: 'italic', margin: '0 0 12px' }}>
+        Private clinical notes are only visible to the counselor in their portal.
+      </p>
       <button onClick={save} disabled={saving} style={{
         padding: '8px 18px', borderRadius: 8, border: 'none', cursor: 'pointer',
         backgroundColor: 'var(--nhlb-red)', color: 'white',
@@ -89,6 +84,8 @@ export default function ClientDetailPage() {
   const [bookings, setBookings] = useState<Booking[]>([])
   const [notes, setNotes] = useState<SessionNote[]>([])
   const [hipaaCompleted, setHipaaCompleted] = useState(false)
+  const [hipaaData, setHipaaData] = useState<HipaaFormData | null>(null)
+  const [hipaaCompletedAt, setHipaaCompletedAt] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [expandedBooking, setExpandedBooking] = useState<string | null>(null)
 
@@ -103,6 +100,8 @@ export default function ClientDetailPage() {
     setClient(clientJson.client)
     setBookings(clientJson.bookings ?? [])
     setHipaaCompleted(clientJson.hipaaCompleted ?? false)
+    setHipaaData(clientJson.hipaaIntake?.form_data ?? null)
+    setHipaaCompletedAt(clientJson.hipaaIntake?.completed_at ?? null)
     setNotes(notesJson.notes ?? [])
     setLoading(false)
   }, [clientId])
@@ -206,6 +205,106 @@ export default function ClientDetailPage() {
             </div>
           )}
         </div>
+
+        {/* HIPAA Intake Data */}
+        {hipaaCompleted && hipaaData && (
+          <div style={{
+            background: 'white', border: '1px solid var(--nhlb-border)',
+            borderRadius: 12, padding: '24px', marginBottom: 24,
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+              <h3 style={{
+                fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem',
+                fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0,
+              }}>
+                HIPAA Intake
+              </h3>
+              {hipaaCompletedAt && (
+                <span style={{
+                  fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)',
+                }}>
+                  Completed {format(new Date(hipaaCompletedAt), 'MMM d, yyyy \'at\' h:mm a')}
+                </span>
+              )}
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              {hipaaData.health_history && (
+                <div>
+                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>
+                    HEALTH HISTORY
+                  </p>
+                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', margin: 0, lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>
+                    {hipaaData.health_history}
+                  </p>
+                </div>
+              )}
+
+              {hipaaData.current_medications && (
+                <div>
+                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>
+                    CURRENT MEDICATIONS
+                  </p>
+                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', margin: 0, lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>
+                    {hipaaData.current_medications}
+                  </p>
+                </div>
+              )}
+
+              {hipaaData.allergies && (
+                <div>
+                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>
+                    ALLERGIES
+                  </p>
+                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', margin: 0, lineHeight: 1.6 }}>
+                    {hipaaData.allergies}
+                  </p>
+                </div>
+              )}
+
+              {(hipaaData.emergency_contact_name || hipaaData.emergency_contact_phone) && (
+                <div style={{
+                  padding: '14px 18px', backgroundColor: 'var(--nhlb-cream-dark)',
+                  borderRadius: 8,
+                }}>
+                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 6px' }}>
+                    EMERGENCY CONTACT
+                  </p>
+                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', fontWeight: 700, color: 'var(--nhlb-text)', margin: '0 0 2px' }}>
+                    {hipaaData.emergency_contact_name}
+                    {hipaaData.emergency_contact_relationship && (
+                      <span style={{ fontWeight: 400, color: 'var(--nhlb-muted)' }}> ({hipaaData.emergency_contact_relationship})</span>
+                    )}
+                  </p>
+                  {hipaaData.emergency_contact_phone && (
+                    <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', margin: 0 }}>
+                      {hipaaData.emergency_contact_phone}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {hipaaData.consent_given && (
+                <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: '#065F46', margin: 0 }}>
+                  ✓ HIPAA consent acknowledged
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {!hipaaCompleted && (
+          <div style={{
+            background: '#FEF3C7', border: '1px solid #FCD34D',
+            borderRadius: 12, padding: '16px 20px', marginBottom: 24,
+            display: 'flex', alignItems: 'center', gap: 10,
+          }}>
+            <span style={{ fontSize: '1.2rem' }}>⚠</span>
+            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: '#92400E', margin: 0 }}>
+              HIPAA intake form has not been completed yet. The client should have received a link via email after booking.
+            </p>
+          </div>
+        )}
 
         {/* Booking history */}
         <h3 style={{

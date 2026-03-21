@@ -23,7 +23,10 @@ export async function GET(
     .order('created_at', { ascending: false })
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-  return NextResponse.json({ notes: data })
+
+  // Strip private_notes from admin view — only the counselor sees those
+  const sanitized = (data ?? []).map(({ private_notes, ...rest }) => rest)
+  return NextResponse.json({ notes: sanitized })
 }
 
 export async function POST(
@@ -58,7 +61,6 @@ export async function POST(
       .from('session_notes')
       .update({
         content: body.content ?? '',
-        private_notes: body.private_notes ?? '',
         updated_at: new Date().toISOString(),
       })
       .eq('id', existing.id)
@@ -74,7 +76,6 @@ export async function POST(
       booking_id: body.booking_id,
       counselor_id: body.counselor_id,
       content: body.content ?? '',
-      private_notes: body.private_notes ?? '',
     })
     .select()
     .single()

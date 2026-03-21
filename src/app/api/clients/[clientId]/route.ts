@@ -24,15 +24,18 @@ export async function GET(
 
   const { data: intakes } = await supabase
     .from('hipaa_intakes')
-    .select('id, completed_at, created_at')
+    .select('id, completed_at, form_data, created_at')
     .eq('client_id', clientId)
     .order('created_at', { ascending: false })
     .limit(1)
 
+  const intake = intakes?.[0] ?? null
+
   return NextResponse.json({
     client,
     bookings: bookings ?? [],
-    hipaaCompleted: intakes?.[0]?.completed_at != null,
+    hipaaCompleted: intake?.completed_at != null,
+    hipaaIntake: intake,
   })
 }
 
