@@ -130,6 +130,23 @@ export default async function ConfirmationPage({
             Book Another Session
           </a>
 
+          <div style={{
+            marginTop: 32, padding: '16px 20px',
+            background: '#FDFAF8', border: '1px solid var(--nhlb-border)',
+            borderRadius: 8, textAlign: 'left',
+          }}>
+            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: '0 0 8px', lineHeight: 1.5 }}>
+              Need to cancel? You may cancel online up to 24 hours before your appointment.
+              For cancellations within 24 hours, please call <strong style={{ color: 'var(--nhlb-red-dark)' }}>985-264-8808</strong>.
+            </p>
+            <a href={`/book/cancel?id=${bookingId}&email=${encodeURIComponent(booking.client?.email ?? '')}`} style={{
+              fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700,
+              color: 'var(--nhlb-red)', textDecoration: 'underline',
+            }}>
+              Cancel this appointment
+            </a>
+          </div>
+
           <p style={{
             fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic',
             fontSize: '1rem', color: 'var(--nhlb-muted)', marginTop: 48,

@@ -1,15 +1,16 @@
 import {
   Html, Head, Body, Container, Section,
-  Text, Heading, Hr, Row, Column
+  Text, Heading, Hr, Row, Column, Link
 } from '@react-email/components'
 import type { Booking, Counselor, Client } from '../src/types'
 import { format } from 'date-fns'
 
-interface Props { booking: Booking; counselor: Counselor; client: Client }
+interface Props { booking: Booking; counselor: Counselor; client: Client; baseUrl?: string }
 
-export function BookingConfirmationEmail({ booking, counselor, client }: Props) {
+export function BookingConfirmationEmail({ booking, counselor, client, baseUrl = 'https://nhlb.vercel.app' }: Props) {
   const date = format(new Date(booking.scheduled_at), 'EEEE, MMMM d, yyyy')
   const time = format(new Date(booking.scheduled_at), 'h:mm a')
+  const cancelUrl = `${baseUrl}/book/cancel?id=${booking.id}&email=${encodeURIComponent(client.email)}`
 
   return (
     <Html>
@@ -79,6 +80,18 @@ export function BookingConfirmationEmail({ booking, counselor, client }: Props) 
               </Text>
             </Section>
           )}
+
+          <Hr style={{ borderColor: '#F0E0D8', margin: '24px 0' }} />
+
+          <Section>
+            <Text style={{ color: '#555', fontSize: 13, fontFamily: 'Arial, sans-serif', lineHeight: '20px' }}>
+              Need to cancel? You can cancel online up to 24 hours before your appointment.
+              For cancellations within 24 hours, please call us at <strong>985-264-8808</strong>.
+            </Text>
+            <Link href={cancelUrl} style={{ color: '#B8311F', fontSize: 13, fontFamily: 'Arial, sans-serif' }}>
+              Cancel this appointment
+            </Link>
+          </Section>
 
           <Text style={{ color: '#9A5A50', fontSize: 13, marginTop: 32, fontStyle: 'italic', fontFamily: 'Georgia, serif' }}>
             &ldquo;As a man thinks in his heart, so is he.&rdquo; &mdash; Proverbs 23:7

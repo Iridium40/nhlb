@@ -20,11 +20,14 @@ export async function sendBookingConfirmation({
   counselor: Counselor
   client: Client
 }) {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : 'http://localhost:3000'
   await getResend().emails.send({
     from: from(),
     to: client.email,
     subject: 'Your NHLB counseling session is confirmed',
-    react: BookingConfirmationEmail({ booking, counselor, client }),
+    react: BookingConfirmationEmail({ booking, counselor, client, baseUrl }),
   })
 }
 

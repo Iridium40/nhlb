@@ -319,7 +319,7 @@ CREATE POLICY "Counselors can delete own blocked dates"
 
 INSERT INTO counselors (name, title, bio, email, phone, specialties)
 VALUES (
-  'Amanda Stickles',
+  'Alicia Stickles',
   'Licensed Professional Counselor',
   'Founder of NHLB with a heart for restoring families through faith-based counseling.',
   'astickles@noheartleftbehind.com',
@@ -340,3 +340,30 @@ INSERT INTO availability_slots (counselor_id, day_of_week, start_time, end_time)
 SELECT c.id, d.day, '09:00'::TIME, '17:00'::TIME
 FROM counselors c, (VALUES (1),(2),(3),(4),(5)) AS d(day)
 WHERE c.name = 'Amanda Stickles';
+
+
+-- ╔═══════════════════════════════════════════╗
+-- ║  SEARCH FUNCTIONS                         ║
+-- ╚═══════════════════════════════════════════╝
+
+-- Search HIPAA intake form_data (JSONB cast to text)
+CREATE OR REPLACE FUNCTION search_hipaa_intakes(search_term TEXT)
+RETURNS TABLE(client_id UUID) AS $$
+  SELECT DISTINCT h.client_id
+  FROM hipaa_intakes h
+  WHERE h.completed_at IS NOT NULL
+    AND h.form_data::TEXT ILIKE search_term;
+$$ LANGUAGE SQL STABLE SECURITY DEFINER;
+
+-- Search session notes content
+CREATE OR REPLACE FUNCTION search_session_notes(search_term TEXT)
+RETURNS TABLE(client_id UUID) AS $$
+  SELECT DISTINCT b.client_id
+  FROM session_notes sn
+  JOIN bookings b ON b.id = sn.booking_id
+  WHERE sn.content ILIKE search_term;
+$$ LANGUAGE SQL STABLE SECURITY DEFINER;
+
+-- Grant execute to supabase roles
+GRANT EXECUTE ON FUNCTION search_hipaa_intakes(TEXT) TO anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION search_session_notes(TEXT) TO anon, authenticated, service_role;

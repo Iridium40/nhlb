@@ -80,6 +80,23 @@ export async function POST(req: NextRequest) {
 
     if (bookingError) throw bookingError
 
+    // Record love offering in donations table for financial reporting
+    if (data.donation_amount_cents > 0) {
+      await supabase.from('donations').insert({
+        booking_id: booking.id,
+        client_id: clientId,
+        amount_cents: data.donation_amount_cents,
+        fund: 'COUNSELING',
+        donor_name: `${data.first_name} ${data.last_name}`,
+        donor_email: data.email,
+        stripe_payment_intent_id: data.stripe_payment_id ?? null,
+        stripe_status: data.stripe_payment_id ? 'pending' : 'dev_mode',
+        is_anonymous: false,
+      }).then(({ error: donErr }) => {
+        if (donErr) console.error('[booking/create] donation insert error:', donErr.message)
+      })
+    }
+
     // Fetch counselor for emails
     const { data: counselor } = await supabase
       .from('counselors')

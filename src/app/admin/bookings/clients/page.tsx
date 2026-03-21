@@ -3,8 +3,13 @@
 import { useEffect, useState, useCallback } from 'react'
 import type { Client } from '@/types'
 
+interface SearchClient extends Client {
+  _match_hipaa?: boolean
+  _match_notes?: boolean
+}
+
 export default function ClientListPage() {
-  const [clients, setClients] = useState<Client[]>([])
+  const [clients, setClients] = useState<SearchClient[]>([])
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
 
@@ -52,7 +57,7 @@ export default function ClientListPage() {
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '32px 24px' }}>
         <input
           value={search} onChange={e => setSearch(e.target.value)}
-          placeholder="Search by name or email..."
+          placeholder="Search by name, email, HIPAA info, or session notes..."
           style={{
             width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
             padding: '12px 16px', fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
@@ -81,11 +86,26 @@ export default function ClientListPage() {
                 onMouseLeave={e => (e.currentTarget).style.borderColor = 'var(--nhlb-border)'}
               >
                 <div>
-                  <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 2px' }}>
-                    {c.first_name} {c.last_name}
-                  </p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2 }}>
+                    <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0 }}>
+                      {c.first_name} {c.last_name}
+                    </p>
+                    {search && c._match_hipaa && (
+                      <span style={{
+                        padding: '1px 8px', borderRadius: 20, fontSize: '0.6rem', fontWeight: 700,
+                        fontFamily: 'Lato, sans-serif', backgroundColor: '#EFF6FF', color: '#1D4ED8',
+                      }}>HIPAA match</span>
+                    )}
+                    {search && c._match_notes && (
+                      <span style={{
+                        padding: '1px 8px', borderRadius: 20, fontSize: '0.6rem', fontWeight: 700,
+                        fontFamily: 'Lato, sans-serif', backgroundColor: '#FEF3C7', color: '#92400E',
+                      }}>Notes match</span>
+                    )}
+                  </div>
                   <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: 0 }}>
                     {c.email}{c.phone ? ` · ${c.phone}` : ''}
+                    {c.service_type ? ` · ${c.service_type}` : ''}
                   </p>
                 </div>
                 <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-blush)' }}>&rarr;</span>
