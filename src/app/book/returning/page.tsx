@@ -1,11 +1,11 @@
 'use client'
 
 import { useState, useEffect, useCallback, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { format } from 'date-fns'
 import type { Client, Counselor, TimeSlot } from '@/types'
 
-type Step = 'lookup' | 'schedule' | 'payment'
+type Step = 'loading' | 'schedule' | 'payment'
 
 const S = {
   input: {
@@ -40,41 +40,31 @@ export default function ReturningClientPage() {
 
 function ReturningClientInner() {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const autoLogin = searchParams.get('auto') === '1'
-  const [step, setStep] = useState<Step>(autoLogin ? 'schedule' : 'lookup')
+  const [step, setStep] = useState<Step>('loading')
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
-  const [sessionChecked, setSessionChecked] = useState(false)
 
-  // Lookup
-  const [email, setEmail] = useState('')
   const [client, setClient] = useState<Client | null>(null)
   const [assignedCounselor, setAssignedCounselor] = useState<Counselor | null>(null)
-  const [lookingUp, setLookingUp] = useState(false)
 
   useEffect(() => {
-    if (sessionChecked) return
     const checkSession = async () => {
       try {
         const res = await fetch('/api/auth/client-session')
         const json = await res.json()
         if (json.client) {
           setClient(json.client)
-          setEmail(json.client.email)
           setAssignedCounselor(json.assignedCounselor ?? null)
           setStep('schedule')
-        } else if (autoLogin) {
-          setStep('lookup')
+        } else {
+          router.replace('/book')
         }
       } catch {
-        if (autoLogin) setStep('lookup')
-      } finally {
-        setSessionChecked(true)
+        router.replace('/book')
       }
     }
     checkSession()
-  }, [autoLogin, sessionChecked])
+  }, [router])
 
   // Schedule
   const [sessionType, setSessionType] = useState<'IN_PERSON' | 'VIRTUAL'>('IN_PERSON')
@@ -84,23 +74,6 @@ function ReturningClientInner() {
 
   // Payment
   const [donationAmount, setDonationAmount] = useState('50')
-
-  const lookupClient = async () => {
-    if (!email.trim()) { setError('Please enter your email.'); return }
-    setLookingUp(true)
-    setError(null)
-    const res = await fetch(`/api/clients?email=${encodeURIComponent(email)}`)
-    const json = await res.json()
-    if (!json.clients?.length) {
-      setError('No account found with that email. Are you a new client?')
-      setLookingUp(false)
-      return
-    }
-    setClient(json.clients[0])
-    setAssignedCounselor(json.assignedCounselor ?? null)
-    setLookingUp(false)
-    setStep('schedule')
-  }
 
   const loadSlots = useCallback(async () => {
     setLoadingSlots(true)
@@ -159,6 +132,14 @@ function ReturningClientInner() {
     return acc
   }, {})
 
+  if (step === 'loading') {
+    return (
+      <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
+      </div>
+    )
+  }
+
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)' }}>
       <div style={{
@@ -192,36 +173,10 @@ function ReturningClientInner() {
             borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: '#B91C1C',
           }}>
             {error}
-            {error.includes('new client') && (
-              <a href="/book/new" style={{ display: 'block', marginTop: 8, color: 'var(--nhlb-red)', fontWeight: 700 }}>
-                Book as a new client &rarr;
-              </a>
-            )}
           </div>
         )}
 
-        {/* Step 1: Email lookup */}
-        {step === 'lookup' && (
-          <div>
-            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
-              Find your account
-            </h2>
-            <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', marginBottom: 28 }}>
-              Enter the email you used for your first session.
-            </p>
-            <div style={{ marginBottom: 20 }}>
-              <label style={S.label}>Email address</label>
-              <input type="email" value={email} onChange={e => setEmail(e.target.value)}
-                style={S.input} className="input-brand" placeholder="jane@example.com"
-                onKeyDown={e => e.key === 'Enter' && lookupClient()} />
-            </div>
-            <button onClick={lookupClient} disabled={lookingUp} style={S.btn} className="btn-primary">
-              {lookingUp ? 'Looking up...' : 'Find My Account'}
-            </button>
-          </div>
-        )}
-
-        {/* Step 2: Schedule */}
+        {/* Schedule */}
         {step === 'schedule' && client && (
           <div>
             <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
@@ -256,20 +211,23 @@ function ReturningClientInner() {
               {([
                 { v: 'IN_PERSON' as const, emoji: '🏠', label: 'In Person' },
                 { v: 'VIRTUAL' as const, emoji: '💻', label: 'Virtual', disabled: !assignedCounselor?.zoom_link },
-              ]).map(({ v, emoji, label, disabled }) => (
-                <button key={v} onClick={() => !disabled && setSessionType(v)}
-                  disabled={disabled}
-                  style={{
-                    padding: '14px 12px', textAlign: 'center', cursor: disabled ? 'not-allowed' : 'pointer',
-                    border: `2px solid ${sessionType === v ? 'var(--nhlb-red)' : 'var(--nhlb-border)'}`,
-                    backgroundColor: sessionType === v ? 'var(--nhlb-red)' : 'white',
-                    color: sessionType === v ? 'white' : disabled ? 'var(--nhlb-blush)' : 'var(--nhlb-text)',
-                    borderRadius: 10, transition: 'all 0.12s', opacity: disabled ? 0.5 : 1,
-                  }}>
-                  <span style={{ fontSize: '1.2rem', display: 'block', marginBottom: 4 }}>{emoji}</span>
-                  <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', fontWeight: 700 }}>{label}</span>
-                </button>
-              ))}
+              ] as const).map(({ v, emoji, label, ...rest }) => {
+                const disabled = 'disabled' in rest ? rest.disabled : false
+                return (
+                  <button key={v} onClick={() => !disabled && setSessionType(v)}
+                    disabled={!!disabled}
+                    style={{
+                      padding: '14px 12px', textAlign: 'center', cursor: disabled ? 'not-allowed' : 'pointer',
+                      border: `2px solid ${sessionType === v ? 'var(--nhlb-red)' : 'var(--nhlb-border)'}`,
+                      backgroundColor: sessionType === v ? 'var(--nhlb-red)' : 'white',
+                      color: sessionType === v ? 'white' : disabled ? 'var(--nhlb-blush)' : 'var(--nhlb-text)',
+                      borderRadius: 10, transition: 'all 0.12s', opacity: disabled ? 0.5 : 1,
+                    }}>
+                    <span style={{ fontSize: '1.2rem', display: 'block', marginBottom: 4 }}>{emoji}</span>
+                    <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', fontWeight: 700 }}>{label}</span>
+                  </button>
+                )
+              })}
             </div>
 
             {loadingSlots ? (
@@ -314,15 +272,10 @@ function ReturningClientInner() {
                 ))}
               </div>
             )}
-
-            <button onClick={() => { setStep('lookup'); setClient(null) }} style={{
-              background: 'none', border: 'none', fontFamily: 'Lato, sans-serif',
-              fontSize: '0.875rem', color: 'var(--nhlb-muted)', cursor: 'pointer', padding: 0,
-            }}>&larr; Use a different email</button>
           </div>
         )}
 
-        {/* Step 3: Payment */}
+        {/* Payment */}
         {step === 'payment' && selectedSlot && client && (
           <div>
             <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>

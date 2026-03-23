@@ -1,7 +1,6 @@
 import { createSupabaseAdminClient } from '@/lib/supabase'
 import { format } from 'date-fns'
 import { notFound } from 'next/navigation'
-import CreateAccountCard from '@/components/booking/CreateAccountCard'
 
 export const dynamic = 'force-dynamic'
 
@@ -147,12 +146,6 @@ export default async function ConfirmationPage({
           }}>
             Please check your email for a HIPAA intake form. Completing it before your session helps us serve you better.
           </p>
-
-          {!booking.client?.supabase_user_id && (
-            <div style={{ marginBottom: 32 }}>
-              <CreateAccountCard clientId={booking.client_id} email={booking.client?.email ?? ''} />
-            </div>
-          )}
 
           <a href="/book" style={{
             display: 'inline-block', padding: '12px 28px',

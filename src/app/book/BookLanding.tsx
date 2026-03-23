@@ -176,18 +176,51 @@ export default function BookLanding() {
                 </p>
               </div>
 
-              <button onClick={() => router.push('/book/returning?auto=1')} style={{
-                display: 'block', width: '100%', padding: '20px 24px',
-                backgroundColor: 'var(--nhlb-red)', color: 'white',
-                fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '1rem',
-                letterSpacing: '0.04em', borderRadius: 12, border: 'none',
-                cursor: 'pointer', marginBottom: 16,
-              }}>
-                Book a Session
-                <span style={{ display: 'block', fontWeight: 400, fontSize: '0.8rem', opacity: 0.85, marginTop: 4 }}>
-                  In-person or virtual
-                </span>
-              </button>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <button onClick={() => router.push('/book/returning?auto=1')} style={{
+                  display: 'block', width: '100%', padding: '20px 24px',
+                  backgroundColor: 'var(--nhlb-red)', color: 'white',
+                  fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '1rem',
+                  letterSpacing: '0.04em', borderRadius: 12, border: 'none',
+                  cursor: 'pointer',
+                }}>
+                  Book a Session
+                  <span style={{ display: 'block', fontWeight: 400, fontSize: '0.8rem', opacity: 0.85, marginTop: 4 }}>
+                    In-person or virtual
+                  </span>
+                </button>
+
+                <button onClick={() => router.push('/book/my-sessions')} style={{
+                  display: 'block', width: '100%', padding: '16px 24px',
+                  backgroundColor: 'white', color: 'var(--nhlb-red-dark)',
+                  border: '2px solid var(--nhlb-border)',
+                  fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.95rem',
+                  letterSpacing: '0.04em', borderRadius: 12, cursor: 'pointer',
+                }}>
+                  My Sessions
+                </button>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                  <button onClick={() => router.push('/book/profile')} style={{
+                    padding: '14px 16px',
+                    backgroundColor: 'white', color: 'var(--nhlb-text)',
+                    border: '1px solid var(--nhlb-border)',
+                    fontFamily: 'Lato, sans-serif', fontWeight: 600, fontSize: '0.85rem',
+                    borderRadius: 10, cursor: 'pointer',
+                  }}>
+                    My Profile
+                  </button>
+                  <button onClick={() => router.push('/book/payment-methods')} style={{
+                    padding: '14px 16px',
+                    backgroundColor: 'white', color: 'var(--nhlb-text)',
+                    border: '1px solid var(--nhlb-border)',
+                    fontFamily: 'Lato, sans-serif', fontWeight: 600, fontSize: '0.85rem',
+                    borderRadius: 10, cursor: 'pointer',
+                  }}>
+                    Payment Methods
+                  </button>
+                </div>
+              </div>
             </div>
           )}
 
@@ -206,25 +239,18 @@ export default function BookLanding() {
                 </span>
               </Link>
 
-              <Link href="/book/returning" style={{
-                display: 'block', padding: '20px 24px',
+              <button onClick={() => setView('signin')} style={{
+                display: 'block', width: '100%', padding: '20px 24px',
                 backgroundColor: 'white', color: 'var(--nhlb-red-dark)',
                 border: '2px solid var(--nhlb-border)',
                 fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '1rem',
-                letterSpacing: '0.04em', borderRadius: 12, textDecoration: 'none',
+                letterSpacing: '0.04em', borderRadius: 12, cursor: 'pointer',
+                textAlign: 'center',
               }}>
-                I&apos;m a Returning Client
+                Returning Client? Sign In
                 <span style={{ display: 'block', fontWeight: 400, fontSize: '0.8rem', color: 'var(--nhlb-muted)', marginTop: 4 }}>
                   In-person or virtual
                 </span>
-              </Link>
-
-              <button onClick={() => setView('signin')} style={{
-                background: 'none', border: 'none', fontFamily: 'Lato, sans-serif',
-                fontSize: '0.875rem', color: 'var(--nhlb-red)', fontWeight: 700,
-                cursor: 'pointer', padding: '8px 0', textDecoration: 'underline',
-              }}>
-                Have an account? Sign in
               </button>
             </div>
           )}
