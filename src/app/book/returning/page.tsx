@@ -168,6 +168,7 @@ function ReturningClientInner() {
               clientEmail: client.email,
               clientName: `${client.first_name} ${client.last_name}`,
               bookingId: json.bookingId,
+              clientId: client.id,
               stripeCustomerId,
               paymentMethodId: selectedCardId,
             }),
@@ -193,6 +194,7 @@ function ReturningClientInner() {
             clientEmail: client.email,
             clientName: `${client.first_name} ${client.last_name}`,
             bookingId: json.bookingId,
+            clientId: client.id,
             stripeCustomerId: stripeCustomerId ?? undefined,
           }),
         })

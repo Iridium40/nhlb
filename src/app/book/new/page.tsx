@@ -155,6 +155,7 @@ export default function NewClientBookingPage() {
             clientEmail: email,
             clientName: `${firstName} ${lastName}`,
             bookingId: json.bookingId,
+            clientId: json.clientId,
           }),
         })
         const piJson = await piRes.json()

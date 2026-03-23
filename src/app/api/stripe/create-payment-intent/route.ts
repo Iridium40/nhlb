@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
+import { createSupabaseAdminClient } from '@/lib/supabase'
 import type Stripe from 'stripe'
 
 const schema = z.object({
@@ -7,9 +8,33 @@ const schema = z.object({
   clientEmail: z.string().email(),
   clientName: z.string(),
   bookingId: z.string().optional(),
+  clientId: z.string().optional(),
   stripeCustomerId: z.string().optional(),
   paymentMethodId: z.string().optional(),
 })
+
+async function ensureStripeCustomer(
+  stripe: Stripe,
+  data: { clientEmail: string; clientName: string; clientId?: string; stripeCustomerId?: string }
+): Promise<string> {
+  if (data.stripeCustomerId) return data.stripeCustomerId
+
+  const customer = await stripe.customers.create({
+    email: data.clientEmail,
+    name: data.clientName,
+    metadata: data.clientId ? { clientId: data.clientId } : {},
+  })
+
+  if (data.clientId) {
+    const supabase = createSupabaseAdminClient()
+    await supabase
+      .from('clients')
+      .update({ stripe_customer_id: customer.id })
+      .eq('id', data.clientId)
+  }
+
+  return customer.id
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -27,9 +52,12 @@ export async function POST(req: NextRequest) {
     const { getStripe } = await import('@/lib/stripe')
     const stripe = getStripe()
 
+    const customerId = await ensureStripeCustomer(stripe, data)
+
     const intentParams: Stripe.PaymentIntentCreateParams = {
       amount: data.amountCents,
       currency: 'usd',
+      customer: customerId,
       automatic_payment_methods: { enabled: true },
       metadata: {
         bookingId: data.bookingId ?? '',
@@ -38,10 +66,6 @@ export async function POST(req: NextRequest) {
       },
       description: 'Love offering — No Heart Left Behind counseling session',
       receipt_email: data.clientEmail,
-    }
-
-    if (data.stripeCustomerId) {
-      intentParams.customer = data.stripeCustomerId
     }
 
     if (data.paymentMethodId) {

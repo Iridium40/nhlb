@@ -87,15 +87,23 @@ export async function POST(
 
     if (regErr) return NextResponse.json({ error: regErr.message }, { status: 500 })
 
+    const customer = await stripe.customers.create({
+      email: body.email,
+      name: `${body.first_name} ${body.last_name}`,
+    })
+
     const paymentIntent = await stripe.paymentIntents.create({
       amount: event.registration_fee_cents,
       currency: 'usd',
+      customer: customer.id,
+      automatic_payment_methods: { enabled: true },
       metadata: {
         eventId: event.id,
         eventTitle: event.title,
         registrationId: reg.id,
         type: 'event_registration',
       },
+      receipt_email: body.email,
     })
 
     await supabase
