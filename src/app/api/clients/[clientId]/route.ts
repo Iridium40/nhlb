@@ -72,5 +72,18 @@ export async function PATCH(
     .single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+
+  if (body.assigned_counselor_id !== undefined) {
+    const newCounselorId = body.assigned_counselor_id || null
+    if (newCounselorId) {
+      await supabase
+        .from('bookings')
+        .update({ counselor_id: newCounselorId })
+        .eq('client_id', clientId)
+        .eq('status', 'CONFIRMED')
+        .gte('scheduled_at', new Date().toISOString())
+    }
+  }
+
   return NextResponse.json({ client: data })
 }
