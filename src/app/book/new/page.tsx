@@ -125,7 +125,7 @@ export default function NewClientBookingPage() {
       })
       const json = await res.json()
       if (!res.ok) {
-        setError(json.error ?? 'Could not create booking')
+        setError(json.error ?? 'Could not create session')
         setSubmitting(false)
         return
       }
@@ -421,7 +421,7 @@ export default function NewClientBookingPage() {
                 backgroundColor: '#FEF3C7', border: '1px solid #FCD34D',
                 borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#92400E',
               }}>
-                Payment integration pending &mdash; booking will proceed without payment in dev mode.
+                Payment integration pending &mdash; session will proceed without payment in dev mode.
               </div>
             )}
 
@@ -435,7 +435,7 @@ export default function NewClientBookingPage() {
               }}
               className="btn-primary"
             >
-              {submitting ? 'Booking...' : `Confirm & Give $${parseFloat(donationAmount || '10').toFixed(2)}`}
+              {submitting ? 'Confirming...' : `Confirm & Give $${parseFloat(donationAmount || '10').toFixed(2)}`}
             </button>
 
             <button onClick={() => { setStep('schedule'); setSelectedSlot(null) }} style={{

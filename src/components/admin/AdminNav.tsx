@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation'
 
 const NAV_ITEMS = [
-  { href: '/admin/bookings', label: 'Bookings' },
+  { href: '/admin/bookings', label: 'Sessions' },
   { href: '/admin/bookings/clients', label: 'Clients' },
   { href: '/admin/bookings/counselors', label: 'Counselors' },
   { href: '/admin/events', label: 'Events' },
@@ -57,7 +57,7 @@ export default function AdminNav() {
           backgroundColor: 'var(--nhlb-red)', padding: '6px 14px',
           borderRadius: 6, textDecoration: 'none',
         }}>
-          Booking Page ↗
+          Book a Session ↗
         </a>
       </header>
     </>

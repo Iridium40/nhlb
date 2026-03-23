@@ -270,7 +270,7 @@ export default function CounselorProfilePage() {
             <label style={S.label}>Bio</label>
             <textarea value={bio} onChange={e => setBio(e.target.value)}
               style={{ ...S.input, resize: 'vertical', minHeight: 80 }} rows={3}
-              placeholder="A brief bio that clients will see on the booking page..." />
+              placeholder="A brief bio that clients will see when scheduling a session..." />
           </div>
         </div>
 

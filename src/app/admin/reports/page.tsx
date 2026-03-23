@@ -314,7 +314,7 @@ export default function AdminReportsPage() {
                   </h2>
                   <div style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', lineHeight: 1.7 }}>
                     <p style={{ margin: '0 0 8px' }}>
-                      <strong>Counseling Services:</strong> Love offerings collected during session bookings. Attributable to individual counselors.
+                      <strong>Counseling Services:</strong> Love offerings collected during counseling sessions. Attributable to individual counselors.
                     </p>
                     <p style={{ margin: '0 0 8px' }}>
                       <strong>Ministry Operations:</strong> General operating fund donations received via the donate page.
@@ -338,7 +338,7 @@ export default function AdminReportsPage() {
                 </h2>
                 {filtered.counselor_stats.length === 0 ? (
                   <p style={{ textAlign: 'center', padding: 32, fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem', color: 'var(--nhlb-muted)' }}>
-                    No booking data for this period
+                    No session data for this period
                   </p>
                 ) : (
                   <div style={{ overflowX: 'auto' }}>

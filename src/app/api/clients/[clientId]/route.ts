@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseAdminClient } from '@/lib/supabase'
+import { sendCounselorAssignmentEmail } from '@/lib/resend'
+import type { Booking, Counselor, Client } from '@/types'
 
 export async function GET(
   _req: NextRequest,
@@ -64,6 +66,16 @@ export async function PATCH(
     if (body[f] !== undefined) updates[f] = body[f]
   }
 
+  let previousCounselorId: string | null = null
+  if (body.assigned_counselor_id !== undefined) {
+    const { data: current } = await supabase
+      .from('clients')
+      .select('assigned_counselor_id')
+      .eq('id', clientId)
+      .single()
+    previousCounselorId = current?.assigned_counselor_id ?? null
+  }
+
   const { data, error } = await supabase
     .from('clients')
     .update(updates)
@@ -75,6 +87,7 @@ export async function PATCH(
 
   if (body.assigned_counselor_id !== undefined) {
     const newCounselorId = body.assigned_counselor_id || null
+
     if (newCounselorId) {
       await supabase
         .from('bookings')
@@ -82,6 +95,36 @@ export async function PATCH(
         .eq('client_id', clientId)
         .eq('status', 'CONFIRMED')
         .gte('scheduled_at', new Date().toISOString())
+
+      if (newCounselorId !== previousCounselorId) {
+        try {
+          const { data: counselor } = await supabase
+            .from('counselors')
+            .select('*')
+            .eq('id', newCounselorId)
+            .single()
+
+          const { data: upcoming } = await supabase
+            .from('bookings')
+            .select('*')
+            .eq('client_id', clientId)
+            .eq('status', 'CONFIRMED')
+            .gte('scheduled_at', new Date().toISOString())
+            .order('scheduled_at', { ascending: true })
+
+          if (counselor) {
+            const isReassignment = previousCounselorId !== null
+            await sendCounselorAssignmentEmail({
+              counselor: counselor as Counselor,
+              client: data as Client,
+              upcomingSessions: (upcoming ?? []) as Booking[],
+              isReassignment,
+            })
+          }
+        } catch {
+          // Email send failure shouldn't block the response
+        }
+      }
     }
   }
 

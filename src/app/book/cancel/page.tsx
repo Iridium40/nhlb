@@ -44,19 +44,19 @@ function CancelBookingInner() {
   async function loadBooking() {
     if (!bookingId) return
     const res = await fetch(`/api/booking/${bookingId}`)
-    if (!res.ok) { setError('Booking not found.'); setStep('error'); return }
+    if (!res.ok) { setError('Session not found.'); setStep('error'); return }
     const { booking: b } = await res.json()
-    if (b.status === 'CANCELLED') { setError('This booking has already been cancelled.'); setStep('error'); return }
-    if (b.status === 'COMPLETED') { setError('This booking has already been completed and cannot be cancelled.'); setStep('error'); return }
+    if (b.status === 'CANCELLED') { setError('This session has already been cancelled.'); setStep('error'); return }
+    if (b.status === 'COMPLETED') { setError('This session has already been completed and cannot be cancelled.'); setStep('error'); return }
     setBooking(b)
     if (prefillEmail) setStep('confirm')
   }
 
   function handleLookup() {
     if (!email.trim()) { setError('Please enter your email.'); return }
-    if (!booking) { setError('Booking not found.'); return }
+    if (!booking) { setError('Session not found.'); return }
     if (booking.client?.email?.toLowerCase() !== email.trim().toLowerCase()) {
-      setError('Email does not match this booking.')
+      setError('Email does not match this session.')
       return
     }
     setError('')
@@ -73,7 +73,7 @@ function CancelBookingInner() {
     })
     if (!res.ok) {
       const data = await res.json()
-      setError(data.error || 'Failed to cancel booking.')
+      setError(data.error || 'Failed to cancel session.')
       setLoading(false)
       return
     }
@@ -97,7 +97,7 @@ function CancelBookingInner() {
 
   return (
     <div style={S.page}>
-      <div style={S.topbar}>No Heart Left Behind &mdash; Cancel Booking</div>
+      <div style={S.topbar}>No Heart Left Behind &mdash; Cancel Session</div>
       <div style={S.main}>
         <div style={S.card}>
 
@@ -215,7 +215,7 @@ function CancelBookingInner() {
                 display: 'inline-block', padding: '12px 28px', backgroundColor: 'var(--nhlb-red)', color: 'white',
                 fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem', borderRadius: 8, textDecoration: 'none',
               }}>
-                Back to Booking
+                Back to Sessions
               </a>
             </div>
           )}

@@ -369,7 +369,7 @@ export default function AdminBookingsPage() {
             {view === 'list' && (
               visibleBookings.length === 0 ? (
                 <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem', color: 'var(--nhlb-muted)' }}>
-                  No bookings found
+                  No sessions found
                 </p>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>

@@ -24,7 +24,7 @@ export function HipaaIntakeEmail({ client, intakeUrl }: Props) {
             Hi {client.first_name},
           </Text>
           <Text style={{ color: '#3D1A14', fontFamily: 'Arial, sans-serif', fontSize: 14, lineHeight: 1.6 }}>
-            Thank you for booking a counseling session with us. Before your first visit, please take a few minutes to complete the confidential health intake form below.
+            Thank you for scheduling a counseling session with us. Before your first visit, please take a few minutes to complete the confidential health intake form below.
           </Text>
 
           <Section style={{ textAlign: 'center', margin: '28px 0' }}>

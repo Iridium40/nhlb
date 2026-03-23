@@ -3,6 +3,7 @@ import { BookingConfirmationEmail } from '../../emails/BookingConfirmation'
 import { CounselorNotificationEmail } from '../../emails/CounselorNotification'
 import { VirtualSessionInfoEmail } from '../../emails/VirtualSessionInfo'
 import { HipaaIntakeEmail } from '../../emails/HipaaIntakeEmail'
+import { CounselorAssignmentEmail } from '../../emails/CounselorAssignment'
 import { generateICS } from '@/lib/ics'
 import type { Booking, Counselor, Client } from '@/types'
 
@@ -61,7 +62,7 @@ export async function sendCounselorNotification({
   await getResend().emails.send({
     from: from(),
     to: recipients,
-    subject: `New booking — ${client.first_name} ${client.last_name}`,
+    subject: `New session — ${client.first_name} ${client.last_name}`,
     react: CounselorNotificationEmail({ booking, counselor, client }),
     attachments: [
       {
@@ -87,6 +88,31 @@ export async function sendVirtualSessionInfo({
     to: client.email,
     subject: `Your virtual session details — ${counselor.name}`,
     react: VirtualSessionInfoEmail({ booking, counselor, client }),
+  })
+}
+
+export async function sendCounselorAssignmentEmail({
+  counselor,
+  client,
+  upcomingSessions,
+  isReassignment,
+}: {
+  counselor: Counselor
+  client: Client
+  upcomingSessions: Booking[]
+  isReassignment: boolean
+}) {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : 'http://localhost:3000'
+
+  await getResend().emails.send({
+    from: from(),
+    to: client.email,
+    subject: isReassignment
+      ? `Your counselor has been updated — ${counselor.name}`
+      : `Meet your counselor — ${counselor.name}`,
+    react: CounselorAssignmentEmail({ counselor, client, upcomingSessions, isReassignment, baseUrl }),
   })
 }
 

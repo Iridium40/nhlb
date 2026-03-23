@@ -493,7 +493,7 @@ export default function ClientDetailPage() {
           }}>
             <span style={{ fontSize: '1.2rem' }}>⚠</span>
             <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: '#92400E', margin: 0 }}>
-              HIPAA intake form has not been completed yet. The client should have received a link via email after booking.
+              HIPAA intake form has not been completed yet. The client should have received a link via email after their session was scheduled.
             </p>
           </div>
         )}

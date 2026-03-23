@@ -35,7 +35,7 @@ export default function CreateAccountCard({ clientId, email }: { clientId: strin
         borderRadius: 12, padding: '20px 24px', textAlign: 'center',
       }}>
         <p style={{ fontFamily: 'Lato, sans-serif', fontWeight: 700, color: '#065F46', fontSize: '0.875rem', margin: 0 }}>
-          Account created! You can now log in for faster bookings.
+          Account created! You can now log in for faster scheduling.
         </p>
       </div>
     )
@@ -57,7 +57,7 @@ export default function CreateAccountCard({ clientId, email }: { clientId: strin
           fontFamily: 'Lato, sans-serif', fontSize: '0.8rem',
           color: 'var(--nhlb-muted)', marginBottom: 14,
         }}>
-          Create an optional account for faster booking next time.
+          Create an optional account for faster scheduling next time.
         </p>
         <button onClick={() => setExpanded(true)} style={{
           padding: '10px 24px', borderRadius: 8,

@@ -144,7 +144,7 @@ function ReturningClientInner() {
         }),
       })
       const json = await res.json()
-      if (!res.ok) { setError(json.error ?? 'Could not create booking'); setSubmitting(false); return }
+      if (!res.ok) { setError(json.error ?? 'Could not create session'); setSubmitting(false); return }
       router.push(`/book/confirmation/${json.bookingId}`)
     } catch {
       setError('Something went wrong.')
@@ -207,7 +207,7 @@ function ReturningClientInner() {
               Find your account
             </h2>
             <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', marginBottom: 28 }}>
-              Enter the email you used for your first booking.
+              Enter the email you used for your first session.
             </p>
             <div style={{ marginBottom: 20 }}>
               <label style={S.label}>Email address</label>
@@ -398,7 +398,7 @@ function ReturningClientInner() {
               disabled={submitting || parseFloat(donationAmount) < 10}
               style={{ ...S.btn, opacity: submitting || parseFloat(donationAmount) < 10 ? 0.5 : 1 }}
               className="btn-primary">
-              {submitting ? 'Booking...' : `Confirm & Give $${parseFloat(donationAmount || '10').toFixed(2)}`}
+              {submitting ? 'Confirming...' : `Confirm & Give $${parseFloat(donationAmount || '10').toFixed(2)}`}
             </button>
 
             <button onClick={() => { setStep('schedule'); setSelectedSlot(null) }} style={{

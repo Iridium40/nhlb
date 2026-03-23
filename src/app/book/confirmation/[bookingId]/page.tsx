@@ -31,7 +31,7 @@ export default async function ConfirmationPage({
         textAlign: 'center', fontSize: '0.8rem', letterSpacing: '0.05em',
         padding: '8px 16px', fontFamily: 'Lato, sans-serif',
       }}>
-        No Heart Left Behind &mdash; Booking Confirmed
+        No Heart Left Behind &mdash; Session Confirmed
       </div>
 
       <header style={{

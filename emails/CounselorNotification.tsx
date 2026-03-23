@@ -15,7 +15,7 @@ export function CounselorNotificationEmail({ booking, counselor, client }: Props
       <Head />
       <Body style={{ fontFamily: 'Arial, sans-serif', background: '#f4f4f4', padding: '32px 0' }}>
         <Container style={{ background: '#fff', borderRadius: 8, padding: '32px', maxWidth: 480 }}>
-          <Heading style={{ fontSize: 20, marginBottom: 4, color: '#8B2015' }}>New booking request</Heading>
+          <Heading style={{ fontSize: 20, marginBottom: 4, color: '#8B2015' }}>New session request</Heading>
           <Text style={{ color: '#666', marginTop: 0 }}>Assigned to {counselor.name}</Text>
           <Hr style={{ margin: '20px 0' }} />
 
@@ -50,7 +50,7 @@ export function CounselorNotificationEmail({ booking, counselor, client }: Props
             </Text>
           </Section>
           <Text style={{ color: '#999', fontSize: 12 }}>
-            Booking ID: {booking.id}
+            Session ID: {booking.id}
           </Text>
         </Container>
       </Body>

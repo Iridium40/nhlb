@@ -63,7 +63,7 @@ export default function CounselorNav() {
             color: 'white', backgroundColor: 'var(--nhlb-red)',
             padding: '6px 14px', borderRadius: 6, textDecoration: 'none',
           }}>
-            Booking Page ↗
+            Book a Session ↗
           </a>
           <button onClick={handleLogout} style={{
             padding: '6px 14px', borderRadius: 6, border: '1px solid var(--nhlb-border)',
