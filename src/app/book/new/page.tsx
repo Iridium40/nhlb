@@ -63,8 +63,8 @@ export default function NewClientBookingPage() {
   }, [step, loadSlots])
 
   const goToSchedule = () => {
-    if (!firstName.trim() || !lastName.trim() || !email.trim()) {
-      setError('Please fill in your name and email.')
+    if (!firstName.trim() || !lastName.trim() || !email.trim() || !phone.trim()) {
+      setError('Please fill in your name, email, and phone number.')
       return
     }
     setError(null)
@@ -114,7 +114,7 @@ export default function NewClientBookingPage() {
           first_name: firstName,
           last_name: lastName,
           email,
-          phone: phone || undefined,
+          phone,
           service_type: serviceType,
           brief_reason: reason || undefined,
           counselor_id: selectedSlot.counselorId,
@@ -227,7 +227,7 @@ export default function NewClientBookingPage() {
               <div><label style={S.label}>Last name *</label><input value={lastName} onChange={e => setLastName(e.target.value)} style={S.input} className="input-brand" placeholder="Smith" /></div>
             </div>
             <div style={{ marginBottom: 16 }}><label style={S.label}>Email *</label><input type="email" value={email} onChange={e => setEmail(e.target.value)} style={S.input} className="input-brand" placeholder="jane@example.com" /></div>
-            <div style={{ marginBottom: 16 }}><label style={S.label}>Phone</label><input type="tel" value={phone} onChange={e => setPhone(e.target.value)} style={S.input} className="input-brand" placeholder="(985) 555-0100" /></div>
+            <div style={{ marginBottom: 16 }}><label style={S.label}>Phone *</label><input type="tel" value={phone} onChange={e => setPhone(e.target.value)} style={S.input} className="input-brand" placeholder="(985) 555-0100" /></div>
 
             <div style={{ marginBottom: 16 }}>
               <label style={S.label}>Type of counseling</label>

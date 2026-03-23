@@ -7,7 +7,7 @@ const schema = z.object({
   first_name: z.string().min(1),
   last_name: z.string().min(1),
   email: z.string().email(),
-  phone: z.string().optional(),
+  phone: z.string().min(1, 'Phone number is required'),
   service_type: z.string().default('individual'),
   brief_reason: z.string().optional(),
   counselor_id: z.string().uuid(),
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
           first_name: data.first_name,
           last_name: data.last_name,
           email: data.email,
-          phone: data.phone ?? null,
+          phone: data.phone,
           service_type: data.service_type,
           brief_reason: data.brief_reason ?? null,
         })
