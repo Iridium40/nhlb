@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
+import type Stripe from 'stripe'
 
 const schema = z.object({
   amountCents: z.number().min(1000, 'Minimum donation is $10'),
@@ -26,9 +27,10 @@ export async function POST(req: NextRequest) {
     const { getStripe } = await import('@/lib/stripe')
     const stripe = getStripe()
 
-    const intentParams: Record<string, unknown> = {
+    const intentParams: Stripe.PaymentIntentCreateParams = {
       amount: data.amountCents,
       currency: 'usd',
+      automatic_payment_methods: { enabled: true },
       metadata: {
         bookingId: data.bookingId ?? '',
         clientEmail: data.clientEmail,
@@ -49,11 +51,9 @@ export async function POST(req: NextRequest) {
         enabled: true,
         allow_redirects: 'never',
       }
-    } else {
-      intentParams.automatic_payment_methods = { enabled: true }
     }
 
-    const intent = await stripe.paymentIntents.create(intentParams as Parameters<typeof stripe.paymentIntents.create>[0])
+    const intent = await stripe.paymentIntents.create(intentParams)
 
     if (data.paymentMethodId && intent.status === 'succeeded') {
       return NextResponse.json({
