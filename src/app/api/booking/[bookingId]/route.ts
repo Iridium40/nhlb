@@ -81,6 +81,21 @@ export async function PATCH(
   if (body.meeting_id !== undefined) updates.meeting_id = body.meeting_id
   if (body.meeting_passcode !== undefined) updates.meeting_passcode = body.meeting_passcode
 
+  // Cannot start or complete a session if the scheduled date is in the future
+  if (body.status === 'in_session' || body.status === 'completed') {
+    const scheduledDate = new Date(current.scheduled_at)
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const schedDay = new Date(scheduledDate)
+    schedDay.setHours(0, 0, 0, 0)
+    if (schedDay > today) {
+      return NextResponse.json(
+        { error: `Cannot ${body.status === 'in_session' ? 'start' : 'complete'} a session scheduled for a future date.` },
+        { status: 400 }
+      )
+    }
+  }
+
   // Auto-stamp call_completed_at when transitioning to call_complete
   if (body.status === 'call_complete') {
     updates.call_completed_at = new Date().toISOString()

@@ -146,6 +146,8 @@ export default function CounselorDashboard() {
   const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }))
   const [view, setView] = useState<'week' | 'list'>('week')
   const [expandedNotes, setExpandedNotes] = useState<string | null>(null)
+  const [completeModal, setCompleteModal] = useState<{ bookingId: string; name: string } | null>(null)
+  const [completeNotes, setCompleteNotes] = useState('')
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -163,13 +165,28 @@ export default function CounselorDashboard() {
   useEffect(() => { load() }, [load])
 
 
-  const updateBooking = async (bookingId: string, status: string) => {
+  const updateBooking = async (bookingId: string, status: string, extra?: Record<string, unknown>) => {
     await fetch(`/api/booking/${bookingId}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status }),
+      body: JSON.stringify({ status, ...extra }),
     })
     load()
+  }
+
+  const isFutureSession = (scheduledAt: string) => {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const schedDay = new Date(scheduledAt)
+    schedDay.setHours(0, 0, 0, 0)
+    return schedDay > today
+  }
+
+  const handleCompleteConfirm = async () => {
+    if (!completeModal) return
+    await updateBooking(completeModal.bookingId, 'completed', completeNotes ? { session_notes: completeNotes } : undefined)
+    setCompleteModal(null)
+    setCompleteNotes('')
   }
 
   if (loading) return (
@@ -444,18 +461,37 @@ export default function CounselorDashboard() {
                           {isNotesOpen ? 'Close Notes' : hasNotes ? 'Edit Notes' : 'Add Notes'}
                         </button>
                         {b.status === 'confirmed' && (
-                          <button onClick={() => updateBooking(b.id, 'in_session')} style={{
-                            padding: '6px 12px', borderRadius: 6, border: 'none',
-                            backgroundColor: '#3C3489', color: 'white',
-                            fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem', cursor: 'pointer',
-                          }}>Start session</button>
+                          <button
+                            onClick={() => !isFutureSession(b.scheduled_at) && updateBooking(b.id, 'in_session')}
+                            disabled={isFutureSession(b.scheduled_at)}
+                            title={isFutureSession(b.scheduled_at) ? 'Session date must be today or in the past' : undefined}
+                            style={{
+                              padding: '6px 12px', borderRadius: 6, border: 'none',
+                              backgroundColor: '#3C3489', color: 'white',
+                              fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem',
+                              cursor: isFutureSession(b.scheduled_at) ? 'not-allowed' : 'pointer',
+                              opacity: isFutureSession(b.scheduled_at) ? 0.4 : 1,
+                            }}>Start session</button>
                         )}
                         {b.status === 'in_session' && (
-                          <button onClick={() => updateBooking(b.id, 'completed')} style={{
-                            padding: '6px 12px', borderRadius: 6, border: 'none',
-                            backgroundColor: '#065F46', color: 'white',
-                            fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem', cursor: 'pointer',
-                          }}>Complete session</button>
+                          <button
+                            onClick={() => {
+                              if (isFutureSession(b.scheduled_at)) return
+                              setCompleteModal({
+                                bookingId: b.id,
+                                name: `${b.client?.first_name ?? ''} ${b.client?.last_name ?? ''}`.trim() || 'Session',
+                              })
+                              setCompleteNotes('')
+                            }}
+                            disabled={isFutureSession(b.scheduled_at)}
+                            title={isFutureSession(b.scheduled_at) ? 'Session date must be today or in the past' : undefined}
+                            style={{
+                              padding: '6px 12px', borderRadius: 6, border: 'none',
+                              backgroundColor: '#065F46', color: 'white',
+                              fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem',
+                              cursor: isFutureSession(b.scheduled_at) ? 'not-allowed' : 'pointer',
+                              opacity: isFutureSession(b.scheduled_at) ? 0.4 : 1,
+                            }}>Complete session</button>
                         )}
                         {!['completed', 'cancelled'].includes(b.status) && (
                           <button onClick={() => updateBooking(b.id, 'cancelled')} style={{
@@ -496,6 +532,57 @@ export default function CounselorDashboard() {
           </div>
         )}
       </div>
+
+      {/* ── Complete Session Modal ── */}
+      {completeModal && (
+        <div style={{
+          position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.4)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999,
+        }} onClick={() => setCompleteModal(null)}>
+          <div onClick={e => e.stopPropagation()} style={{
+            background: 'white', borderRadius: 16, padding: '32px', maxWidth: 460,
+            width: '90%', boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
+          }}>
+            <h3 style={{
+              fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem',
+              fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px',
+            }}>
+              Complete Session
+            </h3>
+            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', margin: '0 0 20px' }}>
+              {completeModal.name} &mdash; Would you like to add session notes?
+            </p>
+            <textarea
+              value={completeNotes}
+              onChange={e => setCompleteNotes(e.target.value)}
+              placeholder="Session notes (optional)"
+              rows={4}
+              style={{
+                width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
+                padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
+                color: 'var(--nhlb-text)', background: 'white', outline: 'none', resize: 'vertical',
+                boxSizing: 'border-box', marginBottom: 20,
+              }}
+            />
+            <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+              <button onClick={() => setCompleteModal(null)} style={{
+                padding: '10px 20px', borderRadius: 8, border: '1px solid var(--nhlb-border)',
+                backgroundColor: 'white', color: 'var(--nhlb-muted)',
+                fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', cursor: 'pointer',
+              }}>
+                Cancel
+              </button>
+              <button onClick={handleCompleteConfirm} style={{
+                padding: '10px 20px', borderRadius: 8, border: 'none',
+                backgroundColor: '#065F46', color: 'white',
+                fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
+              }}>
+                Complete Session
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -54,6 +54,8 @@ export default function AdminBookingsPage() {
   const [savingNotes, setSavingNotes] = useState<Record<string, boolean>>({})
   const [localPreCallNotes, setLocalPreCallNotes] = useState<Record<string, string>>({})
   const [localSessionNotes, setLocalSessionNotes] = useState<Record<string, string>>({})
+  const [completeModal, setCompleteModal] = useState<{ bookingId: string; name: string } | null>(null)
+  const [completeNotes, setCompleteNotes] = useState('')
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -141,6 +143,21 @@ export default function AdminBookingsPage() {
   const nextActions = (status: string): string[] => STATUS_TRANSITIONS[status] ?? []
 
   const statusIdx = (s: string) => ALL_STATUSES.indexOf(s as BookingStatus)
+
+  const isFutureSession = (scheduledAt: string) => {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const schedDay = new Date(scheduledAt)
+    schedDay.setHours(0, 0, 0, 0)
+    return schedDay > today
+  }
+
+  const handleCompleteConfirm = async () => {
+    if (!completeModal) return
+    await transition(completeModal.bookingId, 'completed', completeNotes ? { session_notes: completeNotes } : undefined)
+    setCompleteModal(null)
+    setCompleteNotes('')
+  }
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)' }}>
@@ -376,17 +393,33 @@ export default function AdminBookingsPage() {
                             )}
                           </div>
                           <div style={{ display: 'flex', gap: 6, flexShrink: 0, flexWrap: 'wrap', justifyContent: 'flex-end', maxWidth: 300 }}>
-                            {actions.filter(a => a !== 'cancelled').map(a => (
-                              <button key={a} onClick={() => transition(b.id, a)}
-                                style={{
-                                  padding: '7px 14px', borderRadius: 8, border: 'none', cursor: 'pointer',
-                                  backgroundColor: STATUS_STYLES[a]?.bg ?? '#F3F4F6',
-                                  color: STATUS_STYLES[a]?.text ?? '#374151',
-                                  fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.75rem',
-                                }}>
-                                {ACTION_LABELS[a] ?? a}
-                              </button>
-                            ))}
+                            {actions.filter(a => a !== 'cancelled').map(a => {
+                              const futureBlock = (a === 'in_session' || a === 'completed') && isFutureSession(b.scheduled_at)
+                              return (
+                                <button key={a}
+                                  onClick={() => {
+                                    if (futureBlock) return
+                                    if (a === 'completed') {
+                                      setCompleteModal({ bookingId: b.id, name: `${b.client?.first_name ?? ''} ${b.client?.last_name ?? ''}`.trim() || 'Session' })
+                                      setCompleteNotes(localSessionNotes[b.id] ?? b.session_notes ?? '')
+                                    } else {
+                                      transition(b.id, a)
+                                    }
+                                  }}
+                                  disabled={futureBlock}
+                                  title={futureBlock ? 'Session date must be today or in the past' : undefined}
+                                  style={{
+                                    padding: '7px 14px', borderRadius: 8, border: 'none',
+                                    cursor: futureBlock ? 'not-allowed' : 'pointer',
+                                    backgroundColor: STATUS_STYLES[a]?.bg ?? '#F3F4F6',
+                                    color: STATUS_STYLES[a]?.text ?? '#374151',
+                                    fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.75rem',
+                                    opacity: futureBlock ? 0.4 : 1,
+                                  }}>
+                                  {ACTION_LABELS[a] ?? a}
+                                </button>
+                              )
+                            })}
                             {actions.includes('cancelled') && (
                               <button onClick={() => transition(b.id, 'cancelled')}
                                 style={{
@@ -458,6 +491,57 @@ export default function AdminBookingsPage() {
           </>
         )}
       </div>
+
+      {/* ── Complete Session Modal ── */}
+      {completeModal && (
+        <div style={{
+          position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.4)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999,
+        }} onClick={() => setCompleteModal(null)}>
+          <div onClick={e => e.stopPropagation()} style={{
+            background: 'white', borderRadius: 16, padding: '32px', maxWidth: 460,
+            width: '90%', boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
+          }}>
+            <h3 style={{
+              fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem',
+              fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px',
+            }}>
+              Complete Session
+            </h3>
+            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', margin: '0 0 20px' }}>
+              {completeModal.name} &mdash; Would you like to add session notes?
+            </p>
+            <textarea
+              value={completeNotes}
+              onChange={e => setCompleteNotes(e.target.value)}
+              placeholder="Session notes (optional)"
+              rows={4}
+              style={{
+                width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
+                padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
+                color: 'var(--nhlb-text)', background: 'white', outline: 'none', resize: 'vertical',
+                boxSizing: 'border-box', marginBottom: 20,
+              }}
+            />
+            <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+              <button onClick={() => setCompleteModal(null)} style={{
+                padding: '10px 20px', borderRadius: 8, border: '1px solid var(--nhlb-border)',
+                backgroundColor: 'white', color: 'var(--nhlb-muted)',
+                fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', cursor: 'pointer',
+              }}>
+                Cancel
+              </button>
+              <button onClick={handleCompleteConfirm} style={{
+                padding: '10px 20px', borderRadius: 8, border: 'none',
+                backgroundColor: '#065F46', color: 'white',
+                fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
+              }}>
+                Complete Session
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Success Toast ── */}
       {toast && (
