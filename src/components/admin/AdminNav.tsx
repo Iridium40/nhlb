@@ -8,7 +8,7 @@ const NAV_ITEMS = [
   { href: '/admin/bookings/clients', label: 'Clients' },
   { href: '/admin/bookings/counselors', label: 'Counselors' },
   { href: '/admin/events', label: 'Events' },
-  { href: '/admin/donations', label: 'Donations' },
+  { href: '/admin/donations', label: 'Financials' },
   { href: '/admin/reports', label: 'Reports' },
 ]
 

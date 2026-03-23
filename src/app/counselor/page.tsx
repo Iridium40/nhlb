@@ -145,7 +145,11 @@ export default function CounselorDashboard() {
   const [loading, setLoading] = useState(true)
   const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }))
   const [view, setView] = useState<'week' | 'list'>('week')
+  const [listFilterDay, setListFilterDay] = useState<Date | null>(null)
   const [expandedNotes, setExpandedNotes] = useState<string | null>(null)
+  const [expandedPreCall, setExpandedPreCall] = useState<string | null>(null)
+  const [localPreCallNotes, setLocalPreCallNotes] = useState<Record<string, string>>({})
+  const [savingPreCall, setSavingPreCall] = useState<Record<string, boolean>>({})
   const [completeModal, setCompleteModal] = useState<{ bookingId: string; name: string } | null>(null)
   const [completeNotes, setCompleteNotes] = useState('')
 
@@ -171,6 +175,22 @@ export default function CounselorDashboard() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status, ...extra }),
     })
+    load()
+  }
+
+  const goToListDay = (day: Date) => {
+    setListFilterDay(day)
+    setView('list')
+  }
+
+  const savePreCallNotes = async (bookingId: string) => {
+    setSavingPreCall(prev => ({ ...prev, [bookingId]: true }))
+    await fetch(`/api/booking/${bookingId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pre_call_notes: localPreCallNotes[bookingId] ?? '' }),
+    })
+    setSavingPreCall(prev => ({ ...prev, [bookingId]: false }))
     load()
   }
 
@@ -275,7 +295,7 @@ export default function CounselorDashboard() {
         {/* View toggle + week nav */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
           <div style={{ display: 'flex', gap: 6 }}>
-            <button onClick={() => setView('week')} style={{
+            <button onClick={() => { setView('week'); setListFilterDay(null) }} style={{
               padding: '6px 14px', borderRadius: 6, border: '1px solid',
               borderColor: view === 'week' ? 'var(--nhlb-red)' : 'var(--nhlb-border)',
               backgroundColor: view === 'week' ? 'var(--nhlb-red)' : 'white',
@@ -302,12 +322,24 @@ export default function CounselorDashboard() {
               background: 'none', border: '1px solid var(--nhlb-border)', borderRadius: 6,
               padding: '4px 10px', cursor: 'pointer', fontSize: '0.85rem', color: 'var(--nhlb-muted)',
             }}>&rarr;</button>
-            <button onClick={() => setWeekStart(startOfWeek(new Date(), { weekStartsOn: 1 }))} style={{
+            <button onClick={() => { setWeekStart(startOfWeek(new Date(), { weekStartsOn: 1 })); setListFilterDay(null) }} style={{
               padding: '4px 10px', borderRadius: 6, border: '1px solid var(--nhlb-border)',
               backgroundColor: 'white', color: 'var(--nhlb-muted)',
               fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer',
             }}>Today</button>
           </div>
+          {view === 'list' && listFilterDay && (
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: 'var(--nhlb-red-dark)' }}>
+                {format(listFilterDay, 'EEEE, MMMM d, yyyy')}
+              </span>
+              <button onClick={() => setListFilterDay(null)} style={{
+                padding: '4px 12px', borderRadius: 6, border: '1px solid var(--nhlb-border)',
+                backgroundColor: 'white', color: 'var(--nhlb-muted)',
+                fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer',
+              }}>Show All</button>
+            </div>
+          )}
         </div>
 
         {/* Week calendar grid */}
@@ -358,7 +390,8 @@ export default function CounselorDashboard() {
                       borderLeft: '1px solid var(--nhlb-border)',
                       padding: 2, position: 'relative',
                       backgroundColor: isToday(day) ? 'rgba(184,49,31,0.03)' : 'transparent',
-                    }}>
+                      cursor: dayBookings.length ? 'pointer' : 'default',
+                    }} onClick={() => dayBookings.length > 0 && goToListDay(day)}>
                       {dayBookings.map(b => {
                         const colors = STATUS_COLORS[b.status] ?? STATUS_COLORS.requested
                         return (
@@ -386,22 +419,25 @@ export default function CounselorDashboard() {
         )}
 
         {/* List view */}
-        {view === 'list' && (
+        {view === 'list' && (() => {
+          const listBookings = bookings.filter(b => {
+            if (b.status === 'cancelled') return false
+            const d = new Date(b.scheduled_at)
+            if (listFilterDay) return isSameDay(d, listFilterDay)
+            return d >= weekDays[0] && d <= addDays(weekDays[6], 1)
+          })
+          return (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {bookings.filter(b => {
-              const d = new Date(b.scheduled_at)
-              return d >= weekDays[0] && d <= addDays(weekDays[6], 1) && b.status !== 'cancelled'
-            }).length === 0 ? (
+            {listBookings.length === 0 ? (
               <p style={{ textAlign: 'center', padding: '40px 0', fontFamily: 'Cormorant Garamond, serif', fontSize: '1.2rem', color: 'var(--nhlb-muted)' }}>
-                No sessions this week
+                {listFilterDay ? 'No sessions on this day' : 'No sessions this week'}
               </p>
             ) : (
-              bookings.filter(b => {
-                const d = new Date(b.scheduled_at)
-                return d >= weekDays[0] && d <= addDays(weekDays[6], 1) && b.status !== 'cancelled'
-              }).map(b => {
+              listBookings.map(b => {
                 const isNotesOpen = expandedNotes === b.id
+                const isPreCallOpen = expandedPreCall === b.id
                 const hasNotes = !!b.session_note?.content
+                const preCallVisible = ['call_pending', 'call_complete', 'confirmed', 'in_session', 'completed'].includes(b.status)
                 return (
                   <div key={b.id} style={{
                     background: 'white', border: '1px solid var(--nhlb-border)',
@@ -503,6 +539,39 @@ export default function CounselorDashboard() {
                       </div>
                     </div>
 
+                    {/* Pre-call notes */}
+                    {preCallVisible && (
+                      <div style={{ marginTop: 12 }}>
+                        <button onClick={() => setExpandedPreCall(isPreCallOpen ? null : b.id)} style={{
+                          background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+                          fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                          color: '#633806', letterSpacing: '0.06em',
+                        }}>
+                          {isPreCallOpen ? '▾' : '▸'} PRE-CALL NOTES
+                          {!!b.pre_call_notes && !isPreCallOpen && (
+                            <span style={{ fontWeight: 400, marginLeft: 6, color: '#92400E' }}>(has notes)</span>
+                          )}
+                        </button>
+                        {isPreCallOpen && (
+                          <div style={{ marginTop: 6, padding: '12px 16px', backgroundColor: '#FAEEDA', borderRadius: 8 }}>
+                            <textarea
+                              value={localPreCallNotes[b.id] ?? (b.pre_call_notes ?? '')}
+                              onChange={e => setLocalPreCallNotes(prev => ({ ...prev, [b.id]: e.target.value }))}
+                              rows={2}
+                              placeholder="Notes from the intake phone call..."
+                              style={{ width: '100%', border: '1px solid #E3A008', borderRadius: 6, padding: '8px 12px', fontSize: '0.85rem', fontFamily: 'Lato, sans-serif', color: '#633806', background: 'white', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}
+                            />
+                            <button
+                              onClick={() => savePreCallNotes(b.id)}
+                              disabled={savingPreCall[b.id]}
+                              style={{ marginTop: 6, padding: '5px 14px', borderRadius: 6, border: 'none', cursor: 'pointer', backgroundColor: '#633806', color: 'white', fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.72rem', opacity: savingPreCall[b.id] ? 0.6 : 1 }}>
+                              {savingPreCall[b.id] ? 'Saving...' : 'Save pre-call notes'}
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     {/* Previous session notes for upcoming sessions */}
                     {['confirmed', 'in_session'].includes(b.status) && <PreviousNotes booking={b} />}
 
@@ -530,7 +599,7 @@ export default function CounselorDashboard() {
               })
             )}
           </div>
-        )}
+          )})()}
       </div>
 
       {/* ── Complete Session Modal ── */}

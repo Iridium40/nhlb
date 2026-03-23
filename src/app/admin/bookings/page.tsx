@@ -2,8 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import {
-  format, startOfWeek, startOfMonth, endOfMonth, addDays, addMonths, subMonths,
-  isSameDay, isSameMonth, isToday, getDay,
+  format, startOfWeek, addDays, isSameDay, isToday,
 } from 'date-fns'
 import type { Booking, BookingStatus } from '@/types'
 import { STATUS_TRANSITIONS } from '@/types'
@@ -38,7 +37,7 @@ const COUNSELOR_COLORS = [
 
 const HOURS = Array.from({ length: 11 }, (_, i) => i + 7)
 
-type ViewMode = 'list' | 'week' | 'month'
+type ViewMode = 'list' | 'week'
 
 const ALL_STATUSES: BookingStatus[] = ['requested', 'call_pending', 'call_complete', 'confirmed', 'in_session', 'completed', 'cancelled']
 
@@ -47,9 +46,9 @@ export default function AdminBookingsPage() {
   const [filter, setFilter] = useState<'all' | BookingStatus>('all')
   const [counselorFilter, setCounselorFilter] = useState<string>('all')
   const [loading, setLoading] = useState(true)
-  const [view, setView] = useState<ViewMode>('list')
+  const [view, setView] = useState<ViewMode>('week')
   const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }))
-  const [monthDate, setMonthDate] = useState(() => new Date())
+  const [listFilterDay, setListFilterDay] = useState<Date | null>(null)
   const [toast, setToast] = useState<string | null>(null)
   const [savingNotes, setSavingNotes] = useState<Record<string, boolean>>({})
   const [localPreCallNotes, setLocalPreCallNotes] = useState<Record<string, string>>({})
@@ -106,9 +105,8 @@ export default function AdminBookingsPage() {
   const filters: ('all' | BookingStatus)[] = ['all', ...ALL_STATUSES]
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i))
   const views: { key: ViewMode; label: string }[] = [
-    { key: 'list', label: 'List' },
     { key: 'week', label: 'Week' },
-    { key: 'month', label: 'Month' },
+    { key: 'list', label: 'List' },
   ]
 
   const counselorNames = [...new Set(bookings.map(b => b.counselor?.name).filter(Boolean))]
@@ -117,26 +115,20 @@ export default function AdminBookingsPage() {
     if (name) counselorColorMap[name] = COUNSELOR_COLORS[i % COUNSELOR_COLORS.length]
   })
 
-  const monthStart = startOfMonth(monthDate)
-  const monthEnd = endOfMonth(monthDate)
-  const calendarStart = addDays(monthStart, -(getDay(monthStart) === 0 ? 6 : getDay(monthStart) - 1))
-  const monthWeeks: Date[][] = []
-  let cur = calendarStart
-  while (cur <= monthEnd || monthWeeks.length < 5) {
-    const week: Date[] = []
-    for (let i = 0; i < 7; i++) { week.push(cur); cur = addDays(cur, 1) }
-    monthWeeks.push(week)
-    if (cur > monthEnd && monthWeeks.length >= 5) break
-  }
-
   const matchesFilters = (b: Booking) =>
     (filter === 'all' || b.status === filter)
     && (counselorFilter === 'all' || b.counselor?.name === counselorFilter)
 
-  const filteredBookings = (day: Date) =>
-    bookings.filter(b => isSameDay(new Date(b.scheduled_at), day) && matchesFilters(b))
+  const goToListDay = (day: Date) => {
+    setListFilterDay(day)
+    setView('list')
+  }
 
-  const visibleBookings = bookings.filter(matchesFilters)
+  const visibleBookings = bookings.filter(b => {
+    if (!matchesFilters(b)) return false
+    if (listFilterDay) return isSameDay(new Date(b.scheduled_at), listFilterDay)
+    return true
+  })
 
   const callPendingCount = bookings.filter(b => b.status === 'call_pending').length
 
@@ -217,7 +209,7 @@ export default function AdminBookingsPage() {
           </div>
           <div style={{ display: 'flex', gap: 4 }}>
             {views.map(v => (
-              <button key={v.key} onClick={() => setView(v.key)} style={{
+              <button key={v.key} onClick={() => { setView(v.key); if (v.key === 'week') setListFilterDay(null) }} style={{
                 padding: '6px 14px', borderRadius: 6, border: '1px solid',
                 borderColor: view === v.key ? 'var(--nhlb-red)' : 'var(--nhlb-border)',
                 backgroundColor: view === v.key ? 'var(--nhlb-red)' : 'white',
@@ -229,34 +221,29 @@ export default function AdminBookingsPage() {
         </div>
 
         {/* Week nav */}
-        {view === 'week' && (
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
-            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              <button onClick={() => setWeekStart(addDays(weekStart, -7))} style={{ background: 'none', border: '1px solid var(--nhlb-border)', borderRadius: 6, padding: '4px 10px', cursor: 'pointer', fontSize: '0.85rem', color: 'var(--nhlb-muted)' }}>&larr;</button>
-              <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: 'var(--nhlb-text)', minWidth: 180, textAlign: 'center' }}>
-                {format(weekStart, 'MMM d')} &ndash; {format(addDays(weekStart, 6), 'MMM d, yyyy')}
-              </span>
-              <button onClick={() => setWeekStart(addDays(weekStart, 7))} style={{ background: 'none', border: '1px solid var(--nhlb-border)', borderRadius: 6, padding: '4px 10px', cursor: 'pointer', fontSize: '0.85rem', color: 'var(--nhlb-muted)' }}>&rarr;</button>
-              <button onClick={() => setWeekStart(startOfWeek(new Date(), { weekStartsOn: 1 }))} style={{ padding: '4px 12px', borderRadius: 6, border: '1px solid var(--nhlb-border)', backgroundColor: 'white', color: 'var(--nhlb-muted)', fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer' }}>Today</button>
-            </div>
-            <CounselorLegend names={counselorNames} colorMap={counselorColorMap} />
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <button onClick={() => setWeekStart(addDays(weekStart, -7))} style={{ background: 'none', border: '1px solid var(--nhlb-border)', borderRadius: 6, padding: '4px 10px', cursor: 'pointer', fontSize: '0.85rem', color: 'var(--nhlb-muted)' }}>&larr;</button>
+            <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: 'var(--nhlb-text)', minWidth: 180, textAlign: 'center' }}>
+              {format(weekStart, 'MMM d')} &ndash; {format(addDays(weekStart, 6), 'MMM d, yyyy')}
+            </span>
+            <button onClick={() => setWeekStart(addDays(weekStart, 7))} style={{ background: 'none', border: '1px solid var(--nhlb-border)', borderRadius: 6, padding: '4px 10px', cursor: 'pointer', fontSize: '0.85rem', color: 'var(--nhlb-muted)' }}>&rarr;</button>
+            <button onClick={() => { setWeekStart(startOfWeek(new Date(), { weekStartsOn: 1 })); setListFilterDay(null) }} style={{ padding: '4px 12px', borderRadius: 6, border: '1px solid var(--nhlb-border)', backgroundColor: 'white', color: 'var(--nhlb-muted)', fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer' }}>Today</button>
           </div>
-        )}
-
-        {/* Month nav */}
-        {view === 'month' && (
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
+          {view === 'week' && <CounselorLegend names={counselorNames} colorMap={counselorColorMap} />}
+          {view === 'list' && listFilterDay && (
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              <button onClick={() => setMonthDate(subMonths(monthDate, 1))} style={{ background: 'none', border: '1px solid var(--nhlb-border)', borderRadius: 6, padding: '4px 10px', cursor: 'pointer', fontSize: '0.85rem', color: 'var(--nhlb-muted)' }}>&larr;</button>
-              <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.9rem', fontWeight: 700, color: 'var(--nhlb-text)', minWidth: 160, textAlign: 'center' }}>
-                {format(monthDate, 'MMMM yyyy')}
+              <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: 'var(--nhlb-red-dark)' }}>
+                {format(listFilterDay, 'EEEE, MMMM d, yyyy')}
               </span>
-              <button onClick={() => setMonthDate(addMonths(monthDate, 1))} style={{ background: 'none', border: '1px solid var(--nhlb-border)', borderRadius: 6, padding: '4px 10px', cursor: 'pointer', fontSize: '0.85rem', color: 'var(--nhlb-muted)' }}>&rarr;</button>
-              <button onClick={() => setMonthDate(new Date())} style={{ padding: '4px 12px', borderRadius: 6, border: '1px solid var(--nhlb-border)', backgroundColor: 'white', color: 'var(--nhlb-muted)', fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer' }}>Today</button>
+              <button onClick={() => setListFilterDay(null)} style={{
+                padding: '4px 12px', borderRadius: 6, border: '1px solid var(--nhlb-border)',
+                backgroundColor: 'white', color: 'var(--nhlb-muted)',
+                fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer',
+              }}>Show All</button>
             </div>
-            <CounselorLegend names={counselorNames} colorMap={counselorColorMap} />
-          </div>
-        )}
+          )}
+        </div>
 
         {loading ? (
           <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>
@@ -292,43 +279,11 @@ export default function AdminBookingsPage() {
                         return isSameDay(d, day) && d.getHours() === hour && matchesFilters(b)
                       })
                       return (
-                        <div key={day.toISOString()} style={{ borderLeft: '1px solid var(--nhlb-border)', padding: 2, backgroundColor: isToday(day) ? 'rgba(184,49,31,0.03)' : 'transparent' }}>
+                        <div key={day.toISOString()} style={{ borderLeft: '1px solid var(--nhlb-border)', padding: 2, backgroundColor: isToday(day) ? 'rgba(184,49,31,0.03)' : 'transparent', cursor: dayBookings.length ? 'pointer' : 'default' }}
+                          onClick={() => dayBookings.length > 0 && goToListDay(day)}>
                           {dayBookings.map(b => (
                             <BookingChip key={b.id} booking={b} colorMap={counselorColorMap} />
                           ))}
-                        </div>
-                      )
-                    })}
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* ── Month View ── */}
-            {view === 'month' && (
-              <div style={{ background: 'white', border: '1px solid var(--nhlb-border)', borderRadius: 12, overflow: 'hidden' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', borderBottom: '1px solid var(--nhlb-border)' }}>
-                  {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map(d => (
-                    <div key={d} style={{ padding: '10px 8px', textAlign: 'center', backgroundColor: 'var(--nhlb-cream-dark)', borderLeft: '1px solid var(--nhlb-border)', fontFamily: 'Lato, sans-serif', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)' }}>{d}</div>
-                  ))}
-                </div>
-                {monthWeeks.map((week, wi) => (
-                  <div key={wi} style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', minHeight: 100, borderBottom: wi < monthWeeks.length - 1 ? '1px solid var(--nhlb-border)' : 'none' }}>
-                    {week.map(day => {
-                      const inMonth = isSameMonth(day, monthDate)
-                      const today = isToday(day)
-                      const dayBk = filteredBookings(day)
-                      return (
-                        <div key={day.toISOString()} style={{ borderLeft: '1px solid var(--nhlb-border)', padding: '4px 6px', backgroundColor: today ? 'rgba(184,49,31,0.04)' : !inMonth ? 'rgba(0,0,0,0.015)' : 'transparent', opacity: inMonth ? 1 : 0.45, minHeight: 100 }}>
-                          <div style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', fontWeight: 700, marginBottom: 4, textAlign: 'right', color: today ? 'white' : 'var(--nhlb-text)' }}>
-                            {today ? (
-                              <span style={{ backgroundColor: 'var(--nhlb-red)', color: 'white', borderRadius: '50%', width: 24, height: 24, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem' }}>{format(day, 'd')}</span>
-                            ) : format(day, 'd')}
-                          </div>
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                            {dayBk.slice(0, 3).map(b => (<BookingChip key={b.id} booking={b} colorMap={counselorColorMap} compact />))}
-                            {dayBk.length > 3 && (<span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.6rem', fontWeight: 700, color: 'var(--nhlb-muted)', textAlign: 'center' }}>+{dayBk.length - 3} more</span>)}
-                          </div>
                         </div>
                       )
                     })}
@@ -563,42 +518,37 @@ export default function AdminBookingsPage() {
   )
 }
 
-function BookingChip({ booking: b, colorMap, compact }: {
+function BookingChip({ booking: b, colorMap }: {
   booking: Booking
   colorMap: Record<string, typeof COUNSELOR_COLORS[0]>
-  compact?: boolean
 }) {
   const cName = b.counselor?.name ?? ''
   const cc = colorMap[cName] ?? COUNSELOR_COLORS[0]
   const cancelled = b.status === 'cancelled'
   return (
-    <a href={`/admin/bookings/clients/${b.client_id}`}
-      style={{
-        display: 'block', textDecoration: 'none',
-        backgroundColor: cancelled ? '#FCEBEB' : cc.bg,
-        borderRadius: 4, padding: compact ? '2px 5px' : '3px 6px', marginBottom: compact ? 0 : 2,
-        borderLeft: `3px solid ${cancelled ? '#DC2626' : cc.border}`,
-        opacity: cancelled ? 0.5 : 1,
-      }}>
+    <div style={{
+      display: 'block',
+      backgroundColor: cancelled ? '#FCEBEB' : cc.bg,
+      borderRadius: 4, padding: '3px 6px', marginBottom: 2,
+      borderLeft: `3px solid ${cancelled ? '#DC2626' : cc.border}`,
+      opacity: cancelled ? 0.5 : 1,
+    }}>
       <span style={{
         fontFamily: 'Lato, sans-serif', fontWeight: 700,
-        fontSize: compact ? '0.6rem' : '0.68rem', color: 'var(--nhlb-text)',
+        fontSize: '0.68rem', color: 'var(--nhlb-text)',
         lineHeight: 1.3, display: 'block',
         overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis',
       }}>
-        {compact ? `${format(new Date(b.scheduled_at), 'h:mma')} ` : ''}
         {b.client?.first_name} {b.client?.last_name?.[0]}.
       </span>
-      {!compact && (
-        <span style={{
-          fontFamily: 'Lato, sans-serif', fontSize: '0.58rem',
-          color: 'var(--nhlb-muted)', lineHeight: 1.2, display: 'block',
-        }}>
-          {cName.split(' ')[0]}
-          {b.type === 'VIRTUAL' ? ' · Virtual' : ''}
-        </span>
-      )}
-    </a>
+      <span style={{
+        fontFamily: 'Lato, sans-serif', fontSize: '0.58rem',
+        color: 'var(--nhlb-muted)', lineHeight: 1.2, display: 'block',
+      }}>
+        {cName.split(' ')[0]}
+        {b.type === 'VIRTUAL' ? ' · Virtual' : ''}
+      </span>
+    </div>
   )
 }
 
