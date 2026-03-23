@@ -9,6 +9,7 @@ import CounselorNav from '@/components/counselor/CounselorNav'
 interface EnrichedClient extends Client {
   session_count: number
   last_session_at: string | null
+  _match_notes?: boolean
 }
 
 export default function CounselorClientsPage() {
@@ -46,7 +47,7 @@ export default function CounselorClientsPage() {
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Search clients by name, email, or phone..."
+            placeholder="Search by name, email, phone, or session notes..."
             style={{
               width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
               padding: '12px 16px', fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
@@ -91,12 +92,20 @@ export default function CounselorClientsPage() {
                         {c.first_name[0]}{c.last_name[0]}
                       </div>
                       <div style={{ flex: 1 }}>
-                        <p style={{
-                          fontFamily: 'Cormorant Garamond, serif', fontSize: '1.15rem',
-                          fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 2px',
-                        }}>
-                          {c.first_name} {c.last_name}
-                        </p>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2 }}>
+                          <p style={{
+                            fontFamily: 'Cormorant Garamond, serif', fontSize: '1.15rem',
+                            fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0,
+                          }}>
+                            {c.first_name} {c.last_name}
+                          </p>
+                          {debouncedSearch && c._match_notes && (
+                            <span style={{
+                              padding: '1px 8px', borderRadius: 20, fontSize: '0.6rem', fontWeight: 700,
+                              fontFamily: 'Lato, sans-serif', backgroundColor: '#FEF3C7', color: '#92400E',
+                            }}>Notes match</span>
+                          )}
+                        </div>
                         <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: 0 }}>
                           {c.email}{c.phone ? ` · ${c.phone}` : ''}
                         </p>
