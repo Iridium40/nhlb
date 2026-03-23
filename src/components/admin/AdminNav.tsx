@@ -32,7 +32,7 @@ export default function AdminNav() {
       <header style={{
         backgroundColor: 'white', borderBottom: '1px solid var(--nhlb-blush-light)',
         padding: '0 40px', display: 'flex', alignItems: 'center',
-        justifyContent: 'center', height: 64,
+        justifyContent: 'center', height: 64, position: 'relative',
       }}>
         <nav style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
           {NAV_ITEMS.map(item => {
@@ -51,6 +51,14 @@ export default function AdminNav() {
             )
           })}
         </nav>
+        <a href="/book" target="_blank" rel="noopener noreferrer" style={{
+          position: 'absolute', right: 40, fontFamily: 'Lato, sans-serif',
+          fontSize: '0.75rem', fontWeight: 700, color: 'white',
+          backgroundColor: 'var(--nhlb-red)', padding: '6px 14px',
+          borderRadius: 6, textDecoration: 'none',
+        }}>
+          Booking Page ↗
+        </a>
       </header>
     </>
   )
