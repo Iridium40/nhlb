@@ -7,7 +7,7 @@ import type { Event } from '@/types'
 import { generateSlug } from '@/lib/slug'
 import AdminNav from '@/components/admin/AdminNav'
 
-const BASE_URL = 'https://noheartleftbehind.com'
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://nhlb.vercel.app'
 
 const S = {
   label: {
