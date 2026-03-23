@@ -30,8 +30,15 @@ export async function GET() {
     assignedCounselor = data
   }
 
+  const { count: activeBookingCount } = await admin
+    .from('bookings')
+    .select('*', { count: 'exact', head: true })
+    .eq('client_id', client.id)
+    .in('status', ['requested', 'call_pending', 'call_complete', 'confirmed', 'in_session'])
+
   return NextResponse.json({
     client,
     assignedCounselor,
+    hasActiveBooking: (activeBookingCount ?? 0) > 0,
   })
 }

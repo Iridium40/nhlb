@@ -11,7 +11,7 @@ const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
   ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
   : null
 
-type Step = 'loading' | 'schedule' | 'payment' | 'checkout'
+type Step = 'loading' | 'blocked' | 'schedule' | 'payment' | 'checkout'
 
 const S = {
   input: {
@@ -62,7 +62,12 @@ function ReturningClientInner() {
           setClient(json.client)
           setAssignedCounselor(json.assignedCounselor ?? null)
           setStripeCustomerId(json.client.stripe_customer_id ?? null)
-          setStep('schedule')
+
+          if (json.hasActiveBooking) {
+            setStep('blocked')
+          } else {
+            setStep('schedule')
+          }
 
           // Load saved cards
           if (stripePromise) {
@@ -263,6 +268,50 @@ function ReturningClientInner() {
             borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: '#B91C1C',
           }}>
             {error}
+          </div>
+        )}
+
+        {/* Blocked — active session exists */}
+        {step === 'blocked' && client && (
+          <div style={{ textAlign: 'center', padding: '40px 0' }}>
+            <div style={{
+              width: 56, height: 56, borderRadius: '50%', backgroundColor: '#FEF3C7',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              margin: '0 auto 20px', fontSize: '1.5rem',
+            }}>
+              📅
+            </div>
+            <h2 style={{
+              fontFamily: 'Cormorant Garamond, serif', fontSize: '1.8rem',
+              fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 12px',
+            }}>
+              You already have an upcoming session
+            </h2>
+            <p style={{
+              fontFamily: 'Lato, sans-serif', fontSize: '0.95rem',
+              color: 'var(--nhlb-muted)', lineHeight: 1.6, margin: '0 0 28px',
+            }}>
+              You can reschedule or cancel your current session before booking a new one.
+            </p>
+            <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+              <button onClick={() => router.push('/book/my-sessions')} style={{
+                padding: '14px 28px', borderRadius: 8, border: 'none',
+                backgroundColor: 'var(--nhlb-red)', color: 'white',
+                fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem',
+                cursor: 'pointer',
+              }}>
+                View My Sessions
+              </button>
+              <button onClick={() => router.push('/book')} style={{
+                padding: '14px 28px', borderRadius: 8,
+                border: '1px solid var(--nhlb-border)', backgroundColor: 'white',
+                color: 'var(--nhlb-muted)',
+                fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem',
+                cursor: 'pointer',
+              }}>
+                Back
+              </button>
+            </div>
           </div>
         )}
 

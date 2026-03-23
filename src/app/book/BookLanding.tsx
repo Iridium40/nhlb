@@ -12,6 +12,7 @@ export default function BookLanding() {
   const router = useRouter()
   const [view, setView] = useState<View>('loading')
   const [client, setClient] = useState<Client | null>(null)
+  const [hasActiveBooking, setHasActiveBooking] = useState(false)
 
   const [loginEmail, setLoginEmail] = useState('')
   const [loginPassword, setLoginPassword] = useState('')
@@ -25,6 +26,7 @@ export default function BookLanding() {
       const json = await res.json()
       if (json.client) {
         setClient(json.client)
+        setHasActiveBooking(json.hasActiveBooking ?? false)
         setView('loggedIn')
       } else {
         setView('guest')
@@ -61,6 +63,7 @@ export default function BookLanding() {
     }
 
     setClient(json.client)
+    setHasActiveBooking(json.hasActiveBooking ?? false)
     setView('loggedIn')
     setLoggingIn(false)
   }
@@ -177,18 +180,38 @@ export default function BookLanding() {
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                <button onClick={() => router.push('/book/returning?auto=1')} style={{
-                  display: 'block', width: '100%', padding: '20px 24px',
-                  backgroundColor: 'var(--nhlb-red)', color: 'white',
-                  fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '1rem',
-                  letterSpacing: '0.04em', borderRadius: 12, border: 'none',
-                  cursor: 'pointer',
-                }}>
-                  Book a Session
-                  <span style={{ display: 'block', fontWeight: 400, fontSize: '0.8rem', opacity: 0.85, marginTop: 4 }}>
-                    In-person or virtual
-                  </span>
-                </button>
+                {hasActiveBooking ? (
+                  <div style={{
+                    padding: '20px 24px', backgroundColor: '#FEF3C7',
+                    border: '1px solid #FCD34D', borderRadius: 12, textAlign: 'center',
+                  }}>
+                    <p style={{
+                      fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.9rem',
+                      color: '#92400E', margin: '0 0 6px',
+                    }}>
+                      You already have an upcoming session
+                    </p>
+                    <p style={{
+                      fontFamily: 'Lato, sans-serif', fontSize: '0.8rem',
+                      color: '#92400E', margin: 0, opacity: 0.85,
+                    }}>
+                      View or manage it under &ldquo;My Sessions&rdquo; below.
+                    </p>
+                  </div>
+                ) : (
+                  <button onClick={() => router.push('/book/returning?auto=1')} style={{
+                    display: 'block', width: '100%', padding: '20px 24px',
+                    backgroundColor: 'var(--nhlb-red)', color: 'white',
+                    fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '1rem',
+                    letterSpacing: '0.04em', borderRadius: 12, border: 'none',
+                    cursor: 'pointer',
+                  }}>
+                    Book a Session
+                    <span style={{ display: 'block', fontWeight: 400, fontSize: '0.8rem', opacity: 0.85, marginTop: 4 }}>
+                      In-person or virtual
+                    </span>
+                  </button>
+                )}
 
                 <button onClick={() => router.push('/book/my-sessions')} style={{
                   display: 'block', width: '100%', padding: '16px 24px',

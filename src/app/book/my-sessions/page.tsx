@@ -306,7 +306,7 @@ function SessionCard({
             </p>
             <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', margin: 0 }}>
               {format(scheduled, 'h:mm a')} &middot; {b.type === 'VIRTUAL' ? '💻 Virtual' : '🏠 In-person'}
-              {b.counselor && ` &middot; ${b.counselor.name}`}
+              {b.counselor && <> &middot; {b.counselor.name}</>}
             </p>
           </div>
         </div>
