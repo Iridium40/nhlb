@@ -1,16 +1,28 @@
 import type { Metadata } from 'next'
+import { redirect, notFound } from 'next/navigation'
 import { createSupabaseAdminClient } from '@/lib/supabase'
 import EventSlugClient from './EventSlugClient'
 
 export const dynamic = 'force-dynamic'
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
 interface Props {
   params: Promise<{ slug: string }>
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
+async function resolveEvent(slug: string) {
   const supabase = createSupabaseAdminClient()
+
+  if (UUID_RE.test(slug)) {
+    const { data: event } = await supabase
+      .from('events')
+      .select('slug')
+      .eq('id', slug)
+      .single()
+    if (event?.slug) redirect(`/events/${event.slug}`)
+    notFound()
+  }
 
   const { data: event } = await supabase
     .from('events')
@@ -18,6 +30,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .eq('slug', slug)
     .single()
 
+  return event
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
+
+  if (UUID_RE.test(slug)) {
+    return { title: 'Redirecting… — No Heart Left Behind' }
+  }
+
+  const event = await resolveEvent(slug)
   if (!event) {
     return { title: 'Event Not Found — No Heart Left Behind' }
   }
@@ -59,5 +82,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function EventSlugPage({ params }: Props) {
   const { slug } = await params
+  await resolveEvent(slug)
   return <EventSlugClient slug={slug} />
 }
