@@ -3,10 +3,16 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { format } from 'date-fns'
+import { loadStripe } from '@stripe/stripe-js'
+import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
 import { createSupabaseBrowserClient } from '@/lib/supabase-browser'
 import type { TimeSlot } from '@/types'
 
-type Step = 'info' | 'schedule' | 'payment'
+const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+  ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+  : null
+
+type Step = 'info' | 'schedule' | 'payment' | 'checkout'
 
 const S = {
   input: {
@@ -53,8 +59,10 @@ export default function NewClientBookingPage() {
 
   // Step 3: payment
   const [donationAmount, setDonationAmount] = useState('50')
-  const [stripeReady, setStripeReady] = useState(false)
-  const [devMode, setDevMode] = useState(false)
+
+  // Step 4: Stripe checkout
+  const [clientSecret, setClientSecret] = useState<string | null>(null)
+  const [bookingId, setBookingId] = useState<string | null>(null)
 
   const loadSlots = useCallback(async () => {
     setLoadingSlots(true)
@@ -97,30 +105,8 @@ export default function NewClientBookingPage() {
 
     const amountCents = Math.round((parseFloat(donationAmount) || 0) * 100)
 
-    // If Stripe is configured and amount >= $10, create payment intent first
-    if (amountCents >= 1000 && !devMode) {
-      try {
-        const piRes = await fetch('/api/stripe/create-payment-intent', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            amountCents,
-            clientEmail: email,
-            clientName: `${firstName} ${lastName}`,
-          }),
-        })
-        const piJson = await piRes.json()
-        if (piJson.devMode) {
-          setDevMode(true)
-        }
-        // In full implementation, Stripe Elements would handle the card here
-        // For now, proceed with booking creation
-      } catch {
-        // Continue without payment in dev
-      }
-    }
-
     try {
+      // 1. Create the booking
       const res = await fetch('/api/booking/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -144,6 +130,9 @@ export default function NewClientBookingPage() {
         return
       }
 
+      setBookingId(json.bookingId)
+
+      // 2. Create account (best-effort)
       try {
         await fetch('/api/auth/create-account', {
           method: 'POST',
@@ -153,9 +142,31 @@ export default function NewClientBookingPage() {
         const supabase = createSupabaseBrowserClient()
         await supabase.auth.signInWithPassword({ email, password })
       } catch {
-        // Account creation is best-effort; booking already succeeded
+        // Account creation is best-effort
       }
 
+      // 3. If Stripe is configured and amount >= $10, create PaymentIntent and show checkout
+      if (amountCents >= 1000 && stripePromise) {
+        const piRes = await fetch('/api/stripe/create-payment-intent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amountCents,
+            clientEmail: email,
+            clientName: `${firstName} ${lastName}`,
+            bookingId: json.bookingId,
+          }),
+        })
+        const piJson = await piRes.json()
+        if (piJson.clientSecret) {
+          setClientSecret(piJson.clientSecret)
+          setStep('checkout')
+          setSubmitting(false)
+          return
+        }
+      }
+
+      // 4. No payment needed or Stripe not configured — go straight to confirmation
       router.push(`/book/confirmation/${json.bookingId}`)
     } catch {
       setError('Something went wrong. Please try again.')
@@ -188,8 +199,8 @@ export default function NewClientBookingPage() {
     return acc
   }, {})
 
-  const stepLabels = ['Your Info', 'Choose a Time', 'Love Offering']
-  const stepIndex = step === 'info' ? 0 : step === 'schedule' ? 1 : 2
+  const stepLabels = ['Your Info', 'Choose a Time', 'Love Offering', ...(stripePromise ? ['Payment'] : [])]
+  const stepIndex = step === 'info' ? 0 : step === 'schedule' ? 1 : step === 'payment' ? 2 : 3
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)' }}>
@@ -574,16 +585,6 @@ export default function NewClientBookingPage() {
               )}
             </div>
 
-            {!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY && (
-              <div style={{
-                marginBottom: 20, padding: '14px 16px',
-                backgroundColor: '#FEF3C7', border: '1px solid #FCD34D',
-                borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#92400E',
-              }}>
-                Payment integration pending &mdash; session will proceed without payment in dev mode.
-              </div>
-            )}
-
             <button
               onClick={handleBooking}
               disabled={submitting || parseFloat(donationAmount) < 10}
@@ -594,7 +595,11 @@ export default function NewClientBookingPage() {
               }}
               className="btn-primary"
             >
-              {submitting ? 'Confirming...' : `Confirm & Give $${parseFloat(donationAmount || '10').toFixed(2)}`}
+              {submitting
+                ? 'Confirming...'
+                : stripePromise
+                  ? `Continue to Payment — $${parseFloat(donationAmount || '10').toFixed(2)}`
+                  : `Confirm & Give $${parseFloat(donationAmount || '10').toFixed(2)}`}
             </button>
 
             <button onClick={() => { setStep('schedule'); setSelectedSlot(null) }} style={{
@@ -604,7 +609,96 @@ export default function NewClientBookingPage() {
             }}>&larr; Choose a different time</button>
           </div>
         )}
+
+        {/* Step 4: Stripe Checkout */}
+        {step === 'checkout' && clientSecret && bookingId && selectedSlot && (
+          <div>
+            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
+              Complete Payment
+            </h2>
+            <div style={{
+              background: 'white', border: '1px solid var(--nhlb-border)',
+              borderRadius: 12, padding: '20px', marginBottom: 20,
+            }}>
+              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>
+                Love offering for your session with <strong style={{ color: 'var(--nhlb-red-dark)' }}>{selectedSlot.counselorName}</strong>
+              </p>
+              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)', margin: 0 }}>
+                <strong style={{ color: 'var(--nhlb-red-dark)' }}>{format(new Date(selectedSlot.start), 'EEEE, MMMM d')}</strong> at <strong style={{ color: 'var(--nhlb-red-dark)' }}>{format(new Date(selectedSlot.start), 'h:mm a')}</strong>
+              </p>
+            </div>
+            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.5rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', marginBottom: 20 }}>
+              ${parseFloat(donationAmount).toFixed(2)}
+            </p>
+            <div style={{
+              background: 'white', border: '1px solid var(--nhlb-border)',
+              borderRadius: 12, padding: 28,
+            }}>
+              <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe' } }}>
+                <BookingPaymentForm bookingId={bookingId} />
+              </Elements>
+            </div>
+          </div>
+        )}
       </div>
     </div>
+  )
+}
+
+function BookingPaymentForm({ bookingId }: { bookingId: string }) {
+  const stripe = useStripe()
+  const elements = useElements()
+  const router = useRouter()
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!stripe || !elements) return
+    setSubmitting(true)
+    setError(null)
+
+    const { error: paymentError } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: `${window.location.origin}/book/confirmation/${bookingId}`,
+      },
+      redirect: 'if_required',
+    })
+
+    if (paymentError) {
+      setError(paymentError.message ?? 'Payment failed. Please try again.')
+      setSubmitting(false)
+    } else {
+      router.push(`/book/confirmation/${bookingId}`)
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <PaymentElement />
+      {error && (
+        <div style={{
+          marginTop: 12, padding: '10px 14px',
+          backgroundColor: '#FEF2F2', border: '1px solid #FECACA',
+          borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#B91C1C',
+        }}>
+          {error}
+        </div>
+      )}
+      <button
+        type="submit"
+        disabled={!stripe || submitting}
+        style={{
+          width: '100%', backgroundColor: 'var(--nhlb-red)', color: 'white',
+          fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem',
+          letterSpacing: '0.05em', padding: '14px 24px', borderRadius: 8,
+          border: 'none', cursor: submitting ? 'not-allowed' : 'pointer',
+          marginTop: 20, opacity: submitting ? 0.6 : 1,
+        }}
+      >
+        {submitting ? 'Processing...' : 'Complete Payment'}
+      </button>
+    </form>
   )
 }

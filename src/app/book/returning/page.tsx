@@ -3,9 +3,15 @@
 import { useState, useEffect, useCallback, Suspense } from 'react'
 import { useRouter } from 'next/navigation'
 import { format } from 'date-fns'
+import { loadStripe } from '@stripe/stripe-js'
+import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
 import type { Client, Counselor, TimeSlot } from '@/types'
 
-type Step = 'loading' | 'schedule' | 'payment'
+const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+  ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+  : null
+
+type Step = 'loading' | 'schedule' | 'payment' | 'checkout'
 
 const S = {
   input: {
@@ -55,7 +61,20 @@ function ReturningClientInner() {
         if (json.client) {
           setClient(json.client)
           setAssignedCounselor(json.assignedCounselor ?? null)
+          setStripeCustomerId(json.client.stripe_customer_id ?? null)
           setStep('schedule')
+
+          // Load saved cards
+          if (stripePromise) {
+            fetch('/api/client/payment-methods')
+              .then(r => r.json())
+              .then(j => {
+                const cards = j.paymentMethods ?? []
+                setSavedCards(cards)
+                if (cards.length > 0) setSelectedCardId(cards[0].id)
+              })
+              .catch(() => {})
+          }
         } else {
           router.replace('/book')
         }
@@ -74,6 +93,17 @@ function ReturningClientInner() {
 
   // Payment
   const [donationAmount, setDonationAmount] = useState('50')
+
+  // Stripe checkout
+  const [clientSecret, setClientSecret] = useState<string | null>(null)
+  const [bookingId, setBookingId] = useState<string | null>(null)
+
+  // Saved cards
+  type SavedCard = { id: string; brand: string; last4: string; expMonth: number; expYear: number }
+  const [savedCards, setSavedCards] = useState<SavedCard[]>([])
+  const [selectedCardId, setSelectedCardId] = useState<string | null>(null)
+  const [useNewCard, setUseNewCard] = useState(false)
+  const [stripeCustomerId, setStripeCustomerId] = useState<string | null>(null)
 
   const loadSlots = useCallback(async () => {
     setLoadingSlots(true)
@@ -100,6 +130,7 @@ function ReturningClientInner() {
     const amountCents = Math.round((parseFloat(donationAmount) || 0) * 100)
 
     try {
+      // 1. Create the booking
       const res = await fetch('/api/booking/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -117,7 +148,64 @@ function ReturningClientInner() {
         }),
       })
       const json = await res.json()
-      if (!res.ok) { setError(json.error ?? 'Could not create session'); setSubmitting(false); return }
+      if (!res.ok) {
+        setError(json.error ?? 'Could not create session')
+        setSubmitting(false)
+        return
+      }
+
+      setBookingId(json.bookingId)
+
+      // 2. If Stripe is configured and amount >= $10, handle payment
+      if (amountCents >= 1000 && stripePromise) {
+        // If using a saved card, charge it directly
+        if (selectedCardId && !useNewCard && stripeCustomerId) {
+          const piRes = await fetch('/api/stripe/create-payment-intent', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              amountCents,
+              clientEmail: client.email,
+              clientName: `${client.first_name} ${client.last_name}`,
+              bookingId: json.bookingId,
+              stripeCustomerId,
+              paymentMethodId: selectedCardId,
+            }),
+          })
+          const piJson = await piRes.json()
+          if (piJson.confirmed) {
+            router.push(`/book/confirmation/${json.bookingId}`)
+            return
+          }
+          if (piJson.error) {
+            setError(typeof piJson.error === 'string' ? piJson.error : 'Payment failed with saved card.')
+            setSubmitting(false)
+            return
+          }
+        }
+
+        // Otherwise show Stripe Elements for a new card
+        const piRes = await fetch('/api/stripe/create-payment-intent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amountCents,
+            clientEmail: client.email,
+            clientName: `${client.first_name} ${client.last_name}`,
+            bookingId: json.bookingId,
+            stripeCustomerId: stripeCustomerId ?? undefined,
+          }),
+        })
+        const piJson = await piRes.json()
+        if (piJson.clientSecret) {
+          setClientSecret(piJson.clientSecret)
+          setStep('checkout')
+          setSubmitting(false)
+          return
+        }
+      }
+
+      // 3. No payment needed — go to confirmation
       router.push(`/book/confirmation/${json.bookingId}`)
     } catch {
       setError('Something went wrong.')
@@ -337,13 +425,55 @@ function ReturningClientInner() {
               </div>
             </div>
 
-            {!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY && (
-              <div style={{
-                marginBottom: 20, padding: '14px 16px',
-                backgroundColor: '#FEF3C7', border: '1px solid #FCD34D',
-                borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#92400E',
-              }}>
-                Payment integration pending &mdash; dev mode.
+            {/* Saved cards */}
+            {savedCards.length > 0 && stripePromise && (
+              <div style={{ marginBottom: 20 }}>
+                <label style={S.label}>Payment Method</label>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {savedCards.map(card => (
+                    <button
+                      key={card.id}
+                      onClick={() => { setSelectedCardId(card.id); setUseNewCard(false) }}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 12,
+                        padding: '12px 16px', borderRadius: 8,
+                        border: `2px solid ${selectedCardId === card.id && !useNewCard ? 'var(--nhlb-red)' : 'var(--nhlb-border)'}`,
+                        backgroundColor: selectedCardId === card.id && !useNewCard ? 'var(--nhlb-cream)' : 'white',
+                        cursor: 'pointer', textAlign: 'left', width: '100%',
+                      }}
+                    >
+                      <div style={{
+                        width: 36, height: 24, borderRadius: 4,
+                        backgroundColor: '#F3F4F6', display: 'flex',
+                        alignItems: 'center', justifyContent: 'center',
+                        fontFamily: 'Lato, sans-serif', fontSize: '0.6rem',
+                        fontWeight: 700, color: '#374151', textTransform: 'uppercase',
+                        flexShrink: 0,
+                      }}>
+                        {card.brand}
+                      </div>
+                      <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', fontWeight: 600, color: 'var(--nhlb-text)' }}>
+                        •••• {card.last4}
+                      </span>
+                      <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)', marginLeft: 'auto' }}>
+                        {String(card.expMonth).padStart(2, '0')}/{card.expYear}
+                      </span>
+                    </button>
+                  ))}
+                  <button
+                    onClick={() => { setUseNewCard(true); setSelectedCardId(null) }}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 8,
+                      padding: '12px 16px', borderRadius: 8,
+                      border: `2px solid ${useNewCard ? 'var(--nhlb-red)' : 'var(--nhlb-border)'}`,
+                      backgroundColor: useNewCard ? 'var(--nhlb-cream)' : 'white',
+                      cursor: 'pointer', textAlign: 'left', width: '100%',
+                      fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-text)',
+                    }}
+                  >
+                    + Use a new card
+                  </button>
+                </div>
               </div>
             )}
 
@@ -351,7 +481,13 @@ function ReturningClientInner() {
               disabled={submitting || parseFloat(donationAmount) < 10}
               style={{ ...S.btn, opacity: submitting || parseFloat(donationAmount) < 10 ? 0.5 : 1 }}
               className="btn-primary">
-              {submitting ? 'Confirming...' : `Confirm & Give $${parseFloat(donationAmount || '10').toFixed(2)}`}
+              {submitting
+                ? 'Processing...'
+                : selectedCardId && !useNewCard && stripePromise
+                  ? `Pay $${parseFloat(donationAmount || '10').toFixed(2)} with •••• ${savedCards.find(c => c.id === selectedCardId)?.last4 ?? ''}`
+                  : stripePromise
+                    ? `Continue to Payment — $${parseFloat(donationAmount || '10').toFixed(2)}`
+                    : `Confirm & Give $${parseFloat(donationAmount || '10').toFixed(2)}`}
             </button>
 
             <button onClick={() => { setStep('schedule'); setSelectedSlot(null) }} style={{
@@ -360,7 +496,96 @@ function ReturningClientInner() {
             }}>&larr; Choose a different time</button>
           </div>
         )}
+
+        {/* Stripe Checkout */}
+        {step === 'checkout' && clientSecret && bookingId && selectedSlot && (
+          <div>
+            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
+              Complete Payment
+            </h2>
+            <div style={{
+              background: 'white', border: '1px solid var(--nhlb-border)',
+              borderRadius: 12, padding: '20px', marginBottom: 20,
+            }}>
+              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>
+                Love offering for your session with <strong style={{ color: 'var(--nhlb-red-dark)' }}>{selectedSlot.counselorName}</strong>
+              </p>
+              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)', margin: 0 }}>
+                <strong style={{ color: 'var(--nhlb-red-dark)' }}>{format(new Date(selectedSlot.start), 'EEEE, MMMM d')}</strong> at <strong style={{ color: 'var(--nhlb-red-dark)' }}>{format(new Date(selectedSlot.start), 'h:mm a')}</strong>
+              </p>
+            </div>
+            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.5rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', marginBottom: 20 }}>
+              ${parseFloat(donationAmount).toFixed(2)}
+            </p>
+            <div style={{
+              background: 'white', border: '1px solid var(--nhlb-border)',
+              borderRadius: 12, padding: 28,
+            }}>
+              <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe' } }}>
+                <BookingPaymentForm bookingId={bookingId} />
+              </Elements>
+            </div>
+          </div>
+        )}
       </div>
     </div>
+  )
+}
+
+function BookingPaymentForm({ bookingId }: { bookingId: string }) {
+  const stripe = useStripe()
+  const elements = useElements()
+  const router = useRouter()
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!stripe || !elements) return
+    setSubmitting(true)
+    setError(null)
+
+    const { error: paymentError } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: `${window.location.origin}/book/confirmation/${bookingId}`,
+      },
+      redirect: 'if_required',
+    })
+
+    if (paymentError) {
+      setError(paymentError.message ?? 'Payment failed. Please try again.')
+      setSubmitting(false)
+    } else {
+      router.push(`/book/confirmation/${bookingId}`)
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <PaymentElement />
+      {error && (
+        <div style={{
+          marginTop: 12, padding: '10px 14px',
+          backgroundColor: '#FEF2F2', border: '1px solid #FECACA',
+          borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#B91C1C',
+        }}>
+          {error}
+        </div>
+      )}
+      <button
+        type="submit"
+        disabled={!stripe || submitting}
+        style={{
+          width: '100%', backgroundColor: 'var(--nhlb-red)', color: 'white',
+          fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem',
+          letterSpacing: '0.05em', padding: '14px 24px', borderRadius: 8,
+          border: 'none', cursor: submitting ? 'not-allowed' : 'pointer',
+          marginTop: 20, opacity: submitting ? 0.6 : 1,
+        }}
+      >
+        {submitting ? 'Processing...' : 'Complete Payment'}
+      </button>
+    </form>
   )
 }
