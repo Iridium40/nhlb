@@ -14,9 +14,13 @@ import { CounselorNotificationEmail } from '../../emails/CounselorNotification'
 import { VirtualSessionInfoEmail } from '../../emails/VirtualSessionInfo'
 import { CounselorAssignmentEmail } from '../../emails/CounselorAssignment'
 import { HipaaIntakeEmail } from '../../emails/HipaaIntakeEmail'
-import { generateICS } from '@/lib/ics'
+import { EventConfirmationEmail } from '../../emails/EventConfirmation'
+import { EventCancellationEmail } from '../../emails/EventCancellation'
+import { EventCancellationSummaryEmail } from '../../emails/EventCancellationSummary'
+import { EventMinimumWarningEmail } from '../../emails/EventMinimumWarning'
+import { generateICS, generateEventICS } from '@/lib/ics'
 import { format } from 'date-fns'
-import type { Booking, Counselor, Client } from '@/types'
+import type { Booking, Counselor, Client, Event, EventRegistration } from '@/types'
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -225,5 +229,80 @@ export async function sendHipaaIntakeEmail({
     to: client.email,
     subject: 'Complete your intake form — No Heart Left Behind',
     react: HipaaIntakeEmail({ client, intakeUrl }),
+  })
+}
+
+// ── 6. Event registration confirmation ─────────────────────────────────────
+
+export async function sendEventConfirmationEmail({
+  event, registration,
+}: { event: Event; registration: EventRegistration }) {
+  const icsContent = generateEventICS({
+    title: event.title,
+    startDate: new Date(event.event_date),
+    endDate: event.end_date ? new Date(event.end_date) : new Date(event.event_date),
+    location: event.location ?? undefined,
+    url: `${baseUrl()}/events/${event.slug || event.id}`,
+  })
+
+  await sendEmail({
+    to: registration.email,
+    subject: `You're registered — ${event.title}`,
+    react: EventConfirmationEmail({ event, registration, baseUrl: baseUrl() }),
+    attachments: [
+      {
+        filename: 'event.ics',
+        content: Buffer.from(icsContent).toString('base64'),
+        contentType: 'text/calendar; method=PUBLISH',
+      },
+    ],
+  })
+}
+
+// ── 7. Event cancellation — to each registrant ─────────────────────────────
+
+export async function sendEventCancellationEmail({
+  event, registration, reason,
+}: { event: Event; registration: EventRegistration; reason: string }) {
+  await sendEmail({
+    to: registration.email,
+    subject: `Event cancelled — ${event.title}`,
+    react: EventCancellationEmail({ event, registration, reason }),
+  })
+}
+
+// ── 8. Event cancellation summary — to admin ───────────────────────────────
+
+export async function sendEventCancellationSummaryEmail({
+  event, totalRegistrants, refundsIssued, refundsFailed, totalRefundCents, cancelledBy,
+  failedRefunds,
+}: {
+  event: Event
+  totalRegistrants: number
+  refundsIssued: number
+  refundsFailed: number
+  totalRefundCents: number
+  cancelledBy: string
+  failedRefunds?: { name: string; email: string; amountCents: number }[]
+}) {
+  await sendEmail({
+    to: adminEmail(),
+    subject: `Event cancelled — ${event.title} [Summary]`,
+    react: EventCancellationSummaryEmail({
+      event, totalRegistrants, refundsIssued, refundsFailed,
+      totalRefundCents, cancelledBy, failedRefunds, baseUrl: baseUrl(),
+    }),
+  })
+}
+
+// ── 9. Event minimum warning — to admin ────────────────────────────────────
+
+export async function sendEventMinimumWarningEmail({
+  event, currentCount,
+}: { event: Event; currentCount: number }) {
+  await sendEmail({
+    to: adminEmail(),
+    subject: `⚠ Event below minimum — ${event.title}`,
+    react: EventMinimumWarningEmail({ event, currentCount, baseUrl: baseUrl() }),
   })
 }

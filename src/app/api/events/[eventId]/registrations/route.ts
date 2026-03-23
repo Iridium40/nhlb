@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseAdminClient } from '@/lib/supabase'
+import { sendEventConfirmationEmail } from '@/lib/email'
+import type { Event, EventRegistration } from '@/types'
 
 export async function GET(
   _req: NextRequest,
@@ -26,16 +28,28 @@ export async function POST(
   const body = await req.json()
   const supabase = createSupabaseAdminClient()
 
-  // Verify event exists and has capacity
   const { data: event } = await supabase
     .from('events')
-    .select('id, max_capacity, registration_fee_cents')
+    .select('*')
     .eq('id', eventId)
-    .eq('is_active', true)
-    .single()
+    .single() as { data: Event | null }
 
   if (!event) {
-    return NextResponse.json({ error: 'Event not found or closed' }, { status: 404 })
+    return NextResponse.json({ error: 'Event not found' }, { status: 404 })
+  }
+  if (!event.is_published && !event.is_active) {
+    return NextResponse.json({ error: 'Event is not active' }, { status: 400 })
+  }
+  if (event.cancelled_at) {
+    return NextResponse.json({ error: 'Event has been cancelled' }, { status: 400 })
+  }
+
+  const now = new Date()
+  if (event.registration_opens_at && new Date(event.registration_opens_at) > now) {
+    return NextResponse.json({ error: 'Registration has not opened yet' }, { status: 400 })
+  }
+  if (event.registration_closes_at && new Date(event.registration_closes_at) < now) {
+    return NextResponse.json({ error: 'Registration is closed' }, { status: 400 })
   }
 
   if (event.max_capacity) {
@@ -43,14 +57,61 @@ export async function POST(
       .from('event_registrations')
       .select('*', { count: 'exact', head: true })
       .eq('event_id', eventId)
-      .eq('status', 'REGISTERED')
+      .in('status', ['confirmed', 'pending'])
 
     if ((count ?? 0) >= event.max_capacity) {
       return NextResponse.json({ error: 'Event is at full capacity' }, { status: 409 })
     }
   }
 
-  const { data: reg, error } = await supabase
+  const isPaid = event.registration_fee_cents > 0
+
+  if (isPaid) {
+    const { getStripe } = await import('@/lib/stripe')
+    const stripe = getStripe()
+
+    const { data: reg, error: regErr } = await supabase
+      .from('event_registrations')
+      .insert({
+        event_id: eventId,
+        first_name: body.first_name,
+        last_name: body.last_name,
+        email: body.email,
+        phone: body.phone ?? null,
+        custom_data: body.custom_data ?? {},
+        amount_paid_cents: event.registration_fee_cents,
+        status: 'pending',
+      })
+      .select()
+      .single()
+
+    if (regErr) return NextResponse.json({ error: regErr.message }, { status: 500 })
+
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: event.registration_fee_cents,
+      currency: 'usd',
+      metadata: {
+        eventId: event.id,
+        eventTitle: event.title,
+        registrationId: reg.id,
+        type: 'event_registration',
+      },
+    })
+
+    await supabase
+      .from('event_registrations')
+      .update({ stripe_payment_id: paymentIntent.id })
+      .eq('id', reg.id)
+
+    return NextResponse.json({
+      registrationId: reg.id,
+      clientSecret: paymentIntent.client_secret,
+      requiresPayment: true,
+    }, { status: 201 })
+  }
+
+  // Free event — confirm immediately
+  const { data: reg, error: regErr } = await supabase
     .from('event_registrations')
     .insert({
       event_id: eventId,
@@ -59,28 +120,26 @@ export async function POST(
       email: body.email,
       phone: body.phone ?? null,
       custom_data: body.custom_data ?? {},
-      amount_paid_cents: body.amount_paid_cents ?? event.registration_fee_cents,
-      stripe_payment_id: body.stripe_payment_id ?? null,
-      status: 'REGISTERED',
+      amount_paid_cents: 0,
+      status: 'confirmed',
     })
     .select()
     .single()
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (regErr) return NextResponse.json({ error: regErr.message }, { status: 500 })
 
-  // Also record in donations table under EVENTS fund
-  if ((body.amount_paid_cents ?? event.registration_fee_cents) > 0) {
-    await supabase.from('donations').insert({
-      event_id: eventId,
-      amount_cents: body.amount_paid_cents ?? event.registration_fee_cents,
-      fund: 'EVENTS',
-      donor_name: `${body.first_name} ${body.last_name}`,
-      donor_email: body.email,
-      stripe_payment_intent_id: body.stripe_payment_id ?? null,
-      stripe_status: body.stripe_payment_id ? 'succeeded' : 'pending',
-      is_anonymous: false,
+  try {
+    await sendEventConfirmationEmail({
+      event,
+      registration: reg as unknown as EventRegistration,
     })
+  } catch (emailErr) {
+    console.error('[registration] Confirmation email failed:', emailErr)
   }
 
-  return NextResponse.json({ registration: reg }, { status: 201 })
+  return NextResponse.json({
+    registrationId: reg.id,
+    confirmed: true,
+    requiresPayment: false,
+  }, { status: 201 })
 }

@@ -75,3 +75,47 @@ export function generateICS({
 
   return lines.join('\r\n')
 }
+
+export function generateEventICS({
+  title,
+  startDate,
+  endDate,
+  location,
+  description,
+  url,
+}: {
+  title: string
+  startDate: Date
+  endDate: Date
+  location?: string
+  description?: string
+  url?: string
+}): string {
+  const now = new Date()
+  const lines = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//No Heart Left Behind//Events//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'BEGIN:VEVENT',
+    `UID:event-${Date.now()}@noheartleftbehind.com`,
+    `DTSTAMP:${toICSDate(now)}`,
+    `DTSTART:${toICSDate(startDate)}`,
+    `DTEND:${toICSDate(endDate)}`,
+    `SUMMARY:${escapeText(title)}`,
+    location ? `LOCATION:${escapeText(location)}` : '',
+    description ? `DESCRIPTION:${escapeText(description.replace(/<[^>]+>/g, ''))}` : '',
+    url ? `URL:${url}` : '',
+    'STATUS:CONFIRMED',
+    'BEGIN:VALARM',
+    'TRIGGER:-PT1H',
+    'ACTION:DISPLAY',
+    `DESCRIPTION:Reminder: ${escapeText(title)} in 1 hour`,
+    'END:VALARM',
+    'END:VEVENT',
+    'END:VCALENDAR',
+  ].filter(Boolean)
+
+  return lines.join('\r\n')
+}

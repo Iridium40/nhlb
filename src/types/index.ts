@@ -154,8 +154,17 @@ export interface Event {
   fee_label: string
   max_capacity: number | null
   is_active: boolean
+  is_published: boolean
+  slug: string | null
   image_url: string | null
   custom_fields: EventCustomField[]
+  registration_opens_at: string | null
+  registration_closes_at: string | null
+  min_capacity: number | null
+  cancellation_deadline: string | null
+  cancellation_reason: string | null
+  cancelled_at: string | null
+  min_check_sent_at: string | null
   created_at: string
   registration_count?: number
 }
@@ -168,6 +177,8 @@ export interface EventCustomField {
   options?: string[]
 }
 
+export type EventRegistrationStatus = 'pending' | 'confirmed' | 'cancelled' | 'refunded'
+
 export interface EventRegistration {
   id: string
   event_id: string
@@ -178,7 +189,10 @@ export interface EventRegistration {
   custom_data: Record<string, string | boolean>
   amount_paid_cents: number
   stripe_payment_id: string | null
-  status: 'REGISTERED' | 'CANCELLED'
+  status: EventRegistrationStatus
+  refunded_at: string | null
+  refund_amount_cents: number | null
+  stripe_refund_id: string | null
   created_at: string
   event?: Event
 }
