@@ -19,7 +19,7 @@ export async function GET(
     .from('event_registrations')
     .select('*')
     .eq('event_id', eventId)
-    .eq('status', 'REGISTERED')
+    .in('status', ['confirmed', 'pending'])
     .order('last_name')
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })

@@ -5,8 +5,20 @@
     },
     "src/app/api/bookings/route.ts": {
       "maxDuration": 15
+    },
+    "src/app/api/cron/check-event-minimums/route.ts": {
+      "maxDuration": 60
+    },
+    "src/app/api/events/[eventId]/cancel/route.ts": {
+      "maxDuration": 30
     }
   },
+  "crons": [
+    {
+      "path": "/api/cron/check-event-minimums",
+      "schedule": "*/30 * * * *"
+    }
+  ],
   "headers": [
     {
       "source": "/api/(.*)",

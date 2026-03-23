@@ -126,34 +126,46 @@ CREATE TABLE hipaa_intakes (
 
 -- ── Events ──
 CREATE TABLE events (
-  id                     UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  title                  TEXT NOT NULL,
-  description            TEXT,
-  event_date             TIMESTAMPTZ NOT NULL,
-  end_date               TIMESTAMPTZ,
-  location               TEXT,
-  registration_fee_cents INT DEFAULT 0,
-  fee_label              TEXT DEFAULT 'Registration Fee',
-  max_capacity           INT,
-  is_active              BOOLEAN DEFAULT true,
-  image_url              TEXT,
-  custom_fields          JSONB DEFAULT '[]',
-  created_at             TIMESTAMPTZ DEFAULT NOW()
+  id                       UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  title                    TEXT NOT NULL,
+  description              TEXT,
+  event_date               TIMESTAMPTZ NOT NULL,
+  end_date                 TIMESTAMPTZ,
+  location                 TEXT,
+  registration_fee_cents   INT DEFAULT 0,
+  fee_label                TEXT DEFAULT 'Registration Fee',
+  max_capacity             INT,
+  is_active                BOOLEAN DEFAULT true,
+  image_url                TEXT,
+  custom_fields            JSONB DEFAULT '[]',
+  slug                     TEXT UNIQUE,
+  is_published             BOOLEAN DEFAULT false,
+  registration_opens_at    TIMESTAMPTZ,
+  registration_closes_at   TIMESTAMPTZ,
+  min_capacity             INT,
+  cancellation_deadline    TIMESTAMPTZ,
+  cancellation_reason      TEXT,
+  cancelled_at             TIMESTAMPTZ,
+  min_check_sent_at        TIMESTAMPTZ,
+  created_at               TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- ── Event registrations ──
 CREATE TABLE event_registrations (
-  id                UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  event_id          UUID NOT NULL REFERENCES events(id) ON DELETE CASCADE,
-  first_name        TEXT NOT NULL,
-  last_name         TEXT NOT NULL,
-  email             TEXT NOT NULL,
-  phone             TEXT,
-  custom_data       JSONB DEFAULT '{}',
-  amount_paid_cents INT DEFAULT 0,
-  stripe_payment_id TEXT,
-  status            TEXT DEFAULT 'REGISTERED' CHECK (status IN ('REGISTERED', 'CANCELLED')),
-  created_at        TIMESTAMPTZ DEFAULT NOW()
+  id                  UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  event_id            UUID NOT NULL REFERENCES events(id) ON DELETE CASCADE,
+  first_name          TEXT NOT NULL,
+  last_name           TEXT NOT NULL,
+  email               TEXT NOT NULL,
+  phone               TEXT,
+  custom_data         JSONB DEFAULT '{}',
+  amount_paid_cents   INT DEFAULT 0,
+  stripe_payment_id   TEXT,
+  status              TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'confirmed', 'cancelled', 'refunded')),
+  refunded_at         TIMESTAMPTZ,
+  refund_amount_cents INT,
+  stripe_refund_id    TEXT,
+  created_at          TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- ── Donations ──
