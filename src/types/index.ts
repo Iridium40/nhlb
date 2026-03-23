@@ -1,5 +1,32 @@
 export type BookingType = 'IN_PERSON' | 'VIRTUAL'
-export type BookingStatus = 'CONFIRMED' | 'CANCELLED' | 'COMPLETED'
+export type BookingStatus =
+  | 'requested'
+  | 'call_pending'
+  | 'call_complete'
+  | 'confirmed'
+  | 'in_session'
+  | 'completed'
+  | 'cancelled'
+
+export type RecurrencePattern = 'weekly' | 'biweekly' | 'monthly'
+
+export const ACTIVE_STATUSES: BookingStatus[] = [
+  'requested',
+  'call_pending',
+  'call_complete',
+  'confirmed',
+  'in_session',
+]
+
+export const STATUS_TRANSITIONS: Record<string, string[]> = {
+  requested:     ['call_pending', 'cancelled'],
+  call_pending:  ['call_complete', 'cancelled'],
+  call_complete: ['confirmed', 'cancelled'],
+  confirmed:     ['in_session', 'cancelled'],
+  in_session:    ['completed', 'cancelled'],
+  completed:     [],
+  cancelled:     [],
+}
 
 export interface Counselor {
   id: string
@@ -52,6 +79,15 @@ export interface Booking {
   donation_amount_cents: number
   stripe_payment_id: string | null
   notes: string | null
+  pre_call_notes: string | null
+  session_notes: string | null
+  call_completed_at: string | null
+  call_completed_by: string | null
+  is_recurring: boolean
+  recurrence_pattern: RecurrencePattern | null
+  recurrence_end_date: string | null
+  parent_booking_id: string | null
+  series_index: number
   created_at: string
   client?: Client
   counselor?: Counselor

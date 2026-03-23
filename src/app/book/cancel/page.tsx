@@ -46,8 +46,8 @@ function CancelBookingInner() {
     const res = await fetch(`/api/booking/${bookingId}`)
     if (!res.ok) { setError('Session not found.'); setStep('error'); return }
     const { booking: b } = await res.json()
-    if (b.status === 'CANCELLED') { setError('This session has already been cancelled.'); setStep('error'); return }
-    if (b.status === 'COMPLETED') { setError('This session has already been completed and cannot be cancelled.'); setStep('error'); return }
+    if (b.status === 'cancelled') { setError('This session has already been cancelled.'); setStep('error'); return }
+    if (b.status === 'completed') { setError('This session has already been completed and cannot be cancelled.'); setStep('error'); return }
     setBooking(b)
     if (prefillEmail) setStep('confirm')
   }
@@ -69,7 +69,7 @@ function CancelBookingInner() {
     const res = await fetch(`/api/booking/${bookingId}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status: 'CANCELLED', _caller: 'client', _email: email.trim() }),
+      body: JSON.stringify({ status: 'cancelled', _caller: 'client', _email: email.trim() }),
     })
     if (!res.ok) {
       const data = await res.json()

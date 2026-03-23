@@ -58,8 +58,8 @@ export async function GET(req: NextRequest) {
     }
     const entry = counselorMap[cid]
     entry.total_sessions++
-    if (b.status === 'COMPLETED') entry.completed_sessions++
-    if (b.status === 'CANCELLED') entry.cancelled_sessions++
+    if (b.status === 'completed') entry.completed_sessions++
+    if (b.status === 'cancelled') entry.cancelled_sessions++
   }
 
   // Map booking_id → counselor_id for donation attribution

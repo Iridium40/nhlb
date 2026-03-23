@@ -87,10 +87,19 @@ CREATE TABLE bookings (
   scheduled_at         TIMESTAMPTZ NOT NULL,
   duration_minutes     INT DEFAULT 60,
   type                 TEXT NOT NULL DEFAULT 'IN_PERSON' CHECK (type IN ('IN_PERSON', 'VIRTUAL')),
-  status               TEXT DEFAULT 'CONFIRMED' CHECK (status IN ('CONFIRMED', 'CANCELLED', 'COMPLETED')),
+  status               TEXT DEFAULT 'requested' CHECK (status IN ('requested','call_pending','call_complete','confirmed','in_session','completed','cancelled')),
   donation_amount_cents INT DEFAULT 0,
   stripe_payment_id    TEXT,
   notes                TEXT,
+  pre_call_notes       TEXT,
+  session_notes        TEXT,
+  call_completed_at    TIMESTAMPTZ,
+  call_completed_by    TEXT,
+  is_recurring         BOOLEAN DEFAULT false,
+  recurrence_pattern   TEXT CHECK (recurrence_pattern IN ('weekly', 'biweekly', 'monthly') OR recurrence_pattern IS NULL),
+  recurrence_end_date  TIMESTAMPTZ,
+  parent_booking_id    UUID REFERENCES bookings(id) ON DELETE SET NULL,
+  series_index         INT DEFAULT 1,
   created_at           TIMESTAMPTZ DEFAULT NOW()
 );
 

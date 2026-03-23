@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createSupabaseAdminClient } from '@/lib/supabase'
 import { sendBookingConfirmation, sendCounselorNotification, sendHipaaIntakeEmail } from '@/lib/email'
+import { encryptIfPresent } from '@/lib/phi-crypto'
+import { ACTIVE_STATUSES } from '@/types'
 
 const schema = z.object({
   first_name: z.string().min(1),
@@ -24,7 +26,6 @@ export async function POST(req: NextRequest) {
     const data = schema.parse(body)
     const supabase = createSupabaseAdminClient()
 
-    // Reuse existing client or create new
     let clientId = data.client_id
     let client
     if (clientId) {
@@ -40,7 +41,7 @@ export async function POST(req: NextRequest) {
           email: data.email,
           phone: data.phone,
           service_type: data.service_type,
-          brief_reason: data.brief_reason ?? null,
+          brief_reason: encryptIfPresent(data.brief_reason),
         })
         .select()
         .single()
@@ -49,15 +50,33 @@ export async function POST(req: NextRequest) {
       clientId = newClient.id
     }
 
+    // One-active-session rule for public client bookings
+    if (clientId) {
+      const { count: activeCount } = await supabase
+        .from('bookings')
+        .select('*', { count: 'exact', head: true })
+        .eq('client_id', clientId)
+        .in('status', ACTIVE_STATUSES)
+
+      if ((activeCount ?? 0) > 0) {
+        return NextResponse.json(
+          {
+            error: 'You already have an active session scheduled. To schedule an additional session, please call us at 985-264-8808.',
+          },
+          { status: 409 }
+        )
+      }
+    }
+
     // Double-check slot availability
-    const { count } = await supabase
+    const { count: slotTaken } = await supabase
       .from('bookings')
       .select('*', { count: 'exact', head: true })
       .eq('counselor_id', data.counselor_id)
       .eq('scheduled_at', data.scheduled_at)
-      .neq('status', 'CANCELLED')
+      .neq('status', 'cancelled')
 
-    if ((count ?? 0) > 0) {
+    if ((slotTaken ?? 0) > 0) {
       return NextResponse.json(
         { error: 'That time slot is no longer available.' },
         { status: 409 }
@@ -71,7 +90,7 @@ export async function POST(req: NextRequest) {
         counselor_id: data.counselor_id,
         scheduled_at: data.scheduled_at,
         type: data.type,
-        status: 'CONFIRMED',
+        status: 'requested',
         donation_amount_cents: data.donation_amount_cents,
         stripe_payment_id: data.stripe_payment_id ?? null,
       })
@@ -80,7 +99,6 @@ export async function POST(req: NextRequest) {
 
     if (bookingError) throw bookingError
 
-    // Assign counselor to client if not already assigned
     if (client && !client.assigned_counselor_id) {
       await supabase
         .from('clients')
@@ -88,7 +106,6 @@ export async function POST(req: NextRequest) {
         .eq('id', clientId)
     }
 
-    // Record love offering in donations table for financial reporting
     if (data.donation_amount_cents > 0) {
       await supabase.from('donations').insert({
         booking_id: booking.id,
@@ -105,7 +122,6 @@ export async function POST(req: NextRequest) {
       })
     }
 
-    // Fetch counselor for emails
     const { data: counselor } = await supabase
       .from('counselors')
       .select()
@@ -119,7 +135,6 @@ export async function POST(req: NextRequest) {
       ])
     }
 
-    // Create HIPAA intake record + send email for new clients
     if (!data.client_id && client) {
       const intakeToken = crypto.randomUUID()
       await supabase.from('hipaa_intakes').insert({

@@ -46,7 +46,7 @@ export default function NewClientBookingPage() {
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null)
 
   // Step 3: payment
-  const [donationAmount, setDonationAmount] = useState('25')
+  const [donationAmount, setDonationAmount] = useState('50')
   const [stripeReady, setStripeReady] = useState(false)
   const [devMode, setDevMode] = useState(false)
 

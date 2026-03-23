@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
         .from('bookings')
         .update({
           stripe_payment_id: intent.id,
-          status: 'CONFIRMED',
+          status: 'confirmed',
         })
         .eq('id', bookingId)
     }

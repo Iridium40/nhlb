@@ -49,8 +49,8 @@ async function exportCounselorReport(
     bookingCounselorMap[b.id] = cid
     if (!counselorMap[cid]) counselorMap[cid] = { name: c?.name ?? 'Unknown', sessions: 0, completed: 0, cancelled: 0, revenue: 0, donationAmounts: [] }
     counselorMap[cid].sessions++
-    if (b.status === 'COMPLETED') counselorMap[cid].completed++
-    if (b.status === 'CANCELLED') counselorMap[cid].cancelled++
+    if (b.status === 'completed') counselorMap[cid].completed++
+    if (b.status === 'cancelled') counselorMap[cid].cancelled++
   }
 
   for (const d of donations ?? []) {

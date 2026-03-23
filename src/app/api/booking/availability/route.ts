@@ -76,7 +76,7 @@ export async function GET(req: NextRequest) {
     .from('bookings')
     .select('counselor_id, scheduled_at')
     .in('counselor_id', ids)
-    .neq('status', 'CANCELLED')
+    .neq('status', 'cancelled')
     .gte('scheduled_at', now.toISOString())
     .lte('scheduled_at', rangeEnd.toISOString())
 

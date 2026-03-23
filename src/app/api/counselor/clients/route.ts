@@ -81,7 +81,7 @@ export async function GET(req: NextRequest) {
       .select('client_id, scheduled_at, status')
       .eq('counselor_id', counselor.id)
       .in('client_id', clientIds)
-      .neq('status', 'CANCELLED')
+      .neq('status', 'cancelled')
       .order('scheduled_at', { ascending: false })
 
     for (const b of bookings ?? []) {

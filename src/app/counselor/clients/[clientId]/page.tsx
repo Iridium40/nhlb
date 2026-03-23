@@ -7,9 +7,13 @@ import type { Client, Booking, SessionNote, HipaaFormData } from '@/types'
 import CounselorNav from '@/components/counselor/CounselorNav'
 
 const STATUS_STYLES: Record<string, React.CSSProperties> = {
-  CONFIRMED: { backgroundColor: '#D1FAE5', color: '#065F46' },
-  CANCELLED: { backgroundColor: '#FEE2E2', color: '#991B1B' },
-  COMPLETED: { backgroundColor: 'var(--nhlb-cream-dark)', color: 'var(--nhlb-muted)' },
+  requested:     { backgroundColor: '#F1EFE8', color: '#5F5E5A' },
+  call_pending:  { backgroundColor: '#FAEEDA', color: '#633806' },
+  call_complete: { backgroundColor: '#E6F1FB', color: '#0C447C' },
+  confirmed:     { backgroundColor: '#E1F5EE', color: '#085041' },
+  in_session:    { backgroundColor: '#EEEDFE', color: '#3C3489' },
+  completed:     { backgroundColor: '#EAF3DE', color: '#27500A' },
+  cancelled:     { backgroundColor: '#FCEBEB', color: '#791F1F' },
 }
 
 function SessionNoteEditor({ booking, onSaved, existingNote }: {
@@ -185,7 +189,7 @@ export default function CounselorClientDetailPage() {
               padding: '3px 12px', borderRadius: 20, fontSize: '0.7rem',
               fontFamily: 'Lato, sans-serif', backgroundColor: 'var(--nhlb-cream-dark)', color: 'var(--nhlb-muted)',
             }}>
-              {bookings.filter(b => b.status !== 'CANCELLED').length} session{bookings.filter(b => b.status !== 'CANCELLED').length !== 1 ? 's' : ''}
+              {bookings.filter(b => b.status !== 'cancelled').length} session{bookings.filter(b => b.status !== 'cancelled').length !== 1 ? 's' : ''}
             </span>
           </div>
 
@@ -298,7 +302,7 @@ export default function CounselorClientDetailPage() {
                           padding: '2px 8px', borderRadius: 20, fontSize: '0.65rem',
                           fontWeight: 700, fontFamily: 'Lato, sans-serif', textTransform: 'capitalize',
                         }}>
-                          {b.status.toLowerCase()}
+                          {b.status.replace('_', ' ')}
                         </span>
                         <span style={{
                           padding: '2px 8px', borderRadius: 20, fontSize: '0.65rem',
@@ -322,7 +326,7 @@ export default function CounselorClientDetailPage() {
                       </p>
                     </div>
 
-                    {b.status !== 'CANCELLED' && (
+                    {b.status !== 'cancelled' && (
                       <button onClick={() => setExpandedBooking(isExpanded ? null : b.id)} style={{
                         padding: '6px 12px', borderRadius: 6,
                         border: `1px solid ${hasNotes ? '#FEF3C7' : 'var(--nhlb-border)'}`,
@@ -366,7 +370,7 @@ export default function CounselorClientDetailPage() {
                   )}
 
                   {/* Note editor when expanded */}
-                  {isExpanded && b.status !== 'CANCELLED' && (
+                  {isExpanded && b.status !== 'cancelled' && (
                     <SessionNoteEditor booking={b} existingNote={note} onSaved={load} />
                   )}
                 </div>

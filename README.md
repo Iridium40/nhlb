@@ -33,7 +33,7 @@ Faith-based counseling intake, scheduling, love offering, event management, and 
 - Forgot password / password reset for client accounts
 
 ### Admin Portal (`/admin/bookings`)
-- **Sessions** — Calendar (week/month) and list views with counselor color coding; complete sessions with notes and confirmation toast
+- **Sessions** — 7-stage status lifecycle with color-coded badges and contextual action buttons; calendar (week/month) and list views; pre-call and session notes inline; alert banner for pending intake calls; recurring session scheduling
 - **Clients** — Full client list with search across name, email, HIPAA data, and session notes; view/edit client details; reassign counselors
 - **Counselors** — Manage counselor profiles, create login accounts, upload photos, set Zoom meeting details
 - **Events** — Create/edit events with photos, custom fields, registration fees, capacity limits; manage attendees; CSV export
@@ -85,7 +85,10 @@ clients
 
 bookings
   id, client_id, counselor_id, scheduled_at, duration_minutes, type (IN_PERSON/VIRTUAL),
-  status (CONFIRMED/CANCELLED/COMPLETED), donation_amount_cents, stripe_payment_id, notes
+  status (requested/call_pending/call_complete/confirmed/in_session/completed/cancelled),
+  donation_amount_cents, stripe_payment_id, notes, pre_call_notes, session_notes,
+  call_completed_at, call_completed_by,
+  is_recurring, recurrence_pattern, recurrence_end_date, parent_booking_id, series_index
 
 session_notes
   id, booking_id, counselor_id, content, private_notes
@@ -127,6 +130,7 @@ donations
 │   │   │   └── reports/             # Financial reports
 │   │   ├── api/                     # API routes
 │   │   │   ├── auth/                # Client session, account creation, callbacks
+│   │   │   ├── admin/                # Admin-only: schedule-next, notify
 │   │   │   ├── booking/             # Availability, create, update bookings
 │   │   │   ├── clients/             # Client CRUD + notes
 │   │   │   ├── counselor/           # Counselor self-service APIs
@@ -161,6 +165,7 @@ donations
 │   │   ├── supabase.ts              # Server + admin Supabase clients
 │   │   ├── supabase-browser.ts      # Browser Supabase client
 │   │   ├── email.ts                 # Provider-agnostic email (Resend / AWS SES)
+│   │   ├── phi-crypto.ts            # AES-256-GCM encryption for PHI fields
 │   │   └── ics.ts                   # ICS calendar file generation
 │   └── types/index.ts               # TypeScript interfaces
 └── supabase/
@@ -171,7 +176,8 @@ donations
         ├── 003_events_donations_funds.sql
         ├── 004_counselor_calendar.sql
         ├── 005_assigned_counselor.sql
-        └── 006_zoom_details.sql
+        ├── 006_zoom_details.sql
+        └── 007_session_lifecycle.sql
 ```
 
 ---
@@ -182,8 +188,14 @@ donations
 | Method | Route | Description |
 |--------|-------|-------------|
 | GET | `/api/booking/availability` | Available time slots (filterable by counselor, new/returning) |
-| POST | `/api/booking/create` | Create client + booking, send confirmation emails |
-| PATCH | `/api/booking/[bookingId]` | Update status (confirm, complete, cancel with 24-hr rule) |
+| POST | `/api/booking/create` | Create client + booking (one-active-session rule), send emails |
+| PATCH | `/api/booking/[bookingId]` | Status transitions with server-side validation + notes |
+
+### Admin Operations
+| Method | Route | Description |
+|--------|-------|-------------|
+| POST | `/api/admin/schedule-next` | Create next session or recurring series from completed session |
+| POST | `/api/admin/notify` | Resend virtual session Zoom link email to client |
 
 ### Clients
 | Method | Route | Description |
@@ -327,6 +339,12 @@ SES_FROM_EMAIL=bookings@noheartleftbehind.com
 
 # Shared
 ADMIN_EMAIL=admin@noheartleftbehind.com
+
+# PHI Encryption
+PHI_ENCRYPTION_KEY=     # 64-char hex — generate with: node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+
+# App
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
 ```
 
 ### 6. Run locally
@@ -363,18 +381,85 @@ Set `NEXT_PUBLIC_BASE_URL` to your production URL (e.g. `https://nhlb.vercel.app
 
 ---
 
+## Session Status Lifecycle
+
+Sessions progress through a 7-stage workflow. Only valid transitions are allowed (enforced server-side).
+
+```
+requested → call_pending → call_complete → confirmed → in_session → completed
+     ↘           ↘              ↘             ↘            ↘
+      cancelled   cancelled     cancelled     cancelled   cancelled
+```
+
+| Status | Meaning |
+|--------|---------|
+| `requested` | Client submitted booking, awaiting admin action |
+| `call_pending` | Admin acknowledged, counselor needs to call client |
+| `call_complete` | Pre-session phone call done, notes logged |
+| `confirmed` | Session confirmed to proceed |
+| `in_session` | Session actively underway |
+| `completed` | Session ended, notes finalized |
+| `cancelled` | Cancelled at any stage |
+
+---
+
 ## Key Business Rules
 
 - **Session hours**: 9 AM – 5 PM Central Time (America/Chicago), Mon–Fri
 - **Phone required**: Clients must provide a phone number when scheduling
+- **One active session**: Clients may only have one active session at a time through the public booking flow. Admin/counselor-initiated bookings are exempt.
 - **Assigned counselor**: On first booking, the client is assigned to a counselor. Returning clients can only book with their assigned counselor.
 - **Cancellation policy**: Clients can cancel online up to 24 hours before a session. Within 24 hours, they must call 985-264-8808.
-- **Counselor reassignment**: Admin can reassign a client's counselor — all future confirmed sessions are moved to the new counselor, and the client receives an email notification.
+- **Counselor reassignment**: Admin can reassign a client's counselor — all future active sessions are moved to the new counselor, and the client receives an email notification.
+- **Recurring sessions**: After completing a session, counselors can schedule the next session or create a recurring series (weekly, biweekly, monthly).
 - **Fund tracking**: Donations are categorized into Counseling, Operations, Events, and General Fund for financial reporting.
 - **Session notes privacy**: Counselors have a "private notes" field visible only to them, separate from notes visible to admins.
-- **HIPAA compliance**: Client health data is stored encrypted in Supabase with RLS policies. Intake forms use secure token-based links.
+- **PHI encryption**: `brief_reason` is encrypted with AES-256-GCM at the application layer before storage. Decrypted only in authenticated admin/counselor routes.
+- **HIPAA compliance**: Client health data is stored encrypted in Supabase with RLS policies. Intake forms use secure token-based links. Auth guards protect admin and counselor routes.
 - **Email PHI rules**: No email subject line contains client name, service type, or `brief_reason`. `brief_reason` never appears in any email body. Booking references use truncated IDs only.
 - **Email provider switching**: Set `EMAIL_PROVIDER=ses` and add SES credentials to switch to production. No code changes needed.
+
+---
+
+## Pre-Launch Checklist
+
+### Security
+- [ ] `PHI_ENCRYPTION_KEY` set in Vercel production environment variables
+- [ ] `SUPABASE_SERVICE_ROLE_KEY` confirmed absent from any client-side bundle
+- [ ] `STRIPE_SECRET_KEY` confirmed absent from any client-side bundle
+- [ ] RLS enabled and policies verified on all Supabase tables
+- [ ] HIPAA intake token validated server-side and marked used after submission
+
+### HIPAA — BAAs
+- [ ] BAA signed with Vercel (Settings → Billing → HIPAA add-on)
+- [ ] BAA signed with Supabase (requires Team plan — contact sales)
+- [ ] BAA signed with AWS (AWS Artifact — free, self-serve)
+- [ ] BAA signed with Stripe (contact Stripe support)
+- [ ] Email provider confirmed as AWS SES (`EMAIL_PROVIDER=ses`)
+
+### HIPAA — Code Verification
+- [ ] `brief_reason` stored as encrypted ciphertext (not plaintext) in Supabase
+- [ ] `brief_reason` does not appear in any email subject or body
+- [ ] Stripe payment metadata contains only `bookingId`
+- [ ] All admin/counselor note fields inaccessible to unauthenticated requests
+
+### Stripe
+- [ ] Webhook endpoint registered: `https://yourdomain.com/api/stripe/webhook`
+- [ ] Webhook events: `payment_intent.succeeded`, `payment_intent.payment_failed`
+- [ ] Nonprofit discount applied (email `nonprofit@stripe.com` with EIN)
+- [ ] Switched from test keys to live keys
+
+### AWS SES
+- [ ] Sending domain verified with SPF, DKIM, DMARC
+- [ ] Production access approved (out of sandbox)
+- [ ] BAA signed through AWS Artifact
+
+### General
+- [ ] Full booking flow tested end-to-end in staging
+- [ ] Status transition lifecycle tested through all 7 stages
+- [ ] Recurring session creation tested with series linkage
+- [ ] Password reset flow tested for clients and counselors
+- [ ] `NEXT_PUBLIC_BASE_URL` set to production URL in Vercel
 
 ---
 

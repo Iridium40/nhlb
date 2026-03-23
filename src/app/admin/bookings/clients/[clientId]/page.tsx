@@ -15,9 +15,13 @@ interface Counselor {
 }
 
 const STATUS_STYLES: Record<string, React.CSSProperties> = {
-  CONFIRMED: { backgroundColor: '#D1FAE5', color: '#065F46' },
-  CANCELLED: { backgroundColor: '#FEE2E2', color: '#991B1B' },
-  COMPLETED: { backgroundColor: 'var(--nhlb-cream-dark)', color: 'var(--nhlb-muted)' },
+  requested:     { backgroundColor: '#F1EFE8', color: '#5F5E5A' },
+  call_pending:  { backgroundColor: '#FAEEDA', color: '#633806' },
+  call_complete: { backgroundColor: '#E6F1FB', color: '#0C447C' },
+  confirmed:     { backgroundColor: '#E1F5EE', color: '#085041' },
+  in_session:    { backgroundColor: '#EEEDFE', color: '#3C3489' },
+  completed:     { backgroundColor: '#EAF3DE', color: '#27500A' },
+  cancelled:     { backgroundColor: '#FCEBEB', color: '#791F1F' },
 }
 
 const S = {
@@ -530,7 +534,7 @@ export default function ClientDetailPage() {
                           padding: '2px 8px', borderRadius: 20, fontSize: '0.65rem',
                           fontWeight: 700, fontFamily: 'Lato, sans-serif', textTransform: 'capitalize',
                         }}>
-                          {b.status.toLowerCase()}
+                          {b.status.replace('_', ' ')}
                         </span>
                         <span style={{
                           padding: '2px 8px', borderRadius: 20, fontSize: '0.65rem',
@@ -546,7 +550,7 @@ export default function ClientDetailPage() {
                       </p>
                     </div>
 
-                    {b.status !== 'CANCELLED' && (
+                    {b.status !== 'cancelled' && (
                       <button onClick={() => setExpandedBooking(isExpanded ? null : b.id)} style={{
                         background: 'none', border: 'none', cursor: 'pointer',
                         fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', fontWeight: 700,
@@ -557,7 +561,7 @@ export default function ClientDetailPage() {
                     )}
                   </div>
 
-                  {isExpanded && b.status !== 'CANCELLED' && (
+                  {isExpanded && b.status !== 'cancelled' && (
                     <NoteEditor
                       booking={b}
                       clientId={client.id}

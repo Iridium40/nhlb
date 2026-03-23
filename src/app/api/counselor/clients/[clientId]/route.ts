@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseServerClient, createSupabaseAdminClient } from '@/lib/supabase'
+import { decryptPHI } from '@/lib/phi-crypto'
 
 async function getCounselor() {
   const supabase = await createSupabaseServerClient()
@@ -36,6 +37,8 @@ export async function GET(
   if (error || !client) {
     return NextResponse.json({ error: 'Client not found or not assigned to you' }, { status: 404 })
   }
+
+  client.brief_reason = decryptPHI(client.brief_reason)
 
   const { data: bookings } = await admin
     .from('bookings')

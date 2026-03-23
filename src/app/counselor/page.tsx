@@ -13,9 +13,13 @@ interface EnrichedBooking extends Booking {
 }
 
 const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
-  CONFIRMED: { bg: '#D1FAE5', text: '#065F46' },
-  CANCELLED: { bg: '#FEE2E2', text: '#991B1B' },
-  COMPLETED: { bg: 'var(--nhlb-cream-dark)', text: 'var(--nhlb-muted)' },
+  requested:     { bg: '#F1EFE8', text: '#5F5E5A' },
+  call_pending:  { bg: '#FAEEDA', text: '#633806' },
+  call_complete: { bg: '#E6F1FB', text: '#0C447C' },
+  confirmed:     { bg: '#E1F5EE', text: '#085041' },
+  in_session:    { bg: '#EEEDFE', text: '#3C3489' },
+  completed:     { bg: '#EAF3DE', text: '#27500A' },
+  cancelled:     { bg: '#FCEBEB', text: '#791F1F' },
 }
 
 const HOURS = Array.from({ length: 10 }, (_, i) => i + 8)
@@ -177,10 +181,10 @@ export default function CounselorDashboard() {
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i))
 
   const upcomingBookings = bookings
-    .filter(b => b.status === 'CONFIRMED' && !isBefore(new Date(b.scheduled_at), new Date()))
+    .filter(b => ['requested', 'call_pending', 'call_complete', 'confirmed'].includes(b.status) && !isBefore(new Date(b.scheduled_at), new Date()))
     .slice(0, 5)
 
-  const todayBookings = bookings.filter(b => isToday(new Date(b.scheduled_at)) && b.status !== 'CANCELLED')
+  const todayBookings = bookings.filter(b => isToday(new Date(b.scheduled_at)) && b.status !== 'cancelled')
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)' }}>
@@ -330,7 +334,7 @@ export default function CounselorDashboard() {
                 {weekDays.map(day => {
                   const dayBookings = bookings.filter(b => {
                     const d = new Date(b.scheduled_at)
-                    return isSameDay(d, day) && d.getHours() === hour && b.status !== 'CANCELLED'
+                    return isSameDay(d, day) && d.getHours() === hour && b.status !== 'cancelled'
                   })
                   return (
                     <div key={day.toISOString()} style={{
@@ -339,7 +343,7 @@ export default function CounselorDashboard() {
                       backgroundColor: isToday(day) ? 'rgba(184,49,31,0.03)' : 'transparent',
                     }}>
                       {dayBookings.map(b => {
-                        const colors = STATUS_COLORS[b.status] ?? STATUS_COLORS.CONFIRMED
+                        const colors = STATUS_COLORS[b.status] ?? STATUS_COLORS.requested
                         return (
                           <div key={b.id} style={{
                             backgroundColor: colors.bg, color: colors.text,
@@ -369,7 +373,7 @@ export default function CounselorDashboard() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {bookings.filter(b => {
               const d = new Date(b.scheduled_at)
-              return d >= weekDays[0] && d <= addDays(weekDays[6], 1) && b.status !== 'CANCELLED'
+              return d >= weekDays[0] && d <= addDays(weekDays[6], 1) && b.status !== 'cancelled'
             }).length === 0 ? (
               <p style={{ textAlign: 'center', padding: '40px 0', fontFamily: 'Cormorant Garamond, serif', fontSize: '1.2rem', color: 'var(--nhlb-muted)' }}>
                 No sessions this week
@@ -377,7 +381,7 @@ export default function CounselorDashboard() {
             ) : (
               bookings.filter(b => {
                 const d = new Date(b.scheduled_at)
-                return d >= weekDays[0] && d <= addDays(weekDays[6], 1) && b.status !== 'CANCELLED'
+                return d >= weekDays[0] && d <= addDays(weekDays[6], 1) && b.status !== 'cancelled'
               }).map(b => {
                 const isNotesOpen = expandedNotes === b.id
                 const hasNotes = !!b.session_note?.content
@@ -399,7 +403,7 @@ export default function CounselorDashboard() {
                             padding: '2px 8px', borderRadius: 20, fontSize: '0.65rem', fontWeight: 700,
                             fontFamily: 'Lato, sans-serif', textTransform: 'capitalize',
                           }}>
-                            {b.status.toLowerCase()}
+                            {b.status.replace('_', ' ')}
                           </span>
                           {hasNotes && (
                             <span style={{
@@ -439,15 +443,22 @@ export default function CounselorDashboard() {
                         }}>
                           {isNotesOpen ? 'Close Notes' : hasNotes ? 'Edit Notes' : 'Add Notes'}
                         </button>
-                        {b.status === 'CONFIRMED' && (
-                          <button onClick={() => updateBooking(b.id, 'COMPLETED')} style={{
+                        {b.status === 'confirmed' && (
+                          <button onClick={() => updateBooking(b.id, 'in_session')} style={{
+                            padding: '6px 12px', borderRadius: 6, border: 'none',
+                            backgroundColor: '#3C3489', color: 'white',
+                            fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem', cursor: 'pointer',
+                          }}>Start session</button>
+                        )}
+                        {b.status === 'in_session' && (
+                          <button onClick={() => updateBooking(b.id, 'completed')} style={{
                             padding: '6px 12px', borderRadius: 6, border: 'none',
                             backgroundColor: '#065F46', color: 'white',
                             fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem', cursor: 'pointer',
-                          }}>Complete</button>
+                          }}>Complete session</button>
                         )}
-                        {b.status === 'CONFIRMED' && (
-                          <button onClick={() => updateBooking(b.id, 'CANCELLED')} style={{
+                        {!['completed', 'cancelled'].includes(b.status) && (
+                          <button onClick={() => updateBooking(b.id, 'cancelled')} style={{
                             padding: '6px 12px', borderRadius: 6, border: '1px solid #FECACA',
                             backgroundColor: 'white', color: '#DC2626',
                             fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem', cursor: 'pointer',
@@ -457,7 +468,7 @@ export default function CounselorDashboard() {
                     </div>
 
                     {/* Previous session notes for upcoming sessions */}
-                    {b.status === 'CONFIRMED' && <PreviousNotes booking={b} />}
+                    {['confirmed', 'in_session'].includes(b.status) && <PreviousNotes booking={b} />}
 
                     {/* Inline note preview when collapsed */}
                     {!isNotesOpen && hasNotes && (

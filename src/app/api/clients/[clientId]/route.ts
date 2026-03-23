@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseAdminClient } from '@/lib/supabase'
 import { sendCounselorAssignmentEmail } from '@/lib/email'
+import { decryptPHI } from '@/lib/phi-crypto'
 import type { Booking, Counselor, Client } from '@/types'
 
 export async function GET(
@@ -17,6 +18,8 @@ export async function GET(
     .single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 404 })
+
+  client.brief_reason = decryptPHI(client.brief_reason)
 
   let assignedCounselor = null
   if (client.assigned_counselor_id) {
@@ -93,7 +96,7 @@ export async function PATCH(
         .from('bookings')
         .update({ counselor_id: newCounselorId })
         .eq('client_id', clientId)
-        .eq('status', 'CONFIRMED')
+        .in('status', ['requested', 'call_pending', 'call_complete', 'confirmed', 'in_session'])
         .gte('scheduled_at', new Date().toISOString())
 
       if (newCounselorId !== previousCounselorId) {
@@ -108,7 +111,7 @@ export async function PATCH(
             .from('bookings')
             .select('*')
             .eq('client_id', clientId)
-            .eq('status', 'CONFIRMED')
+            .in('status', ['requested', 'call_pending', 'call_complete', 'confirmed', 'in_session'])
             .gte('scheduled_at', new Date().toISOString())
             .order('scheduled_at', { ascending: true })
 

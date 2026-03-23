@@ -83,7 +83,7 @@ function ReturningClientInner() {
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null)
 
   // Payment
-  const [donationAmount, setDonationAmount] = useState('25')
+  const [donationAmount, setDonationAmount] = useState('50')
 
   const lookupClient = async () => {
     if (!email.trim()) { setError('Please enter your email.'); return }

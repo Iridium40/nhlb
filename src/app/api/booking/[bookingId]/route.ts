@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseAdminClient, createSupabaseServerClient } from '@/lib/supabase'
 import { differenceInHours } from 'date-fns'
+import { STATUS_TRANSITIONS } from '@/types'
+import { decryptPHI } from '@/lib/phi-crypto'
 
 export async function GET(
   _req: NextRequest,
@@ -16,6 +18,11 @@ export async function GET(
     .single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 404 })
+
+  if (data.client) {
+    data.client.brief_reason = decryptPHI(data.client.brief_reason)
+  }
+
   return NextResponse.json({ booking: data })
 }
 
@@ -27,25 +34,24 @@ export async function PATCH(
   const body = await req.json()
   const admin = createSupabaseAdminClient()
 
-  // Determine caller role
-  const caller = body._caller as string | undefined // 'client' | 'counselor' | undefined (admin)
+  const { data: current } = await admin
+    .from('bookings')
+    .select('*, client:clients(email)')
+    .eq('id', bookingId)
+    .single()
 
-  // For client-initiated cancellations, enforce the 24hr rule
-  if (body.status === 'CANCELLED' && caller === 'client') {
-    const { data: booking } = await admin
-      .from('bookings')
-      .select('scheduled_at, client:clients(email)')
-      .eq('id', bookingId)
-      .single()
+  if (!current) return NextResponse.json({ error: 'Booking not found' }, { status: 404 })
 
-    if (!booking) return NextResponse.json({ error: 'Booking not found' }, { status: 404 })
+  const caller = body._caller as string | undefined
 
-    const clientData = booking.client as unknown as { email: string } | null
+  // Client-initiated cancellation: enforce 24hr rule
+  if (body.status === 'cancelled' && caller === 'client') {
+    const clientData = current.client as unknown as { email: string } | null
     if (body._email && clientData?.email?.toLowerCase() !== body._email.toLowerCase()) {
       return NextResponse.json({ error: 'Email does not match this booking' }, { status: 403 })
     }
 
-    const hoursUntil = differenceInHours(new Date(booking.scheduled_at), new Date())
+    const hoursUntil = differenceInHours(new Date(current.scheduled_at), new Date())
     if (hoursUntil < 24) {
       return NextResponse.json({
         error: 'Cancellations within 24 hours of the appointment must be made by phone. Please call 985-264-8808.',
@@ -54,9 +60,31 @@ export async function PATCH(
     }
   }
 
+  // Status transition validation
+  if (body.status !== undefined && body.status !== current.status) {
+    const allowed = STATUS_TRANSITIONS[current.status] ?? []
+    if (!allowed.includes(body.status)) {
+      return NextResponse.json(
+        { error: `Cannot transition from "${current.status}" to "${body.status}". Allowed: ${allowed.join(', ') || 'none'}` },
+        { status: 400 }
+      )
+    }
+  }
+
   const updates: Record<string, unknown> = {}
   if (body.status !== undefined) updates.status = body.status
   if (body.notes !== undefined) updates.notes = body.notes
+  if (body.pre_call_notes !== undefined) updates.pre_call_notes = body.pre_call_notes
+  if (body.session_notes !== undefined) updates.session_notes = body.session_notes
+  if (body.call_completed_by !== undefined) updates.call_completed_by = body.call_completed_by
+  if (body.meeting_link !== undefined) updates.meeting_link = body.meeting_link
+  if (body.meeting_id !== undefined) updates.meeting_id = body.meeting_id
+  if (body.meeting_passcode !== undefined) updates.meeting_passcode = body.meeting_passcode
+
+  // Auto-stamp call_completed_at when transitioning to call_complete
+  if (body.status === 'call_complete') {
+    updates.call_completed_at = new Date().toISOString()
+  }
 
   const { data, error } = await admin
     .from('bookings')
