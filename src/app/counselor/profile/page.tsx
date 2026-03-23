@@ -32,6 +32,7 @@ export default function CounselorProfilePage() {
   const [zoomPasscode, setZoomPasscode] = useState('')
   const [photoUrl, setPhotoUrl] = useState('')
   const [specialties, setSpecialties] = useState<string[]>([])
+  const [customSpecialty, setCustomSpecialty] = useState('')
 
   const load = useCallback(async () => {
     const res = await fetch('/api/counselor/me')
@@ -153,26 +154,7 @@ export default function CounselorProfilePage() {
       <CounselorNav />
 
       <div style={{ maxWidth: 700, margin: '0 auto', padding: '32px 24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-          <div style={{ display: 'flex', gap: 10 }}>
-            <a href="/counselor/availability" style={{
-              padding: '9px 18px', borderRadius: 8, border: '1px solid var(--nhlb-border)',
-              backgroundColor: 'white', color: 'var(--nhlb-text)',
-              fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
-              textDecoration: 'none',
-            }}>
-              Manage Availability
-            </a>
-            <a href="/counselor" style={{
-              padding: '9px 18px', borderRadius: 8, border: '1px solid var(--nhlb-border)',
-              backgroundColor: 'white', color: 'var(--nhlb-text)',
-              fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
-              textDecoration: 'none',
-            }}>
-              View Schedule
-            </a>
-          </div>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: 20, gap: 8 }}>
           {saved && <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#065F46', fontWeight: 700 }}>Saved</span>}
           <button onClick={handleSave} disabled={saving} style={{
             padding: '8px 20px', borderRadius: 8, border: 'none',
@@ -182,7 +164,6 @@ export default function CounselorProfilePage() {
           }}>
             {saving ? 'Saving...' : 'Save Changes'}
           </button>
-          </div>
         </div>
 
         {error && (
@@ -339,8 +320,49 @@ export default function CounselorProfilePage() {
               )
             })}
           </div>
+
+          <div style={{ marginTop: 16 }}>
+            <label style={S.label}>Add Custom Specialty</label>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <input
+                value={customSpecialty}
+                onChange={e => setCustomSpecialty(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    const val = customSpecialty.trim()
+                    if (val && !specialties.some(s => s.toLowerCase() === val.toLowerCase())) {
+                      setSpecialties(prev => [...prev, val])
+                      setCustomSpecialty('')
+                    }
+                  }
+                }}
+                placeholder="e.g. Marriage, Grief Recovery..."
+                style={{ ...S.input, flex: 1 }}
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  const val = customSpecialty.trim()
+                  if (val && !specialties.some(s => s.toLowerCase() === val.toLowerCase())) {
+                    setSpecialties(prev => [...prev, val])
+                    setCustomSpecialty('')
+                  }
+                }}
+                style={{
+                  padding: '10px 20px', borderRadius: 8, border: 'none',
+                  backgroundColor: 'var(--nhlb-red)', color: 'white',
+                  fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
+                  cursor: 'pointer', whiteSpace: 'nowrap',
+                }}
+              >
+                Add
+              </button>
+            </div>
+          </div>
+
           {specialties.filter(s => !SPECIALTY_OPTIONS.includes(s)).length > 0 && (
-            <div style={{ marginTop: 12 }}>
+            <div style={{ marginTop: 14 }}>
               <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)', margin: '0 0 6px' }}>Custom specialties:</p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                 {specialties.filter(s => !SPECIALTY_OPTIONS.includes(s)).map(s => (

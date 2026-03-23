@@ -29,19 +29,23 @@ export function encryptPHI(plaintext: string): string {
   return [iv.toString('base64'), authTag.toString('base64'), encrypted.toString('base64')].join(':')
 }
 
-/** Decrypt a PHI string. Returns null if value is null/undefined. */
+/** Decrypt a PHI string. Returns null if value is null/undefined. Falls back to raw value on failure. */
 export function decryptPHI(packed: string | null | undefined): string | null {
   if (!packed) return null
   const parts = packed.split(':')
   if (parts.length !== 3) return packed
-  const [ivB64, authTagB64, ciphertextB64] = parts
-  const key = getKey()
-  const iv = Buffer.from(ivB64, 'base64')
-  const authTag = Buffer.from(authTagB64, 'base64')
-  const ciphertext = Buffer.from(ciphertextB64, 'base64')
-  const decipher = createDecipheriv(ALGORITHM, key, iv)
-  decipher.setAuthTag(authTag)
-  return Buffer.concat([decipher.update(ciphertext), decipher.final()]).toString('utf8')
+  try {
+    const [ivB64, authTagB64, ciphertextB64] = parts
+    const key = getKey()
+    const iv = Buffer.from(ivB64, 'base64')
+    const authTag = Buffer.from(authTagB64, 'base64')
+    const ciphertext = Buffer.from(ciphertextB64, 'base64')
+    const decipher = createDecipheriv(ALGORITHM, key, iv)
+    decipher.setAuthTag(authTag)
+    return Buffer.concat([decipher.update(ciphertext), decipher.final()]).toString('utf8')
+  } catch {
+    return packed
+  }
 }
 
 /** Encrypt only if value is non-empty. */

@@ -19,7 +19,11 @@ export async function GET(
 
   if (error) return NextResponse.json({ error: error.message }, { status: 404 })
 
-  client.brief_reason = decryptPHI(client.brief_reason)
+  try {
+    client.brief_reason = decryptPHI(client.brief_reason)
+  } catch {
+    // Value may be plain text from before encryption was enabled
+  }
 
   let assignedCounselor = null
   if (client.assigned_counselor_id) {

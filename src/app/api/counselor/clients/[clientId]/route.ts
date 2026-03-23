@@ -38,7 +38,11 @@ export async function GET(
     return NextResponse.json({ error: 'Client not found or not assigned to you' }, { status: 404 })
   }
 
-  client.brief_reason = decryptPHI(client.brief_reason)
+  try {
+    client.brief_reason = decryptPHI(client.brief_reason)
+  } catch {
+    // Value may be plain text from before encryption was enabled
+  }
 
   const { data: bookings } = await admin
     .from('bookings')

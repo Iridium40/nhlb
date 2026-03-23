@@ -20,7 +20,11 @@ export async function GET(
   if (error) return NextResponse.json({ error: error.message }, { status: 404 })
 
   if (data.client) {
-    data.client.brief_reason = decryptPHI(data.client.brief_reason)
+    try {
+      data.client.brief_reason = decryptPHI(data.client.brief_reason)
+    } catch {
+      // Value may be plain text from before encryption was enabled
+    }
   }
 
   return NextResponse.json({ booking: data })
