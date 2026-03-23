@@ -49,6 +49,7 @@ export default function NewClientBookingPage() {
   const [slots, setSlots] = useState<TimeSlot[]>([])
   const [loadingSlots, setLoadingSlots] = useState(false)
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null)
+  const [selectedCounselorId, setSelectedCounselorId] = useState<string | null>(null)
 
   // Step 3: payment
   const [donationAmount, setDonationAmount] = useState('50')
@@ -162,17 +163,28 @@ export default function NewClientBookingPage() {
     }
   }
 
-  // Deduplicate slots by time — for new clients, just show available times.
-  // When multiple counselors offer the same slot, keep one (first match).
-  const deduped = slots.reduce<TimeSlot[]>((acc, slot) => {
-    if (!acc.some(s => s.start === slot.start)) acc.push(slot)
-    return acc
-  }, [])
+  // Group all counselors' slots — show counselor names + photos so clients can choose
+  type CounselorInfo = { id: string; name: string; photoUrl: string | null }
+  const counselorMap = new Map<string, CounselorInfo>()
+  for (const slot of slots) {
+    if (!counselorMap.has(slot.counselorId)) {
+      counselorMap.set(slot.counselorId, {
+        id: slot.counselorId,
+        name: slot.counselorName,
+        photoUrl: slot.counselorPhotoUrl ?? null,
+      })
+    }
+  }
+  const counselors = Array.from(counselorMap.values())
 
-  const groupedSlots = deduped.reduce<Record<string, TimeSlot[]>>((acc, slot) => {
+  const filteredSlots = selectedCounselorId
+    ? slots.filter(s => s.counselorId === selectedCounselorId)
+    : slots
+
+  const groupedSlots = filteredSlots.reduce<Record<string, TimeSlot[]>>((acc, slot) => {
     const key = format(new Date(slot.start), 'EEE, MMM d')
     if (!acc[key]) acc[key] = []
-    acc[key].push(slot)
+    if (!acc[key].some(s => s.start === slot.start)) acc[key].push(slot)
     return acc
   }, {})
 
@@ -353,9 +365,9 @@ export default function NewClientBookingPage() {
         {step === 'schedule' && (
           <div>
             <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
-              Choose a time
+              Choose your counselor &amp; time
             </h2>
-            <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', marginBottom: 28 }}>
+            <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', marginBottom: 24 }}>
               In-person &middot; 60 minutes &middot; 430 N. Jefferson Ave, Covington
             </p>
 
@@ -363,45 +375,105 @@ export default function NewClientBookingPage() {
               <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>
                 Loading available times...
               </p>
-            ) : Object.keys(groupedSlots).length === 0 ? (
+            ) : counselors.length === 0 ? (
               <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>
                 No available slots right now. Please check back later.
               </p>
             ) : (
-              <div style={{ maxHeight: '56vh', overflowY: 'auto', paddingRight: 4, marginBottom: 28 }}>
-                {Object.entries(groupedSlots).map(([day, daySlots]) => (
-                  <div key={day} style={{ marginBottom: 24 }}>
-                    <p style={{
-                      fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
-                      letterSpacing: '0.1em', textTransform: 'uppercase',
-                      color: 'var(--nhlb-muted)', marginBottom: 10,
-                    }}>{day}</p>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
-                      {daySlots.map(slot => (
-                        <button key={slot.start} onClick={() => selectSlot(slot)} style={{
-                          padding: '10px 4px',
-                          border: '1px solid var(--nhlb-border)', borderRadius: 8,
-                          backgroundColor: 'white', fontFamily: 'Lato, sans-serif',
-                          fontSize: '0.8rem', color: 'var(--nhlb-text)',
-                          cursor: 'pointer', transition: 'all 0.12s',
-                        }}
-                        onMouseEnter={e => {
-                          (e.currentTarget).style.backgroundColor = 'var(--nhlb-red)'
-                          ;(e.currentTarget).style.color = 'white'
-                          ;(e.currentTarget).style.borderColor = 'var(--nhlb-red)'
-                        }}
-                        onMouseLeave={e => {
-                          (e.currentTarget).style.backgroundColor = 'white'
-                          ;(e.currentTarget).style.color = 'var(--nhlb-text)'
-                          ;(e.currentTarget).style.borderColor = 'var(--nhlb-border)'
-                        }}>
-                          {format(new Date(slot.start), 'h:mm a')}
-                        </button>
-                      ))}
-                    </div>
+              <>
+                {/* Counselor picker */}
+                <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 28 }}>
+                  <button
+                    onClick={() => setSelectedCounselorId(null)}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 8,
+                      padding: '8px 16px', borderRadius: 20,
+                      border: `2px solid ${!selectedCounselorId ? 'var(--nhlb-red)' : 'var(--nhlb-border)'}`,
+                      backgroundColor: !selectedCounselorId ? 'var(--nhlb-red)' : 'white',
+                      color: !selectedCounselorId ? 'white' : 'var(--nhlb-text)',
+                      fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
+                      cursor: 'pointer', transition: 'all 0.12s',
+                    }}
+                  >
+                    All Counselors
+                  </button>
+                  {counselors.map(c => (
+                    <button
+                      key={c.id}
+                      onClick={() => setSelectedCounselorId(c.id)}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 8,
+                        padding: '6px 14px 6px 6px', borderRadius: 20,
+                        border: `2px solid ${selectedCounselorId === c.id ? 'var(--nhlb-red)' : 'var(--nhlb-border)'}`,
+                        backgroundColor: selectedCounselorId === c.id ? 'var(--nhlb-red)' : 'white',
+                        color: selectedCounselorId === c.id ? 'white' : 'var(--nhlb-text)',
+                        fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
+                        cursor: 'pointer', transition: 'all 0.12s',
+                      }}
+                    >
+                      <div style={{
+                        width: 28, height: 28, borderRadius: '50%', overflow: 'hidden',
+                        backgroundColor: '#F3F4F6', flexShrink: 0,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        border: selectedCounselorId === c.id ? '2px solid rgba(255,255,255,0.4)' : '1px solid var(--nhlb-border)',
+                      }}>
+                        {c.photoUrl ? (
+                          /* eslint-disable-next-line @next/next/no-img-element */
+                          <img src={c.photoUrl} alt={c.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        ) : (
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={selectedCounselorId === c.id ? 'white' : '#9CA3AF'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                          </svg>
+                        )}
+                      </div>
+                      {c.name}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Time slots */}
+                {Object.keys(groupedSlots).length === 0 ? (
+                  <p style={{ textAlign: 'center', padding: '40px 0', fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>
+                    No available times for this counselor.
+                  </p>
+                ) : (
+                  <div style={{ maxHeight: '50vh', overflowY: 'auto', paddingRight: 4, marginBottom: 28 }}>
+                    {Object.entries(groupedSlots).map(([day, daySlots]) => (
+                      <div key={day} style={{ marginBottom: 24 }}>
+                        <p style={{
+                          fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                          letterSpacing: '0.1em', textTransform: 'uppercase',
+                          color: 'var(--nhlb-muted)', marginBottom: 10,
+                        }}>{day}</p>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
+                          {daySlots.map(slot => (
+                            <button key={`${slot.counselorId}_${slot.start}`} onClick={() => selectSlot(slot)} style={{
+                              padding: '10px 4px',
+                              border: '1px solid var(--nhlb-border)', borderRadius: 8,
+                              backgroundColor: 'white', fontFamily: 'Lato, sans-serif',
+                              fontSize: '0.8rem', color: 'var(--nhlb-text)',
+                              cursor: 'pointer', transition: 'all 0.12s',
+                            }}
+                            onMouseEnter={e => {
+                              (e.currentTarget).style.backgroundColor = 'var(--nhlb-red)'
+                              ;(e.currentTarget).style.color = 'white'
+                              ;(e.currentTarget).style.borderColor = 'var(--nhlb-red)'
+                            }}
+                            onMouseLeave={e => {
+                              (e.currentTarget).style.backgroundColor = 'white'
+                              ;(e.currentTarget).style.color = 'var(--nhlb-text)'
+                              ;(e.currentTarget).style.borderColor = 'var(--nhlb-border)'
+                            }}>
+                              {format(new Date(slot.start), 'h:mm a')}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                )}
+              </>
             )}
 
             <button onClick={() => setStep('info')} style={{

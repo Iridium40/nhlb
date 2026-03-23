@@ -5,6 +5,7 @@ import { createSupabaseBrowserClient } from '@/lib/supabase-browser'
 
 const NAV_ITEMS = [
   { href: '/counselor', label: 'My Schedule' },
+  { href: '/counselor/schedule', label: 'Schedule Session' },
   { href: '/counselor/clients', label: 'My Clients' },
   { href: '/counselor/profile', label: 'My Profile' },
   { href: '/counselor/availability', label: 'Availability & Time Off' },
