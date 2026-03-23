@@ -97,22 +97,33 @@ export default function CounselorClientDetailPage() {
   const [hipaaData, setHipaaData] = useState<HipaaFormData | null>(null)
   const [hipaaCompletedAt, setHipaaCompletedAt] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState<string | null>(null)
   const [expandedBooking, setExpandedBooking] = useState<string | null>(null)
 
   const load = useCallback(async () => {
     setLoading(true)
-    const meRes = await fetch('/api/counselor/me')
-    if (!meRes.ok) { router.push('/counselor/login'); return }
+    setLoadError(null)
+    try {
+      const meRes = await fetch('/api/counselor/me')
+      if (!meRes.ok) { router.push('/counselor/login'); return }
 
-    const res = await fetch(`/api/counselor/clients/${clientId}`)
-    if (!res.ok) { router.push('/counselor/clients'); return }
-    const json = await res.json()
-    setClient(json.client)
-    setBookings(json.bookings ?? [])
-    setNotes(json.notes ?? [])
-    setHipaaCompleted(json.hipaaCompleted ?? false)
-    setHipaaData(json.hipaaIntake?.form_data ?? null)
-    setHipaaCompletedAt(json.hipaaIntake?.completed_at ?? null)
+      const res = await fetch(`/api/counselor/clients/${clientId}`)
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}))
+        setLoadError(errJson.error ?? `Failed to load client (${res.status})`)
+        setLoading(false)
+        return
+      }
+      const json = await res.json()
+      setClient(json.client)
+      setBookings(json.bookings ?? [])
+      setNotes(json.notes ?? [])
+      setHipaaCompleted(json.hipaaCompleted ?? false)
+      setHipaaData(json.hipaaIntake?.form_data ?? null)
+      setHipaaCompletedAt(json.hipaaIntake?.completed_at ?? null)
+    } catch (err) {
+      setLoadError(err instanceof Error ? err.message : 'Failed to load client')
+    }
     setLoading(false)
   }, [clientId, router])
 
@@ -124,9 +135,26 @@ export default function CounselorClientDetailPage() {
     </div>
   )
 
-  if (!client) return (
-    <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>Client not found</p>
+  if (loadError || !client) return (
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)' }}>
+      <CounselorNav />
+      <div style={{ maxWidth: 600, margin: '0 auto', padding: '60px 24px', textAlign: 'center' }}>
+        <div style={{
+          padding: '20px 24px', backgroundColor: '#FEF2F2', border: '1px solid #FECACA',
+          borderRadius: 12, marginBottom: 24,
+        }}>
+          <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.9rem', color: '#B91C1C', margin: 0 }}>
+            {loadError ?? 'Client not found'}
+          </p>
+        </div>
+        <a href="/counselor/clients" style={{
+          padding: '10px 20px', borderRadius: 8, backgroundColor: 'var(--nhlb-red)',
+          color: 'white', fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.85rem',
+          textDecoration: 'none',
+        }}>
+          Back to My Clients
+        </a>
+      </div>
     </div>
   )
 
