@@ -53,6 +53,8 @@ export default function AdminBookingsPage() {
   const [savingNotes, setSavingNotes] = useState<Record<string, boolean>>({})
   const [localPreCallNotes, setLocalPreCallNotes] = useState<Record<string, string>>({})
   const [localSessionNotes, setLocalSessionNotes] = useState<Record<string, string>>({})
+  const [expandedPreCall, setExpandedPreCall] = useState<string | null>(null)
+  const [expandedSessionNotes, setExpandedSessionNotes] = useState<string | null>(null)
   const [completeModal, setCompleteModal] = useState<{ bookingId: string; name: string } | null>(null)
   const [completeNotes, setCompleteNotes] = useState('')
 
@@ -297,45 +299,54 @@ export default function AdminBookingsPage() {
               visibleBookings.length === 0 ? (
                 <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem', color: 'var(--nhlb-muted)' }}>No sessions found</p>
               ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   {visibleBookings.map(b => {
                     const ss = STATUS_STYLES[b.status] ?? STATUS_STYLES.requested
                     const actions = nextActions(b.status)
                     const preCallVisible = statusIdx(b.status) >= statusIdx('call_pending')
                     const sessionNotesVisible = statusIdx(b.status) >= statusIdx('confirmed')
                     const phone = b.client?.phone
+                    const isPreCallOpen = expandedPreCall === b.id
+                    const isSessionNotesOpen = expandedSessionNotes === b.id
 
                     return (
-                      <div key={b.id} style={{ background: 'white', border: '1px solid var(--nhlb-border)', borderRadius: 12, padding: '20px 24px' }}>
+                      <div key={b.id} style={{
+                        background: 'white', border: '1px solid var(--nhlb-border)',
+                        borderRadius: 10, padding: '16px 20px',
+                        borderLeft: `4px solid ${b.type === 'VIRTUAL' ? '#3B82F6' : 'var(--nhlb-red)'}`,
+                      }}>
                         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
                           <div style={{ flex: 1 }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6, flexWrap: 'wrap' }}>
-                              <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.15rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0 }}>
-                                {b.client?.first_name} {b.client?.last_name}
-                              </p>
-                              <span style={{ backgroundColor: ss.bg, color: ss.text, padding: '2px 10px', borderRadius: 20, fontSize: '0.7rem', fontWeight: 700, fontFamily: 'Lato, sans-serif', textTransform: 'capitalize' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
+                              <span style={{ fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.9rem', color: 'var(--nhlb-red-dark)' }}>
+                                {format(new Date(b.scheduled_at), 'EEE, MMM d')} at {format(new Date(b.scheduled_at), 'h:mm a')}
+                              </span>
+                              <span style={{
+                                backgroundColor: ss.bg, color: ss.text,
+                                padding: '2px 8px', borderRadius: 20, fontSize: '0.65rem', fontWeight: 700,
+                                fontFamily: 'Lato, sans-serif', textTransform: 'capitalize',
+                              }}>
                                 {b.status.replace('_', ' ')}
                               </span>
-                              <span style={{ backgroundColor: b.type === 'VIRTUAL' ? '#EFF6FF' : 'var(--nhlb-cream-dark)', color: b.type === 'VIRTUAL' ? '#1D4ED8' : 'var(--nhlb-muted)', padding: '2px 10px', borderRadius: 20, fontSize: '0.7rem', fontFamily: 'Lato, sans-serif' }}>
-                                {b.type === 'VIRTUAL' ? 'Virtual' : 'In Person'}
-                              </span>
                               {b.is_recurring && (
-                                <span style={{ backgroundColor: '#D1FAE5', color: '#065F46', padding: '2px 10px', borderRadius: 20, fontSize: '0.65rem', fontWeight: 700, fontFamily: 'Lato, sans-serif' }}>
+                                <span style={{ backgroundColor: '#D1FAE5', color: '#065F46', padding: '2px 8px', borderRadius: 20, fontSize: '0.6rem', fontWeight: 700, fontFamily: 'Lato, sans-serif' }}>
                                   ↻ Recurring
                                 </span>
                               )}
                               {b.series_index > 1 && (
-                                <span style={{ backgroundColor: '#F3F4F6', color: '#6B7280', padding: '2px 10px', borderRadius: 20, fontSize: '0.65rem', fontWeight: 700, fontFamily: 'Lato, sans-serif' }}>
+                                <span style={{ backgroundColor: '#F3F4F6', color: '#6B7280', padding: '2px 8px', borderRadius: 20, fontSize: '0.6rem', fontWeight: 700, fontFamily: 'Lato, sans-serif' }}>
                                   Session #{b.series_index}
                                 </span>
                               )}
                             </div>
-                            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', margin: '0 0 4px' }}>
-                              {format(new Date(b.scheduled_at), 'EEE, MMM d')} at {format(new Date(b.scheduled_at), 'h:mm a')}
-                              &ensp;&middot;&ensp;{b.counselor?.name}
+                            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '1rem', fontWeight: 700, color: 'var(--nhlb-text)', margin: '0 0 2px' }}>
+                              {b.client?.first_name} {b.client?.last_name}
                             </p>
                             <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: 0 }}>
-                              {b.client?.email}
+                              {b.type === 'VIRTUAL' ? '💻 Virtual' : '🏠 In Person'}
+                              {' · '}{b.client?.service_type}
+                              {b.counselor?.name ? ` · ${b.counselor.name}` : ''}
+                              {b.client?.email ? <> · <a href={`mailto:${b.client.email}`} style={{ color: 'var(--nhlb-red)', textDecoration: 'none' }}>{b.client.email}</a></> : ''}
                               {phone ? <> · <a href={`tel:${phone}`} style={{ color: 'var(--nhlb-red)', textDecoration: 'none' }}>{phone}</a></> : ''}
                               {b.donation_amount_cents > 0 ? ` · $${(b.donation_amount_cents / 100).toFixed(2)} donation` : ''}
                             </p>
@@ -347,7 +358,7 @@ export default function AdminBookingsPage() {
                               </p>
                             )}
                           </div>
-                          <div style={{ display: 'flex', gap: 6, flexShrink: 0, flexWrap: 'wrap', justifyContent: 'flex-end', maxWidth: 300 }}>
+                          <div style={{ display: 'flex', gap: 6, flexShrink: 0, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
                             {actions.filter(a => a !== 'cancelled').map(a => {
                               const futureBlock = (a === 'in_session' || a === 'completed') && isFutureSession(b.scheduled_at)
                               return (
@@ -364,11 +375,11 @@ export default function AdminBookingsPage() {
                                   disabled={futureBlock}
                                   title={futureBlock ? 'Session date must be today or in the past' : undefined}
                                   style={{
-                                    padding: '7px 14px', borderRadius: 8, border: 'none',
+                                    padding: '6px 12px', borderRadius: 6, border: 'none',
                                     cursor: futureBlock ? 'not-allowed' : 'pointer',
                                     backgroundColor: STATUS_STYLES[a]?.bg ?? '#F3F4F6',
                                     color: STATUS_STYLES[a]?.text ?? '#374151',
-                                    fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.75rem',
+                                    fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem',
                                     opacity: futureBlock ? 0.4 : 1,
                                   }}>
                                   {ACTION_LABELS[a] ?? a}
@@ -378,17 +389,17 @@ export default function AdminBookingsPage() {
                             {actions.includes('cancelled') && (
                               <button onClick={() => transition(b.id, 'cancelled')}
                                 style={{
-                                  padding: '7px 14px', borderRadius: 8, cursor: 'pointer',
+                                  padding: '6px 12px', borderRadius: 6, cursor: 'pointer',
                                   border: '1px solid #FECACA', backgroundColor: 'white', color: '#DC2626',
-                                  fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.75rem',
+                                  fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem',
                                 }}>
                                 Cancel
                               </button>
                             )}
                             <a href={`/admin/bookings/clients/${b.client_id}`} style={{
-                              padding: '7px 14px', borderRadius: 8, border: '1px solid var(--nhlb-border)',
+                              padding: '6px 12px', borderRadius: 6, border: '1px solid var(--nhlb-border)',
                               backgroundColor: 'white', color: 'var(--nhlb-muted)', textDecoration: 'none',
-                              fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.75rem',
+                              fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem',
                               display: 'inline-flex', alignItems: 'center',
                             }}>View client</a>
                           </div>
@@ -396,45 +407,67 @@ export default function AdminBookingsPage() {
 
                         {/* Pre-call notes */}
                         {preCallVisible && (
-                          <div style={{ marginTop: 14, padding: '12px 16px', backgroundColor: '#FAEEDA', borderRadius: 8 }}>
-                            <label style={{ display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.06em', color: '#633806', marginBottom: 6, textTransform: 'uppercase' }}>
-                              Pre-call notes
-                            </label>
-                            <textarea
-                              value={localPreCallNotes[b.id] ?? b.pre_call_notes ?? ''}
-                              onChange={e => setLocalPreCallNotes(prev => ({ ...prev, [b.id]: e.target.value }))}
-                              rows={2}
-                              placeholder="Notes from the intake phone call..."
-                              style={{ width: '100%', border: '1px solid #E3A008', borderRadius: 6, padding: '8px 12px', fontSize: '0.85rem', fontFamily: 'Lato, sans-serif', color: '#633806', background: 'white', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}
-                            />
-                            <button
-                              onClick={() => saveNotes(b.id, 'pre_call_notes')}
-                              disabled={savingNotes[`${b.id}_pre_call_notes`]}
-                              style={{ marginTop: 6, padding: '5px 14px', borderRadius: 6, border: 'none', cursor: 'pointer', backgroundColor: '#633806', color: 'white', fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.72rem', opacity: savingNotes[`${b.id}_pre_call_notes`] ? 0.6 : 1 }}>
-                              {savingNotes[`${b.id}_pre_call_notes`] ? 'Saving...' : 'Save pre-call notes'}
+                          <div style={{ marginTop: 12 }}>
+                            <button onClick={() => setExpandedPreCall(isPreCallOpen ? null : b.id)} style={{
+                              background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+                              fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                              color: '#633806', letterSpacing: '0.06em',
+                            }}>
+                              {isPreCallOpen ? '▾' : '▸'} PRE-CALL NOTES
+                              {!!b.pre_call_notes && !isPreCallOpen && (
+                                <span style={{ fontWeight: 400, marginLeft: 6, color: '#92400E' }}>(has notes)</span>
+                              )}
                             </button>
+                            {isPreCallOpen && (
+                              <div style={{ marginTop: 6, padding: '12px 16px', backgroundColor: '#FAEEDA', borderRadius: 8 }}>
+                                <textarea
+                                  value={localPreCallNotes[b.id] ?? b.pre_call_notes ?? ''}
+                                  onChange={e => setLocalPreCallNotes(prev => ({ ...prev, [b.id]: e.target.value }))}
+                                  rows={2}
+                                  placeholder="Notes from the intake phone call..."
+                                  style={{ width: '100%', border: '1px solid #E3A008', borderRadius: 6, padding: '8px 12px', fontSize: '0.85rem', fontFamily: 'Lato, sans-serif', color: '#633806', background: 'white', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}
+                                />
+                                <button
+                                  onClick={() => saveNotes(b.id, 'pre_call_notes')}
+                                  disabled={savingNotes[`${b.id}_pre_call_notes`]}
+                                  style={{ marginTop: 6, padding: '5px 14px', borderRadius: 6, border: 'none', cursor: 'pointer', backgroundColor: '#633806', color: 'white', fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.72rem', opacity: savingNotes[`${b.id}_pre_call_notes`] ? 0.6 : 1 }}>
+                                  {savingNotes[`${b.id}_pre_call_notes`] ? 'Saving...' : 'Save pre-call notes'}
+                                </button>
+                              </div>
+                            )}
                           </div>
                         )}
 
                         {/* Session notes */}
                         {sessionNotesVisible && (
-                          <div style={{ marginTop: 10, padding: '12px 16px', backgroundColor: '#E1F5EE', borderRadius: 8 }}>
-                            <label style={{ display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.06em', color: '#085041', marginBottom: 6, textTransform: 'uppercase' }}>
-                              Session notes
-                            </label>
-                            <textarea
-                              value={localSessionNotes[b.id] ?? b.session_notes ?? ''}
-                              onChange={e => setLocalSessionNotes(prev => ({ ...prev, [b.id]: e.target.value }))}
-                              rows={2}
-                              placeholder="Summary of the session, progress, follow-up..."
-                              style={{ width: '100%', border: '1px solid #34D399', borderRadius: 6, padding: '8px 12px', fontSize: '0.85rem', fontFamily: 'Lato, sans-serif', color: '#085041', background: 'white', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}
-                            />
-                            <button
-                              onClick={() => saveNotes(b.id, 'session_notes')}
-                              disabled={savingNotes[`${b.id}_session_notes`]}
-                              style={{ marginTop: 6, padding: '5px 14px', borderRadius: 6, border: 'none', cursor: 'pointer', backgroundColor: '#085041', color: 'white', fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.72rem', opacity: savingNotes[`${b.id}_session_notes`] ? 0.6 : 1 }}>
-                              {savingNotes[`${b.id}_session_notes`] ? 'Saving...' : 'Save session notes'}
+                          <div style={{ marginTop: 8 }}>
+                            <button onClick={() => setExpandedSessionNotes(isSessionNotesOpen ? null : b.id)} style={{
+                              background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+                              fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                              color: '#085041', letterSpacing: '0.06em',
+                            }}>
+                              {isSessionNotesOpen ? '▾' : '▸'} SESSION NOTES
+                              {!!b.session_notes && !isSessionNotesOpen && (
+                                <span style={{ fontWeight: 400, marginLeft: 6, color: '#065F46' }}>(has notes)</span>
+                              )}
                             </button>
+                            {isSessionNotesOpen && (
+                              <div style={{ marginTop: 6, padding: '12px 16px', backgroundColor: '#E1F5EE', borderRadius: 8 }}>
+                                <textarea
+                                  value={localSessionNotes[b.id] ?? b.session_notes ?? ''}
+                                  onChange={e => setLocalSessionNotes(prev => ({ ...prev, [b.id]: e.target.value }))}
+                                  rows={2}
+                                  placeholder="Summary of the session, progress, follow-up..."
+                                  style={{ width: '100%', border: '1px solid #34D399', borderRadius: 6, padding: '8px 12px', fontSize: '0.85rem', fontFamily: 'Lato, sans-serif', color: '#085041', background: 'white', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}
+                                />
+                                <button
+                                  onClick={() => saveNotes(b.id, 'session_notes')}
+                                  disabled={savingNotes[`${b.id}_session_notes`]}
+                                  style={{ marginTop: 6, padding: '5px 14px', borderRadius: 6, border: 'none', cursor: 'pointer', backgroundColor: '#085041', color: 'white', fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.72rem', opacity: savingNotes[`${b.id}_session_notes`] ? 0.6 : 1 }}>
+                                  {savingNotes[`${b.id}_session_notes`] ? 'Saving...' : 'Save session notes'}
+                                </button>
+                              </div>
+                            )}
                           </div>
                         )}
                       </div>

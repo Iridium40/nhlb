@@ -473,8 +473,8 @@ export default function CounselorDashboard() {
                         <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: 0 }}>
                           {b.type === 'VIRTUAL' ? '💻 Virtual' : '🏠 In Person'}
                           {' · '}{b.client?.service_type}
-                          {b.client?.email ? ` · ${b.client.email}` : ''}
-                          {b.client?.phone ? ` · ${b.client.phone}` : ''}
+                          {b.client?.email ? <> · <a href={`mailto:${b.client.email}`} style={{ color: 'var(--nhlb-red)', textDecoration: 'none' }}>{b.client.email}</a></> : ''}
+                          {b.client?.phone ? <> · <a href={`tel:${b.client.phone}`} style={{ color: 'var(--nhlb-red)', textDecoration: 'none' }}>{b.client.phone}</a></> : ''}
                         </p>
                         {b.type === 'VIRTUAL' && counselor?.zoom_link && (
                           <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: '#1D4ED8', margin: '4px 0 0' }}>
