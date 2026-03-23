@@ -24,78 +24,6 @@ const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
 
 const HOURS = Array.from({ length: 10 }, (_, i) => i + 8)
 
-function SessionNoteEditor({ booking, onSaved }: {
-  booking: EnrichedBooking
-  onSaved: () => void
-}) {
-  const existing = booking.session_note
-  const [content, setContent] = useState(existing?.content ?? '')
-  const [privateNotes, setPrivateNotes] = useState(existing?.private_notes ?? '')
-  const [saving, setSaving] = useState(false)
-  const [saved, setSaved] = useState(false)
-
-  const save = async () => {
-    setSaving(true)
-    setSaved(false)
-    await fetch('/api/counselor/notes', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ booking_id: booking.id, content, private_notes: privateNotes }),
-    })
-    setSaving(false)
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2000)
-    onSaved()
-  }
-
-  return (
-    <div style={{
-      marginTop: 12, padding: '16px 18px',
-      backgroundColor: 'var(--nhlb-cream-dark)', border: '1px solid var(--nhlb-blush-light)',
-      borderRadius: 10,
-    }}>
-      <p style={{ fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem', color: 'var(--nhlb-muted)', letterSpacing: '0.06em', margin: '0 0 10px' }}>
-        SESSION NOTES {existing ? '(editing)' : '(new)'}
-      </p>
-      <div style={{ marginBottom: 10 }}>
-        <label style={{ display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, color: 'var(--nhlb-muted)', letterSpacing: '0.06em', marginBottom: 4 }}>
-          Notes
-        </label>
-        <textarea value={content} onChange={e => setContent(e.target.value)}
-          style={{
-            width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-            padding: '10px 14px', fontSize: '0.85rem', fontFamily: 'Lato, sans-serif',
-            color: 'var(--nhlb-text)', background: 'white', outline: 'none', resize: 'none',
-          }} rows={3}
-          placeholder="Session summary, goals discussed, homework assigned..." />
-      </div>
-      <div style={{ marginBottom: 10 }}>
-        <label style={{ display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, color: 'var(--nhlb-muted)', letterSpacing: '0.06em', marginBottom: 4 }}>
-          Private Notes (only you see these)
-        </label>
-        <textarea value={privateNotes} onChange={e => setPrivateNotes(e.target.value)}
-          style={{
-            width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-            padding: '10px 14px', fontSize: '0.85rem', fontFamily: 'Lato, sans-serif',
-            color: 'var(--nhlb-text)', background: 'white', outline: 'none', resize: 'none',
-          }} rows={2}
-          placeholder="Clinical observations, treatment plan notes..." />
-      </div>
-      <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-        <button onClick={save} disabled={saving} style={{
-          padding: '8px 18px', borderRadius: 8, border: 'none', cursor: 'pointer',
-          backgroundColor: 'var(--nhlb-red)', color: 'white',
-          fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
-          opacity: saving ? 0.6 : 1,
-        }}>
-          {saving ? 'Saving...' : existing ? 'Update Notes' : 'Save Notes'}
-        </button>
-        {saved && <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#065F46' }}>Saved</span>}
-      </div>
-    </div>
-  )
-}
-
 function PreviousNotes({ booking }: { booking: EnrichedBooking }) {
   const [expanded, setExpanded] = useState(false)
   if (!booking.previous_note?.content) return null
@@ -146,10 +74,15 @@ export default function CounselorDashboard() {
   const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }))
   const [view, setView] = useState<'week' | 'list'>('week')
   const [listFilterDay, setListFilterDay] = useState<Date | null>(null)
-  const [expandedNotes, setExpandedNotes] = useState<string | null>(null)
   const [expandedPreCall, setExpandedPreCall] = useState<string | null>(null)
+  const [expandedSessionNotes, setExpandedSessionNotes] = useState<string | null>(null)
+  const [expandedPrivateNotes, setExpandedPrivateNotes] = useState<string | null>(null)
   const [localPreCallNotes, setLocalPreCallNotes] = useState<Record<string, string>>({})
+  const [localSessionNoteContent, setLocalSessionNoteContent] = useState<Record<string, string>>({})
+  const [localPrivateNotes, setLocalPrivateNotes] = useState<Record<string, string>>({})
   const [savingPreCall, setSavingPreCall] = useState<Record<string, boolean>>({})
+  const [savingSessionNote, setSavingSessionNote] = useState<Record<string, boolean>>({})
+  const [savingPrivateNote, setSavingPrivateNote] = useState<Record<string, boolean>>({})
   const [completeModal, setCompleteModal] = useState<{ bookingId: string; name: string } | null>(null)
   const [completeNotes, setCompleteNotes] = useState('')
 
@@ -191,6 +124,36 @@ export default function CounselorDashboard() {
       body: JSON.stringify({ pre_call_notes: localPreCallNotes[bookingId] ?? '' }),
     })
     setSavingPreCall(prev => ({ ...prev, [bookingId]: false }))
+    load()
+  }
+
+  const saveSessionNote = async (bookingId: string, booking: EnrichedBooking) => {
+    setSavingSessionNote(prev => ({ ...prev, [bookingId]: true }))
+    await fetch('/api/counselor/notes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        booking_id: bookingId,
+        content: localSessionNoteContent[bookingId] ?? booking.session_note?.content ?? '',
+        private_notes: localPrivateNotes[bookingId] ?? booking.session_note?.private_notes ?? '',
+      }),
+    })
+    setSavingSessionNote(prev => ({ ...prev, [bookingId]: false }))
+    load()
+  }
+
+  const savePrivateNote = async (bookingId: string, booking: EnrichedBooking) => {
+    setSavingPrivateNote(prev => ({ ...prev, [bookingId]: true }))
+    await fetch('/api/counselor/notes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        booking_id: bookingId,
+        content: localSessionNoteContent[bookingId] ?? booking.session_note?.content ?? '',
+        private_notes: localPrivateNotes[bookingId] ?? booking.session_note?.private_notes ?? '',
+      }),
+    })
+    setSavingPrivateNote(prev => ({ ...prev, [bookingId]: false }))
     load()
   }
 
@@ -434,9 +397,7 @@ export default function CounselorDashboard() {
               </p>
             ) : (
               listBookings.map(b => {
-                const isNotesOpen = expandedNotes === b.id
                 const isPreCallOpen = expandedPreCall === b.id
-                const hasNotes = !!b.session_note?.content
                 const preCallVisible = ['call_pending', 'call_complete', 'confirmed', 'in_session', 'completed'].includes(b.status)
                 return (
                   <div key={b.id} style={{
@@ -458,14 +419,6 @@ export default function CounselorDashboard() {
                           }}>
                             {b.status.replace('_', ' ')}
                           </span>
-                          {hasNotes && (
-                            <span style={{
-                              padding: '2px 8px', borderRadius: 20, fontSize: '0.6rem', fontWeight: 700,
-                              fontFamily: 'Lato, sans-serif', backgroundColor: '#FEF3C7', color: '#92400E',
-                            }}>
-                              Has Notes
-                            </span>
-                          )}
                         </div>
                         <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '1rem', fontWeight: 700, color: 'var(--nhlb-text)', margin: '0 0 2px' }}>
                           {b.client?.first_name} {b.client?.last_name}
@@ -487,15 +440,6 @@ export default function CounselorDashboard() {
                         )}
                       </div>
                       <div style={{ display: 'flex', gap: 6, flexShrink: 0, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-                        <button onClick={() => setExpandedNotes(isNotesOpen ? null : b.id)} style={{
-                          padding: '6px 12px', borderRadius: 6,
-                          border: `1px solid ${hasNotes ? '#FEF3C7' : 'var(--nhlb-border)'}`,
-                          backgroundColor: hasNotes ? '#FEF3C7' : 'white',
-                          color: hasNotes ? '#92400E' : 'var(--nhlb-muted)',
-                          fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem', cursor: 'pointer',
-                        }}>
-                          {isNotesOpen ? 'Close Notes' : hasNotes ? 'Edit Notes' : 'Add Notes'}
-                        </button>
                         {b.status === 'confirmed' && (
                           <button
                             onClick={() => !isFutureSession(b.scheduled_at) && updateBooking(b.id, 'in_session')}
@@ -536,6 +480,12 @@ export default function CounselorDashboard() {
                             fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem', cursor: 'pointer',
                           }}>Cancel</button>
                         )}
+                        <a href={`/counselor/clients/${b.client_id}`} style={{
+                          padding: '6px 12px', borderRadius: 6, border: '1px solid var(--nhlb-border)',
+                          backgroundColor: 'white', color: 'var(--nhlb-muted)', textDecoration: 'none',
+                          fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem',
+                          display: 'inline-flex', alignItems: 'center',
+                        }}>View client</a>
                       </div>
                     </div>
 
@@ -575,25 +525,70 @@ export default function CounselorDashboard() {
                     {/* Previous session notes for upcoming sessions */}
                     {['confirmed', 'in_session'].includes(b.status) && <PreviousNotes booking={b} />}
 
-                    {/* Inline note preview when collapsed */}
-                    {!isNotesOpen && hasNotes && (
-                      <div style={{
-                        marginTop: 10, padding: '10px 14px',
-                        backgroundColor: 'var(--nhlb-cream-dark)', borderRadius: 8,
+                    {/* Session notes accordion */}
+                    <div style={{ marginTop: 8 }}>
+                      <button onClick={() => setExpandedSessionNotes(expandedSessionNotes === b.id ? null : b.id)} style={{
+                        background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+                        fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                        color: '#085041', letterSpacing: '0.06em',
                       }}>
-                        <p style={{
-                          fontFamily: 'Lato, sans-serif', fontSize: '0.8rem',
-                          color: 'var(--nhlb-text)', margin: 0, lineHeight: 1.5,
-                        }}>
-                          {(b.session_note?.content ?? '').length > 150
-                            ? b.session_note!.content.slice(0, 150) + '...'
-                            : b.session_note?.content}
-                        </p>
-                      </div>
-                    )}
+                        {expandedSessionNotes === b.id ? '▾' : '▸'} SESSION NOTES
+                        {!!b.session_note?.content && expandedSessionNotes !== b.id && (
+                          <span style={{ fontWeight: 400, marginLeft: 6, color: '#065F46' }}>(has notes)</span>
+                        )}
+                      </button>
+                      {expandedSessionNotes === b.id && (
+                        <div style={{ marginTop: 6, padding: '12px 16px', backgroundColor: '#E1F5EE', borderRadius: 8 }}>
+                          <textarea
+                            value={localSessionNoteContent[b.id] ?? (b.session_note?.content ?? '')}
+                            onChange={e => setLocalSessionNoteContent(prev => ({ ...prev, [b.id]: e.target.value }))}
+                            rows={3}
+                            placeholder="Session summary, goals discussed, homework assigned..."
+                            style={{ width: '100%', border: '1px solid #34D399', borderRadius: 6, padding: '8px 12px', fontSize: '0.85rem', fontFamily: 'Lato, sans-serif', color: '#085041', background: 'white', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}
+                          />
+                          <button
+                            onClick={() => saveSessionNote(b.id, b)}
+                            disabled={savingSessionNote[b.id]}
+                            style={{ marginTop: 6, padding: '5px 14px', borderRadius: 6, border: 'none', cursor: 'pointer', backgroundColor: '#085041', color: 'white', fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.72rem', opacity: savingSessionNote[b.id] ? 0.6 : 1 }}>
+                            {savingSessionNote[b.id] ? 'Saving...' : 'Save session notes'}
+                          </button>
+                        </div>
+                      )}
+                    </div>
 
-                    {/* Notes editor when expanded */}
-                    {isNotesOpen && <SessionNoteEditor booking={b} onSaved={load} />}
+                    {/* Private notes accordion */}
+                    <div style={{ marginTop: 8 }}>
+                      <button onClick={() => setExpandedPrivateNotes(expandedPrivateNotes === b.id ? null : b.id)} style={{
+                        background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+                        fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                        color: '#4338CA', letterSpacing: '0.06em',
+                      }}>
+                        {expandedPrivateNotes === b.id ? '▾' : '▸'} PRIVATE NOTES
+                        {!!b.session_note?.private_notes && expandedPrivateNotes !== b.id && (
+                          <span style={{ fontWeight: 400, marginLeft: 6, color: '#6366F1' }}>(has notes)</span>
+                        )}
+                      </button>
+                      {expandedPrivateNotes === b.id && (
+                        <div style={{ marginTop: 6, padding: '12px 16px', backgroundColor: '#EEEDFE', borderRadius: 8 }}>
+                          <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.65rem', color: '#6366F1', margin: '0 0 6px', fontStyle: 'italic' }}>
+                            Only you can see these notes
+                          </p>
+                          <textarea
+                            value={localPrivateNotes[b.id] ?? (b.session_note?.private_notes ?? '')}
+                            onChange={e => setLocalPrivateNotes(prev => ({ ...prev, [b.id]: e.target.value }))}
+                            rows={2}
+                            placeholder="Clinical observations, treatment plan notes..."
+                            style={{ width: '100%', border: '1px solid #A5B4FC', borderRadius: 6, padding: '8px 12px', fontSize: '0.85rem', fontFamily: 'Lato, sans-serif', color: '#3730A3', background: 'white', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}
+                          />
+                          <button
+                            onClick={() => savePrivateNote(b.id, b)}
+                            disabled={savingPrivateNote[b.id]}
+                            style={{ marginTop: 6, padding: '5px 14px', borderRadius: 6, border: 'none', cursor: 'pointer', backgroundColor: '#4338CA', color: 'white', fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.72rem', opacity: savingPrivateNote[b.id] ? 0.6 : 1 }}>
+                            {savingPrivateNote[b.id] ? 'Saving...' : 'Save private notes'}
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )
               })

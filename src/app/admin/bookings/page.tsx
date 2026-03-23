@@ -128,8 +128,9 @@ export default function AdminBookingsPage() {
 
   const visibleBookings = bookings.filter(b => {
     if (!matchesFilters(b)) return false
-    if (listFilterDay) return isSameDay(new Date(b.scheduled_at), listFilterDay)
-    return true
+    const d = new Date(b.scheduled_at)
+    if (listFilterDay) return isSameDay(d, listFilterDay)
+    return d >= weekDays[0] && d <= addDays(weekDays[6], 1)
   })
 
   const callPendingCount = bookings.filter(b => b.status === 'call_pending').length
