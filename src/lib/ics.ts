@@ -43,7 +43,7 @@ export function generateICS({
 
   const description = perspective === 'client'
     ? `Your ${isVirtual ? 'virtual' : 'in-person'} counseling session with ${counselor.name} (${counselor.title}).${zoomDetails ? '\\n\\n' + zoomDetails : ''}\\n\\nNo Heart Left Behind\\n985-264-8808\\nreconnectus@yahoo.com`
-    : `${isVirtual ? 'Virtual' : 'In-person'} session with ${client.first_name} ${client.last_name}.\\nEmail: ${client.email}${client.phone ? '\\nPhone: ' + client.phone : ''}\\nService: ${client.service_type}${client.brief_reason ? '\\nReason: ' + client.brief_reason : ''}${zoomDetails ? '\\n\\n' + zoomDetails : ''}`
+    : `${isVirtual ? 'Virtual' : 'In-person'} session with ${client.first_name} ${client.last_name}.\\nEmail: ${client.email}${client.phone ? '\\nPhone: ' + client.phone : ''}${zoomDetails ? '\\n\\n' + zoomDetails : ''}`
 
   const readableDate = format(start, 'EEEE, MMMM d, yyyy')
   const readableTime = format(start, 'h:mm a')

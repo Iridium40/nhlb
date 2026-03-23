@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseAdminClient } from '@/lib/supabase'
-import { sendCounselorAssignmentEmail } from '@/lib/resend'
+import { sendCounselorAssignmentEmail } from '@/lib/email'
 import type { Booking, Counselor, Client } from '@/types'
 
 export async function GET(

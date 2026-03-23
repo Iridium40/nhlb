@@ -23,7 +23,6 @@ export function CounselorNotificationEmail({ booking, counselor, client }: Props
             <Text style={{ margin: '4px 0' }}><strong>Client:</strong> {client.first_name} {client.last_name}</Text>
             <Text style={{ margin: '4px 0' }}><strong>Email:</strong> {client.email}</Text>
             {client.phone && <Text style={{ margin: '4px 0' }}><strong>Phone:</strong> {client.phone}</Text>}
-            <Text style={{ margin: '4px 0' }}><strong>Service:</strong> {client.service_type}</Text>
             <Text style={{ margin: '4px 0' }}>
               <strong>Format:</strong> {booking.type === 'VIRTUAL' ? '💻 Virtual' : '📍 In Person'}
             </Text>
@@ -31,15 +30,6 @@ export function CounselorNotificationEmail({ booking, counselor, client }: Props
             <Text style={{ margin: '4px 0' }}><strong>Date:</strong> {date} at {time}</Text>
             {booking.donation_amount_cents > 0 && (
               <Text style={{ margin: '4px 0' }}><strong>Donation:</strong> ${(booking.donation_amount_cents / 100).toFixed(2)}</Text>
-            )}
-            {client.brief_reason && (
-              <>
-                <Hr style={{ margin: '16px 0' }} />
-                <Text style={{ margin: '4px 0' }}><strong>Reason for seeking counseling:</strong></Text>
-                <Text style={{ color: '#444', background: '#f9f9f9', padding: '10px', borderRadius: 4 }}>
-                  {client.brief_reason}
-                </Text>
-              </>
             )}
           </Section>
 

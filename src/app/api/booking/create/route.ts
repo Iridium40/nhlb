@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createSupabaseAdminClient } from '@/lib/supabase'
-import { sendBookingConfirmation, sendCounselorNotification, sendHipaaIntakeEmail } from '@/lib/resend'
+import { sendBookingConfirmation, sendCounselorNotification, sendHipaaIntakeEmail } from '@/lib/email'
 
 const schema = z.object({
   first_name: z.string().min(1),
