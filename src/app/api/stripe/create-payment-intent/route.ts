@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
     })
   } catch (err) {
     if (err instanceof z.ZodError) {
-      return NextResponse.json({ error: err.errors }, { status: 400 })
+      return NextResponse.json({ error: err.errors.map(e => e.message).join(', ') }, { status: 400 })
     }
     console.error('[/api/stripe/create-payment-intent]', err)
     return NextResponse.json({ error: 'Payment setup failed' }, { status: 500 })

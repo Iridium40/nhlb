@@ -101,7 +101,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ donation }, { status: 201 })
   } catch (err) {
     if (err instanceof z.ZodError) {
-      return NextResponse.json({ error: err.errors }, { status: 400 })
+      return NextResponse.json({ error: err.errors.map(e => e.message).join(', ') }, { status: 400 })
     }
     return NextResponse.json({ error: 'Something went wrong' }, { status: 500 })
   }

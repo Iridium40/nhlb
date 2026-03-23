@@ -125,7 +125,7 @@ export default function NewClientBookingPage() {
       })
       const json = await res.json()
       if (!res.ok) {
-        setError(json.error ?? 'Could not create session')
+        setError(typeof json.error === 'string' ? json.error : 'Could not create session')
         setSubmitting(false)
         return
       }

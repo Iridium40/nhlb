@@ -150,7 +150,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ bookingId: booking.id, clientId })
   } catch (err) {
     if (err instanceof z.ZodError) {
-      return NextResponse.json({ error: err.errors }, { status: 400 })
+      const msg = err.errors.map(e => e.message).join(', ')
+      return NextResponse.json({ error: msg }, { status: 400 })
     }
     console.error('[/api/booking/create]', err)
     return NextResponse.json({ error: 'Something went wrong' }, { status: 500 })
