@@ -140,16 +140,26 @@ export default function MySessionsPage() {
 
       <header style={{
         backgroundColor: 'white', borderBottom: '1px solid var(--nhlb-blush-light)',
-        padding: '0 40px', display: 'flex', alignItems: 'center', height: 64,
+        padding: '0 40px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 64,
       }}>
-        <Link href="/book" style={{
-          fontFamily: 'Lato, sans-serif', fontSize: '0.85rem',
-          color: 'var(--nhlb-muted)', textDecoration: 'none',
-        }}>&larr; Back</Link>
-        <h1 style={{
-          fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem',
-          fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 0 20px',
-        }}>My Sessions</h1>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Link href="/book" style={{
+            fontFamily: 'Lato, sans-serif', fontSize: '0.85rem',
+            color: 'var(--nhlb-muted)', textDecoration: 'none',
+          }}>&larr; Back</Link>
+          <h1 style={{
+            fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem',
+            fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 0 20px',
+          }}>My Sessions</h1>
+        </div>
+        <Link href="/book/donation-report" style={{
+          padding: '6px 14px', borderRadius: 6, border: '1px solid var(--nhlb-border)',
+          backgroundColor: 'white', color: 'var(--nhlb-muted)', textDecoration: 'none',
+          fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.75rem',
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+        }}>
+          Donation Report
+        </Link>
       </header>
 
       {toast && (
@@ -307,6 +317,7 @@ function SessionCard({
             <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', margin: 0 }}>
               {format(scheduled, 'h:mm a')} &middot; {b.type === 'VIRTUAL' ? '💻 Virtual' : '🏠 In-person'}
               {b.counselor && <> &middot; {b.counselor.name}</>}
+              {b.donation_amount_cents > 0 && <> &middot; ${(b.donation_amount_cents / 100).toFixed(2)} donation</>}
             </p>
           </div>
         </div>
