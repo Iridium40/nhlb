@@ -53,9 +53,11 @@ export async function GET(req: NextRequest) {
   const counselorId = searchParams.get('counselorId')
   const isNewClient = searchParams.get('newClient') === 'true'
 
+  const daysAhead = Math.min(parseInt(searchParams.get('days') ?? '14'), 60)
+
   const now = new Date()
   const minBookingTime = isNewClient ? addHours(now, 24) : addHours(now, 1)
-  const rangeEnd = addDays(now, 14)
+  const rangeEnd = addDays(now, daysAhead)
 
   let counselorQuery = supabase
     .from('counselors')
@@ -107,7 +109,7 @@ export async function GET(req: NextRequest) {
   const slots: { start: string; counselorId: string; counselorName: string; counselorPhotoUrl: string | null }[] = []
   const counselorMap = Object.fromEntries(counselors.map(c => [c.id, { name: c.name, photo_url: c.photo_url }]))
 
-  for (let d = 0; d <= 14; d++) {
+  for (let d = 0; d <= daysAhead; d++) {
     const dayUTC = addDays(now, d)
     const { dateStr, dow } = toCentralDate(dayUTC)
 

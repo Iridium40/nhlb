@@ -81,7 +81,7 @@ export default function MySessionsPage() {
 
   const loadRescheduleSlots = useCallback(async (counselorId: string) => {
     setLoadingSlots(true)
-    const res = await fetch(`/api/booking/availability?newClient=false&counselorId=${counselorId}`)
+    const res = await fetch(`/api/booking/availability?newClient=false&counselorId=${counselorId}&days=30`)
     const json = await res.json()
     setSlots(json.slots ?? [])
     setLoadingSlots(false)
