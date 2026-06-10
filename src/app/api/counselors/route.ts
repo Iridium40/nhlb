@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseAdminClient } from '@/lib/supabase'
 import { requireAdmin, isErrorResponse } from '@/lib/auth-guard'
+import { generateSlug } from '@/lib/slug'
 
 export async function GET() {
   const supabase = createSupabaseAdminClient()
@@ -20,6 +21,8 @@ export async function POST(req: NextRequest) {
   const body = await req.json()
   const supabase = createSupabaseAdminClient()
 
+  const slug = body.slug || generateSlug(body.name)
+
   const { data, error } = await supabase
     .from('counselors')
     .insert({
@@ -33,6 +36,7 @@ export async function POST(req: NextRequest) {
       zoom_passcode: body.zoom_passcode ?? null,
       specialties: body.specialties ?? [],
       is_active: body.is_active ?? true,
+      slug,
     })
     .select()
     .single()

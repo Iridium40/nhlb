@@ -42,6 +42,7 @@ export interface Counselor {
   specialties: string[]
   is_active: boolean
   supabase_user_id: string | null
+  slug: string | null
   created_at: string
 }
 

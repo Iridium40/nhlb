@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { format } from 'date-fns'
 import { loadStripe } from '@stripe/stripe-js'
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
@@ -35,6 +35,9 @@ const S = {
 
 export default function NewClientBookingPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const preselectedCounselorId = searchParams.get('counselorId')
+
   const [step, setStep] = useState<Step>('info')
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
@@ -55,7 +58,7 @@ export default function NewClientBookingPage() {
   const [slots, setSlots] = useState<TimeSlot[]>([])
   const [loadingSlots, setLoadingSlots] = useState(false)
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null)
-  const [selectedCounselorId, setSelectedCounselorId] = useState<string | null>(null)
+  const [selectedCounselorId, setSelectedCounselorId] = useState<string | null>(preselectedCounselorId)
 
   // Step 3: payment
   const [donationAmount, setDonationAmount] = useState('50')
@@ -66,11 +69,12 @@ export default function NewClientBookingPage() {
 
   const loadSlots = useCallback(async () => {
     setLoadingSlots(true)
-    const res = await fetch('/api/booking/availability?newClient=true')
+    const counselorParam = preselectedCounselorId ? `&counselorId=${preselectedCounselorId}` : ''
+    const res = await fetch(`/api/booking/availability?newClient=true${counselorParam}`)
     const json = await res.json()
     setSlots(json.slots ?? [])
     setLoadingSlots(false)
-  }, [])
+  }, [preselectedCounselorId])
 
   useEffect(() => {
     if (step === 'schedule') loadSlots()

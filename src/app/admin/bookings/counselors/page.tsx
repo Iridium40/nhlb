@@ -1,8 +1,11 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import type { Counselor, CounselorAvailability } from '@/types'
 import AdminNav from '@/components/admin/AdminNav'
+import { generateSlug } from '@/lib/slug'
+
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://nhlb.vercel.app'
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 const HOURS = Array.from({ length: 12 }, (_, i) => {
@@ -137,6 +140,8 @@ function CounselorForm({ counselor, onSaved, onCancel }: {
 }) {
   const [name, setName] = useState(counselor?.name ?? '')
   const [title, setTitle] = useState(counselor?.title ?? '')
+  const [slug, setSlug] = useState(counselor?.slug ?? '')
+  const slugManuallyEdited = useRef(!!counselor?.slug)
   const [bio, setBio] = useState(counselor?.bio ?? '')
   const [email, setEmail] = useState(counselor?.email ?? '')
   const [phone, setPhone] = useState(counselor?.phone ?? '')
@@ -147,10 +152,23 @@ function CounselorForm({ counselor, onSaved, onCancel }: {
   const [isActive, setIsActive] = useState(counselor?.is_active ?? true)
   const [saving, setSaving] = useState(false)
 
+  const handleNameChange = (val: string) => {
+    setName(val)
+    if (!slugManuallyEdited.current) {
+      setSlug(generateSlug(val))
+    }
+  }
+
+  const handleSlugChange = (val: string) => {
+    slugManuallyEdited.current = true
+    setSlug(val)
+  }
+
   const handleSave = async () => {
     setSaving(true)
     const payload = {
       name, title,
+      slug: slug || generateSlug(name),
       bio: bio || null,
       email: email || null,
       phone: phone || null,
@@ -176,10 +194,22 @@ function CounselorForm({ counselor, onSaved, onCancel }: {
       borderRadius: 12, padding: '24px', marginBottom: 16,
     }}>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
-        <div><label style={S.label}>Name *</label><input value={name} onChange={e => setName(e.target.value)} style={S.input} /></div>
+        <div><label style={S.label}>Name *</label><input value={name} onChange={e => handleNameChange(e.target.value)} style={S.input} /></div>
         <div><label style={S.label}>Title *</label><input value={title} onChange={e => setTitle(e.target.value)} style={S.input} /></div>
         <div><label style={S.label}>Email</label><input value={email} onChange={e => setEmail(e.target.value)} style={S.input} type="email" /></div>
         <div><label style={S.label}>Phone</label><input value={phone} onChange={e => setPhone(e.target.value)} style={S.input} /></div>
+      </div>
+      <div style={{ marginBottom: 16 }}>
+        <label style={S.label}>Profile URL Slug</label>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)' }}>/counselors/</span>
+          <input value={slug} onChange={e => handleSlugChange(e.target.value)} style={{ ...S.input, flex: 1 }} placeholder="auto-generated-from-name" />
+        </div>
+        {slug && (
+          <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)', marginTop: 4 }}>
+            Public profile: {BASE_URL}/counselors/{slug}
+          </p>
+        )}
       </div>
       <div style={{ marginBottom: 16 }}><label style={S.label}>Zoom Link</label><input value={zoomLink} onChange={e => setZoomLink(e.target.value)} style={S.input} placeholder="https://zoom.us/j/..." /></div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
@@ -424,6 +454,21 @@ function CounselorCard({ counselor, onEdit, onRefresh }: {
         </div>
         </div>
         <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+          {counselor.slug && (
+            <a
+              href={`/counselors/${counselor.slug}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                ...S.btn('#1D4ED8', 'white'),
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+              }}
+            >
+              View Profile
+            </a>
+          )}
           {!hasLogin && (
             <button onClick={() => setShowLoginForm(!showLoginForm)} style={S.btn('#065F46', 'white')}>
               Create Login
