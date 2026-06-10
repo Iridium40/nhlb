@@ -200,7 +200,7 @@ function CounselorForm({ counselor, onSaved, onCancel }: {
         <div><label style={S.label}>Phone</label><input value={phone} onChange={e => setPhone(e.target.value)} style={S.input} /></div>
       </div>
       <div style={{ marginBottom: 16 }}>
-        <label style={S.label}>Profile URL Slug</label>
+        <label style={S.label}>Profile URL Extension</label>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)' }}>/counselors/</span>
           <input value={slug} onChange={e => handleSlugChange(e.target.value)} style={{ ...S.input, flex: 1 }} placeholder="auto-generated-from-name" />
