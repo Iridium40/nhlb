@@ -231,7 +231,6 @@ export default function EventSlugClient({ slug }: { slug: string }) {
   }
 
   /* ─── Registration state ─────────────────────── */
-  const now = new Date()
   const regNotOpenYet = event.registration_opens_at && isFuture(new Date(event.registration_opens_at))
   const regClosed = event.registration_closes_at && isPast(new Date(event.registration_closes_at))
   const atCapacity = event.max_capacity != null && (event.registration_count ?? 0) >= event.max_capacity

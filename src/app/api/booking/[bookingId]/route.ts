@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createSupabaseAdminClient, createSupabaseServerClient } from '@/lib/supabase'
+import { createSupabaseAdminClient } from '@/lib/supabase'
 import { differenceInHours } from 'date-fns'
 import { STATUS_TRANSITIONS } from '@/types'
 import { decryptPHI, encryptIfPresent } from '@/lib/phi-crypto'

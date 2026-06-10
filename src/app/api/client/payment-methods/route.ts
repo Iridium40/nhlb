@@ -35,7 +35,7 @@ export async function GET() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const { admin, client } = await getClientWithStripe(user.id)
+  const { client } = await getClientWithStripe(user.id)
   if (!client) return NextResponse.json({ error: 'Client not found' }, { status: 404 })
 
   if (!client.stripe_customer_id) {

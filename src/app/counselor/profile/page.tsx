@@ -14,7 +14,7 @@ const SPECIALTY_OPTIONS = [
 
 export default function CounselorProfilePage() {
   const router = useRouter()
-  const [counselor, setCounselor] = useState<Counselor | null>(null)
+  const [, setCounselor] = useState<Counselor | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)

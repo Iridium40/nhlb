@@ -91,8 +91,6 @@ function ConfirmedContent() {
     </div>
   )
 
-  const eventUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/events/${slug}`
-
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', flexDirection: 'column' }}>
       <div style={{

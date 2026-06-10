@@ -111,12 +111,12 @@ async function exportSettlementReport(
     fundSummary[f].count++
   }
 
-  const headers = ['Fund', 'Total Revenue', 'Transaction Count']
-  const rows = Object.entries(fundSummary).map(([fund, s]) => [
+  const rows: string[][] = [['Fund', 'Total Revenue', 'Transaction Count']]
+  rows.push(...Object.entries(fundSummary).map(([fund, s]) => [
     fund,
     `$${(s.total / 100).toFixed(2)}`,
     s.count.toString(),
-  ])
+  ]))
   const grandTotal = allDonations.reduce((s, d) => s + d.amount_cents, 0)
   rows.push(['GRAND TOTAL', `$${(grandTotal / 100).toFixed(2)}`, allDonations.length.toString()])
 

@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
 import { format } from 'date-fns'
 import AdminNav from '@/components/admin/AdminNav'
 import type { Client, Counselor, TimeSlot } from '@/types'
@@ -25,7 +24,6 @@ const S = {
 }
 
 export default function AdminSchedulePage() {
-  const router = useRouter()
   const [clients, setClients] = useState<Client[]>([])
   const [counselors, setCounselors] = useState<Counselor[]>([])
   const [loading, setLoading] = useState(true)
@@ -127,7 +125,6 @@ export default function AdminSchedulePage() {
   })
 
   const selectedClient = clients.find(c => c.id === selectedClientId)
-  const selectedCounselor = counselors.find(c => c.id === selectedCounselorId)
 
   const groupedSlots = slots.reduce<Record<string, TimeSlot[]>>((acc, slot) => {
     const key = format(new Date(slot.start), 'EEE, MMM d')

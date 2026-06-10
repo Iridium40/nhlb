@@ -11,24 +11,3 @@ export function getStripe() {
   }
   return _stripe
 }
-
-export async function createLoveOfferingIntent({
-  amountCents,
-  bookingId,
-  clientEmail,
-  clientName,
-}: {
-  amountCents: number
-  bookingId: string
-  clientEmail: string
-  clientName: string
-}) {
-  return getStripe().paymentIntents.create({
-    amount: amountCents,
-    currency: 'usd',
-    automatic_payment_methods: { enabled: true },
-    metadata: { bookingId, clientEmail, clientName },
-    description: 'Love offering — No Heart Left Behind counseling session',
-    receipt_email: clientEmail,
-  })
-}
