@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { format } from 'date-fns'
 import { loadStripe } from '@stripe/stripe-js'
@@ -34,6 +34,18 @@ const S = {
 }
 
 export default function NewClientBookingPage() {
+  return (
+    <Suspense fallback={
+      <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
+      </div>
+    }>
+      <NewClientBookingContent />
+    </Suspense>
+  )
+}
+
+function NewClientBookingContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const preselectedCounselorId = searchParams.get('counselorId')
