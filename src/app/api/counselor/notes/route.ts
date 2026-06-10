@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseServerClient, createSupabaseAdminClient } from '@/lib/supabase'
+import { encryptIfPresent, decryptPHI } from '@/lib/phi-crypto'
 
 async function getCounselor() {
   const supabase = await createSupabaseServerClient()
@@ -32,6 +33,10 @@ export async function GET(req: NextRequest) {
       .eq('booking_id', bookingId)
       .eq('counselor_id', counselor.id)
       .single()
+    if (data) {
+      data.content = decryptPHI(data.content) ?? ''
+      data.private_notes = decryptPHI(data.private_notes) ?? ''
+    }
     return NextResponse.json({ note: data })
   }
 
@@ -49,6 +54,11 @@ export async function GET(req: NextRequest) {
       .select('*, booking:bookings(id, scheduled_at, status)')
       .in('booking_id', bookingIds.map(b => b.id))
       .order('created_at', { ascending: false })
+
+    for (const note of data ?? []) {
+      note.content = decryptPHI(note.content) ?? ''
+      note.private_notes = decryptPHI(note.private_notes) ?? ''
+    }
 
     return NextResponse.json({ notes: data ?? [] })
   }
@@ -78,18 +88,23 @@ export async function POST(req: NextRequest) {
     .eq('booking_id', body.booking_id)
     .single()
 
+  const encryptedContent = encryptIfPresent(body.content) ?? ''
+  const encryptedPrivate = encryptIfPresent(body.private_notes) ?? ''
+
   if (existing) {
     const { data, error } = await admin
       .from('session_notes')
       .update({
-        content: body.content ?? '',
-        private_notes: body.private_notes ?? '',
+        content: encryptedContent,
+        private_notes: encryptedPrivate,
         updated_at: new Date().toISOString(),
       })
       .eq('id', existing.id)
       .select()
       .single()
     if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+    data.content = decryptPHI(data.content) ?? ''
+    data.private_notes = decryptPHI(data.private_notes) ?? ''
     return NextResponse.json({ note: data })
   }
 
@@ -98,12 +113,14 @@ export async function POST(req: NextRequest) {
     .insert({
       booking_id: body.booking_id,
       counselor_id: counselor.id,
-      content: body.content ?? '',
-      private_notes: body.private_notes ?? '',
+      content: encryptedContent,
+      private_notes: encryptedPrivate,
     })
     .select()
     .single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  data.content = decryptPHI(data.content) ?? ''
+  data.private_notes = decryptPHI(data.private_notes) ?? ''
   return NextResponse.json({ note: data }, { status: 201 })
 }

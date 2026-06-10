@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseServerClient, createSupabaseAdminClient } from '@/lib/supabase'
 import { startOfDay, endOfDay, addDays } from 'date-fns'
+import { decryptPHI } from '@/lib/phi-crypto'
 
 export async function GET(req: NextRequest) {
   const supabase = await createSupabaseServerClient()
@@ -34,7 +35,16 @@ export async function GET(req: NextRequest) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
-  // For each upcoming booking, find the most recent previous session note for the same client
+  for (const b of bookings ?? []) {
+    b.pre_call_notes = decryptPHI(b.pre_call_notes) ?? b.pre_call_notes ?? ''
+    b.session_notes = decryptPHI(b.session_notes) ?? b.session_notes ?? ''
+    b.notes = decryptPHI(b.notes) ?? b.notes ?? ''
+    if (b.session_note) {
+      b.session_note.content = decryptPHI(b.session_note.content) ?? b.session_note.content ?? ''
+      b.session_note.private_notes = decryptPHI(b.session_note.private_notes) ?? b.session_note.private_notes ?? ''
+    }
+  }
+
   const enriched = (bookings ?? []).map(b => {
     const clientId = b.client?.id
     if (!clientId) return { ...b, previous_note: null }

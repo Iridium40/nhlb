@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseAdminClient } from '@/lib/supabase'
 import { format } from 'date-fns'
+import { requireAdmin, isErrorResponse } from '@/lib/auth-guard'
 
 export async function GET(req: NextRequest) {
+  const auth = await requireAdmin()
+  if (isErrorResponse(auth)) return auth
+
   const { searchParams } = new URL(req.url)
   const supabase = createSupabaseAdminClient()
   const type = searchParams.get('type') ?? 'counselor'

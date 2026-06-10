@@ -5,6 +5,8 @@ import { createServerClient } from '@supabase/ssr'
 const PUBLIC_ADMIN_PATHS = ['/admin/login']
 const PUBLIC_COUNSELOR_PATHS = ['/counselor/login', '/counselor/forgot-password']
 
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? process.env.ADMIN_EMAIL ?? '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean)
+
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
 
@@ -43,6 +45,35 @@ export async function middleware(req: NextRequest) {
     const loginUrl = req.nextUrl.clone()
     loginUrl.pathname = isAdminRoute ? '/admin/login' : '/counselor/login'
     return NextResponse.redirect(loginUrl)
+  }
+
+  if (isAdminRoute) {
+    const email = user.email?.toLowerCase() ?? ''
+    if (!ADMIN_EMAILS.includes(email)) {
+      const loginUrl = req.nextUrl.clone()
+      loginUrl.pathname = '/admin/login'
+      return NextResponse.redirect(loginUrl)
+    }
+  }
+
+  if (isCounselorRoute) {
+    const email = user.email?.toLowerCase() ?? ''
+    if (ADMIN_EMAILS.includes(email)) {
+      return response
+    }
+
+    const { data: counselor } = await supabase
+      .from('counselors')
+      .select('id')
+      .eq('supabase_user_id', user.id)
+      .limit(1)
+      .single()
+
+    if (!counselor) {
+      const loginUrl = req.nextUrl.clone()
+      loginUrl.pathname = '/counselor/login'
+      return NextResponse.redirect(loginUrl)
+    }
   }
 
   return response

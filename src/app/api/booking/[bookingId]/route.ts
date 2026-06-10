@@ -2,12 +2,16 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseAdminClient, createSupabaseServerClient } from '@/lib/supabase'
 import { differenceInHours } from 'date-fns'
 import { STATUS_TRANSITIONS } from '@/types'
-import { decryptPHI } from '@/lib/phi-crypto'
+import { decryptPHI, encryptIfPresent } from '@/lib/phi-crypto'
+import { requireAdminOrCounselor, isErrorResponse } from '@/lib/auth-guard'
 
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ bookingId: string }> }
 ) {
+  const auth = await requireAdminOrCounselor()
+  if (isErrorResponse(auth)) return auth
+
   const { bookingId } = await params
   const supabase = createSupabaseAdminClient()
 
@@ -27,6 +31,10 @@ export async function GET(
     }
   }
 
+  data.notes = decryptPHI(data.notes) ?? data.notes ?? ''
+  data.pre_call_notes = decryptPHI(data.pre_call_notes) ?? data.pre_call_notes ?? ''
+  data.session_notes = decryptPHI(data.session_notes) ?? data.session_notes ?? ''
+
   return NextResponse.json({ booking: data })
 }
 
@@ -36,6 +44,12 @@ export async function PATCH(
 ) {
   const { bookingId } = await params
   const body = await req.json()
+
+  if (body._caller !== 'client') {
+    const auth = await requireAdminOrCounselor()
+    if (isErrorResponse(auth)) return auth
+  }
+
   const admin = createSupabaseAdminClient()
 
   const { data: current } = await admin
@@ -77,9 +91,9 @@ export async function PATCH(
 
   const updates: Record<string, unknown> = {}
   if (body.status !== undefined) updates.status = body.status
-  if (body.notes !== undefined) updates.notes = body.notes
-  if (body.pre_call_notes !== undefined) updates.pre_call_notes = body.pre_call_notes
-  if (body.session_notes !== undefined) updates.session_notes = body.session_notes
+  if (body.notes !== undefined) updates.notes = encryptIfPresent(body.notes) ?? ''
+  if (body.pre_call_notes !== undefined) updates.pre_call_notes = encryptIfPresent(body.pre_call_notes) ?? ''
+  if (body.session_notes !== undefined) updates.session_notes = encryptIfPresent(body.session_notes) ?? ''
   if (body.call_completed_by !== undefined) updates.call_completed_by = body.call_completed_by
   if (body.meeting_link !== undefined) updates.meeting_link = body.meeting_link
   if (body.meeting_id !== undefined) updates.meeting_id = body.meeting_id
@@ -113,5 +127,13 @@ export async function PATCH(
     .single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+
+  data.notes = decryptPHI(data.notes) ?? data.notes ?? ''
+  data.pre_call_notes = decryptPHI(data.pre_call_notes) ?? data.pre_call_notes ?? ''
+  data.session_notes = decryptPHI(data.session_notes) ?? data.session_notes ?? ''
+  if (data.client) {
+    data.client.brief_reason = decryptPHI(data.client.brief_reason) ?? data.client.brief_reason ?? ''
+  }
+
   return NextResponse.json({ booking: data })
 }

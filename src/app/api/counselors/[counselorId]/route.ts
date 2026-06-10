@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseAdminClient } from '@/lib/supabase'
+import { requireAdmin, isErrorResponse } from '@/lib/auth-guard'
 
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ counselorId: string }> }
 ) {
+  const auth = await requireAdmin()
+  if (isErrorResponse(auth)) return auth
+
   const { counselorId } = await params
   const supabase = createSupabaseAdminClient()
 
@@ -22,6 +26,9 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ counselorId: string }> }
 ) {
+  const auth = await requireAdmin()
+  if (isErrorResponse(auth)) return auth
+
   const { counselorId } = await params
   const body = await req.json()
   const supabase = createSupabaseAdminClient()
@@ -47,6 +54,9 @@ export async function DELETE(
   _req: NextRequest,
   { params }: { params: Promise<{ counselorId: string }> }
 ) {
+  const auth = await requireAdmin()
+  if (isErrorResponse(auth)) return auth
+
   const { counselorId } = await params
   const supabase = createSupabaseAdminClient()
 

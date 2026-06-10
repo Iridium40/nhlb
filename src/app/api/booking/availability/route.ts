@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseAdminClient } from '@/lib/supabase'
 import { addDays, addHours } from 'date-fns'
+import { requireAdmin, isErrorResponse } from '@/lib/auth-guard'
 
 const BUSINESS_TZ = 'America/Chicago'
 const BUSINESS_HOUR_START = 9
@@ -39,6 +40,9 @@ export async function GET(req: NextRequest) {
   const supabase = createSupabaseAdminClient()
 
   if (searchParams.get('admin') === 'true') {
+    const auth = await requireAdmin()
+    if (isErrorResponse(auth)) return auth
+
     const status = searchParams.get('status') ?? 'all'
     const query = supabase
       .from('bookings')

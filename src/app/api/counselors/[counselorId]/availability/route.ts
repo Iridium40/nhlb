@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseAdminClient } from '@/lib/supabase'
+import { requireAdminOrCounselor, isErrorResponse } from '@/lib/auth-guard'
 
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ counselorId: string }> }
 ) {
+  const auth = await requireAdminOrCounselor()
+  if (isErrorResponse(auth)) return auth
+
   const { counselorId } = await params
   const supabase = createSupabaseAdminClient()
 
@@ -24,6 +28,9 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ counselorId: string }> }
 ) {
+  const auth = await requireAdminOrCounselor()
+  if (isErrorResponse(auth)) return auth
+
   const { counselorId } = await params
   const body = await req.json()
   const supabase = createSupabaseAdminClient()
@@ -48,6 +55,9 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ counselorId: string }> }
 ) {
+  const auth = await requireAdminOrCounselor()
+  if (isErrorResponse(auth)) return auth
+
   const { counselorId } = await params
   const { slots } = await req.json() as { slots: { day_of_week: number; start_time: string; end_time: string }[] }
   const supabase = createSupabaseAdminClient()
@@ -84,6 +94,9 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ counselorId: string }> }
 ) {
+  const auth = await requireAdminOrCounselor()
+  if (isErrorResponse(auth)) return auth
+
   const { counselorId } = await params
   const { slotId } = await req.json()
   const supabase = createSupabaseAdminClient()

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseAdminClient } from '@/lib/supabase'
+import { encryptPHI, decryptPHI } from '@/lib/phi-crypto'
 
 export async function GET(
   _req: NextRequest,
@@ -24,6 +25,15 @@ export async function GET(
     .select('first_name, last_name')
     .eq('id', data.client_id)
     .single()
+
+  if (data.form_data && typeof data.form_data === 'string') {
+    try {
+      const decrypted = decryptPHI(data.form_data)
+      if (decrypted) data.form_data = JSON.parse(decrypted)
+    } catch {
+      // form_data may already be a plain JSON object
+    }
+  }
 
   return NextResponse.json({
     intake: data,
@@ -53,10 +63,12 @@ export async function POST(
     return NextResponse.json({ error: 'This intake form has already been submitted' }, { status: 400 })
   }
 
+  const encryptedFormData = encryptPHI(JSON.stringify(body.formData))
+
   const { error } = await supabase
     .from('hipaa_intakes')
     .update({
-      form_data: body.formData,
+      form_data: encryptedFormData,
       completed_at: new Date().toISOString(),
     })
     .eq('token', token)

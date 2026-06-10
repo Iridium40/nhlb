@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseAdminClient } from '@/lib/supabase'
+import { requireAdmin, isErrorResponse } from '@/lib/auth-guard'
 
 const BUCKET = 'profile_image'
 
@@ -7,6 +8,9 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ counselorId: string }> }
 ) {
+  const auth = await requireAdmin()
+  if (isErrorResponse(auth)) return auth
+
   const { counselorId } = await params
   const admin = createSupabaseAdminClient()
 
@@ -63,6 +67,9 @@ export async function DELETE(
   _req: NextRequest,
   { params }: { params: Promise<{ counselorId: string }> }
 ) {
+  const auth = await requireAdmin()
+  if (isErrorResponse(auth)) return auth
+
   const { counselorId } = await params
   const admin = createSupabaseAdminClient()
 

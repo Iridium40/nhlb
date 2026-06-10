@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseAdminClient } from '@/lib/supabase'
+import { requireAdmin, isErrorResponse } from '@/lib/auth-guard'
 
 export async function GET() {
   const supabase = createSupabaseAdminClient()
@@ -13,6 +14,9 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const auth = await requireAdmin()
+  if (isErrorResponse(auth)) return auth
+
   const body = await req.json()
   const supabase = createSupabaseAdminClient()
 

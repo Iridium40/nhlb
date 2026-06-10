@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseAdminClient } from '@/lib/supabase'
 import { sendCounselorAssignmentEmail } from '@/lib/email'
-import { decryptPHI } from '@/lib/phi-crypto'
+import { decryptPHI, encryptIfPresent } from '@/lib/phi-crypto'
+import { requireAdmin, isErrorResponse } from '@/lib/auth-guard'
 import type { Booking, Counselor, Client } from '@/types'
 
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ clientId: string }> }
 ) {
+  const auth = await requireAdmin()
+  if (isErrorResponse(auth)) return auth
+
   const { clientId } = await params
   const supabase = createSupabaseAdminClient()
 
@@ -49,6 +53,14 @@ export async function GET(
     .limit(1)
 
   const intake = intakes?.[0] ?? null
+  if (intake?.form_data && typeof intake.form_data === 'string') {
+    try {
+      const decrypted = decryptPHI(intake.form_data)
+      if (decrypted) intake.form_data = JSON.parse(decrypted)
+    } catch {
+      // form_data may already be a plain JSON object
+    }
+  }
 
   return NextResponse.json({
     client,
@@ -63,6 +75,9 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ clientId: string }> }
 ) {
+  const auth = await requireAdmin()
+  if (isErrorResponse(auth)) return auth
+
   const { clientId } = await params
   const body = await req.json()
   const supabase = createSupabaseAdminClient()
@@ -71,6 +86,10 @@ export async function PATCH(
   const fields = ['first_name', 'last_name', 'email', 'phone', 'service_type', 'brief_reason', 'assigned_counselor_id']
   for (const f of fields) {
     if (body[f] !== undefined) updates[f] = body[f]
+  }
+
+  if (updates.brief_reason !== undefined) {
+    updates.brief_reason = encryptIfPresent(updates.brief_reason as string)
   }
 
   let previousCounselorId: string | null = null

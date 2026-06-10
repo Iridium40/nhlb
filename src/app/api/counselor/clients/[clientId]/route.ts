@@ -51,6 +51,12 @@ export async function GET(
     .eq('counselor_id', counselor.id)
     .order('scheduled_at', { ascending: false })
 
+  for (const b of bookings ?? []) {
+    b.pre_call_notes = decryptPHI(b.pre_call_notes) ?? b.pre_call_notes ?? ''
+    b.session_notes = decryptPHI(b.session_notes) ?? b.session_notes ?? ''
+    b.notes = decryptPHI(b.notes) ?? b.notes ?? ''
+  }
+
   const bookingIds = (bookings ?? []).map(b => b.id)
   let notes: Record<string, unknown>[] = []
 
@@ -61,7 +67,11 @@ export async function GET(
       .in('booking_id', bookingIds)
       .eq('counselor_id', counselor.id)
       .order('created_at', { ascending: false })
-    notes = data ?? []
+    notes = (data ?? []).map(n => ({
+      ...n,
+      content: decryptPHI(n.content as string) ?? n.content ?? '',
+      private_notes: decryptPHI(n.private_notes as string) ?? n.private_notes ?? '',
+    }))
   }
 
   const { data: intakes } = await admin
@@ -72,6 +82,14 @@ export async function GET(
     .limit(1)
 
   const intake = intakes?.[0] ?? null
+  if (intake?.form_data && typeof intake.form_data === 'string') {
+    try {
+      const decrypted = decryptPHI(intake.form_data)
+      if (decrypted) intake.form_data = JSON.parse(decrypted)
+    } catch {
+      // form_data may already be a plain JSON object
+    }
+  }
 
   return NextResponse.json({
     client,

@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseAdminClient } from '@/lib/supabase'
 import { sendVirtualSessionInfo } from '@/lib/email'
+import { requireAdmin, isErrorResponse } from '@/lib/auth-guard'
 
 export async function POST(req: NextRequest) {
   try {
+    const auth = await requireAdmin()
+    if (isErrorResponse(auth)) return auth
     const { bookingId } = await req.json()
     if (!bookingId) {
       return NextResponse.json({ error: 'bookingId is required' }, { status: 400 })

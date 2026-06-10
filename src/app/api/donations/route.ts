@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseAdminClient } from '@/lib/supabase'
 import { z } from 'zod'
+import { requireAdmin, isErrorResponse } from '@/lib/auth-guard'
 
 const donationSchema = z.object({
   amount_cents: z.number().min(100, 'Minimum donation is $1'),
@@ -12,6 +13,9 @@ const donationSchema = z.object({
 })
 
 export async function GET(req: NextRequest) {
+  const auth = await requireAdmin()
+  if (isErrorResponse(auth)) return auth
+
   const { searchParams } = new URL(req.url)
   const supabase = createSupabaseAdminClient()
 

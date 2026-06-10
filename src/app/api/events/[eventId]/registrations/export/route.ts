@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseAdminClient } from '@/lib/supabase'
 import { format } from 'date-fns'
+import { requireAdmin, isErrorResponse } from '@/lib/auth-guard'
 
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ eventId: string }> }
 ) {
+  const auth = await requireAdmin()
+  if (isErrorResponse(auth)) return auth
+
   const { eventId } = await params
   const supabase = createSupabaseAdminClient()
 

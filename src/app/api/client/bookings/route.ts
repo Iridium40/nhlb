@@ -23,7 +23,7 @@ export async function GET() {
 
   const { data: bookings, error } = await admin
     .from('bookings')
-    .select('*, counselor:counselors(id, name, title, photo_url, zoom_link, zoom_meeting_id, zoom_passcode)')
+    .select('id, client_id, counselor_id, scheduled_at, type, status, duration_minutes, meeting_link, meeting_id, meeting_passcode, donation_amount_cents, is_recurring, recurrence_pattern, parent_booking_id, series_index, created_at, counselor:counselors(id, name, title, photo_url, zoom_link, zoom_meeting_id, zoom_passcode)')
     .eq('client_id', client.id)
     .order('scheduled_at', { ascending: false })
 

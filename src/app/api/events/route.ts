@@ -1,11 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseAdminClient } from '@/lib/supabase'
 import { generateSlug } from '@/lib/slug'
+import { requireAdmin, isErrorResponse } from '@/lib/auth-guard'
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
   const includeInactive = searchParams.get('all') === 'true'
   const publicOnly = searchParams.get('public') === 'true'
+
+  if (!publicOnly) {
+    const auth = await requireAdmin()
+    if (isErrorResponse(auth)) return auth
+  }
+
   const supabase = createSupabaseAdminClient()
 
   let query = supabase.from('events').select('*').order('event_date', { ascending: true })
@@ -37,6 +44,9 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const auth = await requireAdmin()
+  if (isErrorResponse(auth)) return auth
+
   const body = await req.json()
   const supabase = createSupabaseAdminClient()
 

@@ -1,6 +1,7 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { createSupabaseBrowserClient } from '@/lib/supabase-browser'
 
 const NAV_ITEMS = [
   { href: '/admin/bookings', label: 'Sessions' },
@@ -14,6 +15,13 @@ const NAV_ITEMS = [
 
 export default function AdminNav() {
   const pathname = usePathname()
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    const supabase = createSupabaseBrowserClient()
+    await supabase.auth.signOut()
+    router.push('/admin/login')
+  }
 
   const isActive = (href: string) => {
     if (href === '/admin/bookings') return pathname === '/admin/bookings'
@@ -52,14 +60,20 @@ export default function AdminNav() {
             )
           })}
         </nav>
-        <a href="/book" target="_blank" rel="noopener noreferrer" style={{
-          position: 'absolute', right: 40, fontFamily: 'Lato, sans-serif',
-          fontSize: '0.75rem', fontWeight: 700, color: 'white',
-          backgroundColor: 'var(--nhlb-red)', padding: '6px 14px',
-          borderRadius: 6, textDecoration: 'none',
-        }}>
-          Book a Session ↗
-        </a>
+        <div style={{ position: 'absolute', right: 40, display: 'flex', gap: 10, alignItems: 'center' }}>
+          <a href="/book" target="_blank" rel="noopener noreferrer" style={{
+            fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', fontWeight: 700,
+            color: 'white', backgroundColor: 'var(--nhlb-red)',
+            padding: '6px 14px', borderRadius: 6, textDecoration: 'none',
+          }}>
+            Book a Session ↗
+          </a>
+          <button onClick={handleLogout} style={{
+            padding: '6px 14px', borderRadius: 6, border: '1px solid var(--nhlb-border)',
+            backgroundColor: 'white', color: 'var(--nhlb-muted)',
+            fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', cursor: 'pointer',
+          }}>Sign Out</button>
+        </div>
       </header>
     </>
   )

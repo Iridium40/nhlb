@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseAdminClient } from '@/lib/supabase'
+import { requireAdmin, isErrorResponse } from '@/lib/auth-guard'
 
 export async function POST(req: NextRequest) {
+  const auth = await requireAdmin()
+  if (isErrorResponse(auth)) return auth
+
   const { counselorId, email, password } = await req.json()
 
   if (!counselorId || !email || !password) {
