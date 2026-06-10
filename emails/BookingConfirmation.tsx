@@ -1,5 +1,5 @@
 import {
-  Html, Head, Body, Container, Section,
+  Html, Head, Body, Container, Section, Img,
   Text, Heading, Hr, Row, Column, Link
 } from '@react-email/components'
 import type { Booking, Counselor, Client } from '../src/types'
@@ -15,55 +15,58 @@ export function BookingConfirmationEmail({ booking, counselor, client, baseUrl =
   return (
     <Html>
       <Head />
-      <Body style={{ fontFamily: 'Georgia, serif', background: '#FDFAF8', padding: '40px 0' }}>
+      <Body style={{ fontFamily: 'Georgia, serif', background: '#FAF6F5', padding: '40px 0' }}>
         <Container style={{ background: '#fff', borderRadius: 8, padding: '40px', maxWidth: 520 }}>
-          <Heading style={{ color: '#8B2015', fontFamily: 'Georgia, serif', fontSize: 24, marginBottom: 4 }}>
+          <Section style={{ backgroundColor: '#763535', borderRadius: 8, padding: '20px 24px', textAlign: 'center', marginBottom: 24 }}>
+            <Img src="https://rgssitykmtunydrbuuhc.supabase.co/storage/v1/object/public/NHLB_Images/No-Heart-Left-Behind-Horizontal-White.svg" alt="No Heart Left Behind" width="220" style={{ margin: '0 auto', display: 'block' }} />
+          </Section>
+          <Heading style={{ color: '#763535', fontFamily: 'Georgia, serif', fontSize: 24, marginBottom: 4 }}>
             Your session is confirmed
           </Heading>
-          <Text style={{ color: '#9A5A50', marginTop: 0, fontFamily: 'Arial, sans-serif', fontSize: 13 }}>
+          <Text style={{ color: '#8A6A62', marginTop: 0, fontFamily: 'Arial, sans-serif', fontSize: 13 }}>
             No Heart Left Behind &mdash; Faith-Based Counseling
           </Text>
-          <Hr style={{ borderColor: '#F0E0D8', margin: '24px 0' }} />
+          <Hr style={{ borderColor: '#FCEEE7', margin: '24px 0' }} />
 
           <Section>
             <Row>
               <Column style={{ paddingRight: 16 }}>
-                <Text style={{ color: '#9A5A50', fontSize: 12, marginBottom: 2 }}>DATE</Text>
-                <Text style={{ color: '#3D1A14', fontSize: 16, fontWeight: 'bold', margin: 0 }}>{date}</Text>
+                <Text style={{ color: '#8A6A62', fontSize: 12, marginBottom: 2 }}>DATE</Text>
+                <Text style={{ color: '#241F1E', fontSize: 16, fontWeight: 'bold', margin: 0 }}>{date}</Text>
               </Column>
               <Column>
-                <Text style={{ color: '#9A5A50', fontSize: 12, marginBottom: 2 }}>TIME</Text>
-                <Text style={{ color: '#3D1A14', fontSize: 16, fontWeight: 'bold', margin: 0 }}>{time}</Text>
+                <Text style={{ color: '#8A6A62', fontSize: 12, marginBottom: 2 }}>TIME</Text>
+                <Text style={{ color: '#241F1E', fontSize: 16, fontWeight: 'bold', margin: 0 }}>{time}</Text>
               </Column>
             </Row>
 
             <Row style={{ marginTop: 20 }}>
               <Column style={{ paddingRight: 16 }}>
-                <Text style={{ color: '#9A5A50', fontSize: 12, marginBottom: 2 }}>COUNSELOR</Text>
-                <Text style={{ color: '#3D1A14', fontSize: 16, margin: 0 }}>{counselor.name}</Text>
-                <Text style={{ color: '#9A5A50', fontSize: 14, margin: '2px 0 0' }}>{counselor.title}</Text>
+                <Text style={{ color: '#8A6A62', fontSize: 12, marginBottom: 2 }}>COUNSELOR</Text>
+                <Text style={{ color: '#241F1E', fontSize: 16, margin: 0 }}>{counselor.name}</Text>
+                <Text style={{ color: '#8A6A62', fontSize: 14, margin: '2px 0 0' }}>{counselor.title}</Text>
               </Column>
               <Column>
-                <Text style={{ color: '#9A5A50', fontSize: 12, marginBottom: 2 }}>FORMAT</Text>
-                <Text style={{ color: '#3D1A14', fontSize: 16, margin: 0 }}>
+                <Text style={{ color: '#8A6A62', fontSize: 12, marginBottom: 2 }}>FORMAT</Text>
+                <Text style={{ color: '#241F1E', fontSize: 16, margin: 0 }}>
                   {booking.type === 'VIRTUAL' ? '💻 Virtual' : '📍 In Person'}
                 </Text>
               </Column>
             </Row>
           </Section>
 
-          <Hr style={{ borderColor: '#F0E0D8', margin: '24px 0' }} />
+          <Hr style={{ borderColor: '#FCEEE7', margin: '24px 0' }} />
 
           {booking.type === 'VIRTUAL' ? (
-            <Section style={{ background: '#F5EDE8', borderRadius: 6, padding: '16px 20px', border: '1px solid #F0E0D8' }}>
-              <Text style={{ color: '#8B2015', fontSize: 14, fontWeight: 'bold', margin: '0 0 10px', fontFamily: 'Georgia, serif' }}>
+            <Section style={{ background: '#F8F3ED', borderRadius: 6, padding: '16px 20px', border: '1px solid #FCEEE7' }}>
+              <Text style={{ color: '#763535', fontSize: 14, fontWeight: 'bold', margin: '0 0 10px', fontFamily: 'Georgia, serif' }}>
                 💻 Virtual session
               </Text>
               {counselor.zoom_link ? (
                 <>
                   <Text style={{ color: '#555', fontSize: 13, margin: '0 0 4px' }}>
                     <strong>Join link:</strong>{' '}
-                    <a href={counselor.zoom_link} style={{ color: '#B8311F' }}>{counselor.zoom_link}</a>
+                    <a href={counselor.zoom_link} style={{ color: '#A90113' }}>{counselor.zoom_link}</a>
                   </Text>
                   {counselor.zoom_meeting_id && (
                     <Text style={{ color: '#555', fontSize: 13, margin: '4px 0 0' }}>
@@ -77,23 +80,23 @@ export function BookingConfirmationEmail({ booking, counselor, client, baseUrl =
                   )}
                 </>
               ) : (
-                <Text style={{ color: '#9A5A50', fontSize: 13, margin: 0, fontStyle: 'italic' }}>
+                <Text style={{ color: '#8A6A62', fontSize: 13, margin: 0, fontStyle: 'italic' }}>
                   Your counselor will send a secure video link before your session.
                 </Text>
               )}
             </Section>
           ) : (
-            <Section style={{ background: '#FDFAF8', borderRadius: 6, padding: '16px 20px' }}>
-              <Text style={{ color: '#3D1A14', fontSize: 14, margin: 0 }}>
+            <Section style={{ background: '#FAF6F5', borderRadius: 6, padding: '16px 20px' }}>
+              <Text style={{ color: '#241F1E', fontSize: 14, margin: 0 }}>
                 <strong>Location:</strong> 430 N. Jefferson Ave, Covington, LA 70433
               </Text>
-              <Text style={{ color: '#3D1A14', fontSize: 14, margin: '8px 0 0' }}>
+              <Text style={{ color: '#241F1E', fontSize: 14, margin: '8px 0 0' }}>
                 <strong>Questions?</strong> Call 985-264-8808 or email reconnectus@yahoo.com
               </Text>
             </Section>
           )}
 
-          <Hr style={{ borderColor: '#F0E0D8', margin: '24px 0' }} />
+          <Hr style={{ borderColor: '#FCEEE7', margin: '24px 0' }} />
 
           <Section style={{ background: '#EAF5EE', borderRadius: 6, padding: '12px 16px', marginBottom: 16 }}>
             <Text style={{ color: '#065F46', fontSize: 13, fontFamily: 'Arial, sans-serif', margin: 0, lineHeight: '20px' }}>
@@ -107,15 +110,15 @@ export function BookingConfirmationEmail({ booking, counselor, client, baseUrl =
               Need to cancel? You can cancel online up to 24 hours before your appointment.
               For cancellations within 24 hours, please call us at <strong>985-264-8808</strong>.
             </Text>
-            <Link href={cancelUrl} style={{ color: '#B8311F', fontSize: 13, fontFamily: 'Arial, sans-serif' }}>
+            <Link href={cancelUrl} style={{ color: '#A90113', fontSize: 13, fontFamily: 'Arial, sans-serif' }}>
               Cancel this appointment
             </Link>
           </Section>
 
-          <Text style={{ color: '#9A5A50', fontSize: 13, marginTop: 32, fontStyle: 'italic', fontFamily: 'Georgia, serif' }}>
+          <Text style={{ color: '#8A6A62', fontSize: 13, marginTop: 32, fontStyle: 'italic', fontFamily: 'Georgia, serif' }}>
             &ldquo;As a man thinks in his heart, so is he.&rdquo; &mdash; Proverbs 23:7
           </Text>
-          <Text style={{ color: '#D4A898', fontSize: 12, fontFamily: 'Arial, sans-serif' }}>
+          <Text style={{ color: '#E5C4B8', fontSize: 12, fontFamily: 'Arial, sans-serif' }}>
             No Heart Left Behind &copy; {new Date().getFullYear()}
           </Text>
         </Container>

@@ -7,18 +7,18 @@ import type { Client, TimeSlot } from '@/types'
 
 const S = {
   label: {
-    display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.75rem',
+    display: 'block', fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem',
     fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' as const,
     color: 'var(--nhlb-muted)', marginBottom: 6,
   } as React.CSSProperties,
   input: {
     width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-    padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
+    padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Raleway, sans-serif',
     color: 'var(--nhlb-text)', background: 'white', outline: 'none',
   } as React.CSSProperties,
   btn: (bg: string, color: string) => ({
     padding: '12px 24px', borderRadius: 8, border: 'none', cursor: 'pointer',
-    backgroundColor: bg, color, fontFamily: 'Lato, sans-serif',
+    backgroundColor: bg, color, fontFamily: 'Raleway, sans-serif',
     fontWeight: 700, fontSize: '0.875rem',
   } as React.CSSProperties),
 }
@@ -132,7 +132,7 @@ export default function CounselorSchedulePage() {
   if (loading) return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)' }}>
       <CounselorNav />
-      <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
+      <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
     </div>
   )
 
@@ -142,12 +142,12 @@ export default function CounselorSchedulePage() {
 
       <div style={{ maxWidth: 700, margin: '0 auto', padding: '32px 24px' }}>
         <h1 style={{
-          fontFamily: 'Cormorant Garamond, serif', fontSize: '1.8rem',
+          fontFamily: 'Playfair Display, serif', fontSize: '1.8rem',
           fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 8px',
         }}>
           Schedule a Session
         </h1>
-        <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', marginBottom: 28 }}>
+        <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', marginBottom: 28 }}>
           Schedule a session for one of your assigned clients.
         </p>
 
@@ -155,14 +155,14 @@ export default function CounselorSchedulePage() {
           <div style={{
             marginBottom: 16, padding: '12px 14px', backgroundColor: '#FEF2F2',
             border: '1px solid #FECACA', borderRadius: 8,
-            fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: '#B91C1C',
+            fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: '#B91C1C',
           }}>{error}</div>
         )}
         {success && (
           <div style={{
             marginBottom: 16, padding: '12px 14px', backgroundColor: '#EAF5EE',
             border: '1px solid #A7F3D0', borderRadius: 8,
-            fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: '#065F46',
+            fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: '#065F46',
           }}>{success}</div>
         )}
 
@@ -175,12 +175,12 @@ export default function CounselorSchedulePage() {
             <label style={S.label}>Client *</label>
             {selectedClient ? (
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', border: '1px solid var(--nhlb-border)', borderRadius: 8, background: 'var(--nhlb-cream)' }}>
-                <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', fontWeight: 600 }}>
+                <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', fontWeight: 600 }}>
                   {selectedClient.first_name} {selectedClient.last_name}
                 </span>
                 <button onClick={() => { setSelectedClientId(null); setClientSearch('') }} style={{
                   background: 'none', border: 'none', color: 'var(--nhlb-red)', cursor: 'pointer',
-                  fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700,
+                  fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', fontWeight: 700,
                 }}>Change</button>
               </div>
             ) : (
@@ -190,7 +190,7 @@ export default function CounselorSchedulePage() {
                 {clientSearch.trim() && (
                   <div style={{ maxHeight: 200, overflowY: 'auto', marginTop: 4, border: '1px solid var(--nhlb-border)', borderRadius: 8, background: 'white' }}>
                     {filteredClients.length === 0 ? (
-                      <p style={{ padding: '12px 14px', fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', margin: 0 }}>
+                      <p style={{ padding: '12px 14px', fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', margin: 0 }}>
                         No clients found
                       </p>
                     ) : (
@@ -199,7 +199,7 @@ export default function CounselorSchedulePage() {
                           width: '100%', textAlign: 'left', padding: '10px 14px',
                           border: 'none', borderBottom: '1px solid var(--nhlb-border)',
                           background: 'white', cursor: 'pointer',
-                          fontFamily: 'Lato, sans-serif', fontSize: '0.85rem',
+                          fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem',
                         }}>
                           <strong>{c.first_name} {c.last_name}</strong>
                           <span style={{ color: 'var(--nhlb-muted)', marginLeft: 8 }}>{c.email}</span>
@@ -228,7 +228,7 @@ export default function CounselorSchedulePage() {
                   borderRadius: 10,
                 }}>
                   <span style={{ fontSize: '1.2rem', display: 'block', marginBottom: 4 }}>{emoji}</span>
-                  <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', fontWeight: 700 }}>{label}</span>
+                  <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', fontWeight: 700 }}>{label}</span>
                 </button>
               ))}
             </div>
@@ -240,16 +240,16 @@ export default function CounselorSchedulePage() {
               <label style={{ ...S.label, marginBottom: 0 }}>Date &amp; Time *</label>
               <button onClick={() => setUseSlots(!useSlots)} style={{
                 background: 'none', border: 'none', color: 'var(--nhlb-red)',
-                fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer',
+                fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer',
               }}>
                 {useSlots ? 'Enter custom time →' : '← Pick from slots'}
               </button>
             </div>
             {useSlots ? (
               loadingSlots ? (
-                <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.85rem' }}>Loading slots...</p>
+                <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.85rem' }}>Loading slots...</p>
               ) : Object.keys(groupedSlots).length === 0 ? (
-                <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.85rem' }}>
+                <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.85rem' }}>
                   No available slots.
                 </p>
               ) : (
@@ -257,7 +257,7 @@ export default function CounselorSchedulePage() {
                   {Object.entries(groupedSlots).map(([day, daySlots]) => (
                     <div key={day} style={{ marginBottom: 16 }}>
                       <p style={{
-                        fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                        fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700,
                         letterSpacing: '0.1em', textTransform: 'uppercase',
                         color: 'var(--nhlb-muted)', marginBottom: 8,
                       }}>{day}</p>
@@ -270,7 +270,7 @@ export default function CounselorSchedulePage() {
                               border: `1px solid ${isSelected ? 'var(--nhlb-red)' : 'var(--nhlb-border)'}`,
                               backgroundColor: isSelected ? 'var(--nhlb-red)' : 'white',
                               color: isSelected ? 'white' : 'var(--nhlb-text)',
-                              fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', cursor: 'pointer',
+                              fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', cursor: 'pointer',
                             }}>
                               {format(new Date(slot.start), 'h:mm a')}
                             </button>
@@ -288,7 +288,7 @@ export default function CounselorSchedulePage() {
                 style={S.input} />
             )}
             {scheduledAt && (
-              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-text)', marginTop: 6 }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-text)', marginTop: 6 }}>
                 Selected: <strong>{format(new Date(scheduledAt), 'EEE, MMM d, yyyy \'at\' h:mm a')}</strong>
               </p>
             )}
@@ -299,7 +299,7 @@ export default function CounselorSchedulePage() {
             <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', marginBottom: 8 }}>
               <input type="checkbox" checked={isRecurring} onChange={e => setIsRecurring(e.target.checked)}
                 style={{ width: 16, height: 16, accentColor: 'var(--nhlb-red)' }} />
-              <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', fontWeight: 700 }}>Make this a recurring session</span>
+              <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', fontWeight: 700 }}>Make this a recurring session</span>
             </label>
             {isRecurring && (
               <div style={{
@@ -320,7 +320,7 @@ export default function CounselorSchedulePage() {
                     <input type="date" value={recurrenceEndDate} onChange={e => setRecurrenceEndDate(e.target.value)} style={S.input} />
                   </div>
                 </div>
-                <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)', marginTop: 8, fontStyle: 'italic' }}>
+                <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)', marginTop: 8, fontStyle: 'italic' }}>
                   Sessions will be created at the same time on each occurrence. Weekends are skipped.
                 </p>
               </div>

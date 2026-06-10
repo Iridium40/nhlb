@@ -71,7 +71,7 @@ export default function DonationReportPage() {
   if (loading) {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>Loading report...</p>
+        <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>Loading report...</p>
       </div>
     )
   }
@@ -82,7 +82,7 @@ export default function DonationReportPage() {
       <div className="no-print" style={{
         backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
         textAlign: 'center', fontSize: '0.8rem', letterSpacing: '0.05em',
-        padding: '8px 16px', fontFamily: 'Lato, sans-serif',
+        padding: '8px 16px', fontFamily: 'Raleway, sans-serif',
       }}>
         Donation Report
       </div>
@@ -92,11 +92,11 @@ export default function DonationReportPage() {
         padding: '0 40px', display: 'flex', alignItems: 'center', height: 64,
       }}>
         <Link href="/book/my-sessions" style={{
-          fontFamily: 'Lato, sans-serif', fontSize: '0.85rem',
+          fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem',
           color: 'var(--nhlb-muted)', textDecoration: 'none',
         }}>&larr; My Sessions</Link>
         <h1 style={{
-          fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem',
+          fontFamily: 'Playfair Display, serif', fontSize: '1.3rem',
           fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 0 20px',
         }}>Donation Report</h1>
       </header>
@@ -105,13 +105,13 @@ export default function DonationReportPage() {
         {/* Year selector + actions (screen only) */}
         <div className="no-print" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
           <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-            <label style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: 'var(--nhlb-muted)' }}>Year:</label>
+            <label style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: 'var(--nhlb-muted)' }}>Year:</label>
             <select
               value={year}
               onChange={e => setYear(Number(e.target.value))}
               style={{
                 padding: '6px 12px', borderRadius: 6, border: '1px solid var(--nhlb-border)',
-                fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)',
+                fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)',
                 backgroundColor: 'white', cursor: 'pointer',
               }}
             >
@@ -122,7 +122,7 @@ export default function DonationReportPage() {
             <button onClick={handleCSV} disabled={donations.length === 0} style={{
               padding: '8px 16px', borderRadius: 6, border: '1px solid var(--nhlb-border)',
               backgroundColor: 'white', color: 'var(--nhlb-text)',
-              fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
+              fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.8rem',
               cursor: donations.length === 0 ? 'not-allowed' : 'pointer',
               opacity: donations.length === 0 ? 0.5 : 1,
             }}>
@@ -131,7 +131,7 @@ export default function DonationReportPage() {
             <button onClick={handlePrint} disabled={donations.length === 0} style={{
               padding: '8px 16px', borderRadius: 6, border: 'none',
               backgroundColor: 'var(--nhlb-red)', color: 'white',
-              fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
+              fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.8rem',
               cursor: donations.length === 0 ? 'not-allowed' : 'pointer',
               opacity: donations.length === 0 ? 0.5 : 1,
             }}>
@@ -148,15 +148,15 @@ export default function DonationReportPage() {
           {/* Report header */}
           <div style={{ textAlign: 'center', marginBottom: 28, paddingBottom: 20, borderBottom: '2px solid var(--nhlb-red)' }}>
             <h2 style={{
-              fontFamily: 'Cormorant Garamond, serif', fontSize: '1.6rem',
+              fontFamily: 'Playfair Display, serif', fontSize: '1.6rem',
               fontWeight: 700, color: 'var(--nhlb-red-dark)', margin: '0 0 4px',
             }}>
               No Heart Left Behind
             </h2>
-            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: '0 0 2px' }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: '0 0 2px' }}>
               Counseling Ministry
             </p>
-            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)', margin: 0 }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)', margin: 0 }}>
               Love Offering Donation Summary &mdash; {year}
             </p>
           </div>
@@ -164,21 +164,21 @@ export default function DonationReportPage() {
           {/* Client info */}
           <div style={{ marginBottom: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
-              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px', textTransform: 'uppercase' }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px', textTransform: 'uppercase' }}>
                 Donor
               </p>
-              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '1rem', fontWeight: 700, color: 'var(--nhlb-text)', margin: '0 0 2px' }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '1rem', fontWeight: 700, color: 'var(--nhlb-text)', margin: '0 0 2px' }}>
                 {clientName}
               </p>
-              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', margin: 0 }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', margin: 0 }}>
                 {clientEmail}
               </p>
             </div>
             <div style={{ textAlign: 'right' }}>
-              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px', textTransform: 'uppercase' }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px', textTransform: 'uppercase' }}>
                 Report Generated
               </p>
-              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', margin: 0 }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', margin: 0 }}>
                 {format(new Date(), 'MMMM d, yyyy')}
               </p>
             </div>
@@ -186,7 +186,7 @@ export default function DonationReportPage() {
 
           {donations.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '40px 0' }}>
-              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.95rem', color: 'var(--nhlb-muted)' }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.95rem', color: 'var(--nhlb-muted)' }}>
                 No donations recorded for {year}.
               </p>
             </div>
@@ -198,7 +198,7 @@ export default function DonationReportPage() {
                   <tr style={{ borderBottom: '2px solid var(--nhlb-border)' }}>
                     {['Date', 'Time', 'Type', 'Counselor', 'Amount'].map(h => (
                       <th key={h} style={{
-                        fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                        fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700,
                         letterSpacing: '0.06em', textTransform: 'uppercase',
                         color: 'var(--nhlb-muted)', padding: '8px 12px',
                         textAlign: h === 'Amount' ? 'right' : 'left',
@@ -209,19 +209,19 @@ export default function DonationReportPage() {
                 <tbody>
                   {donations.map(d => (
                     <tr key={d.id} style={{ borderBottom: '1px solid var(--nhlb-border)' }}>
-                      <td style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', padding: '10px 12px' }}>
+                      <td style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', padding: '10px 12px' }}>
                         {format(new Date(d.scheduled_at), 'MMM d, yyyy')}
                       </td>
-                      <td style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', padding: '10px 12px' }}>
+                      <td style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', padding: '10px 12px' }}>
                         {format(new Date(d.scheduled_at), 'h:mm a')}
                       </td>
-                      <td style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', padding: '10px 12px' }}>
+                      <td style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', padding: '10px 12px' }}>
                         {d.type === 'VIRTUAL' ? 'Virtual' : 'In Person'}
                       </td>
-                      <td style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', padding: '10px 12px' }}>
+                      <td style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', padding: '10px 12px' }}>
                         {d.counselor?.name ?? '—'}
                       </td>
-                      <td style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', fontWeight: 700, color: 'var(--nhlb-text)', padding: '10px 12px', textAlign: 'right' }}>
+                      <td style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', fontWeight: 700, color: 'var(--nhlb-text)', padding: '10px 12px', textAlign: 'right' }}>
                         ${(d.donation_amount_cents / 100).toFixed(2)}
                       </td>
                     </tr>
@@ -230,13 +230,13 @@ export default function DonationReportPage() {
                 <tfoot>
                   <tr style={{ borderTop: '2px solid var(--nhlb-red)' }}>
                     <td colSpan={4} style={{
-                      fontFamily: 'Lato, sans-serif', fontSize: '0.9rem', fontWeight: 700,
+                      fontFamily: 'Raleway, sans-serif', fontSize: '0.9rem', fontWeight: 700,
                       color: 'var(--nhlb-red-dark)', padding: '12px 12px', textAlign: 'right',
                     }}>
                       Total Donations
                     </td>
                     <td style={{
-                      fontFamily: 'Lato, sans-serif', fontSize: '1rem', fontWeight: 700,
+                      fontFamily: 'Raleway, sans-serif', fontSize: '1rem', fontWeight: 700,
                       color: 'var(--nhlb-red-dark)', padding: '12px 12px', textAlign: 'right',
                     }}>
                       ${(totalCents / 100).toFixed(2)}
@@ -251,7 +251,7 @@ export default function DonationReportPage() {
                 backgroundColor: 'var(--nhlb-cream)', borderRadius: 8,
                 border: '1px solid var(--nhlb-border)',
               }}>
-                <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)', margin: 0, lineHeight: 1.6 }}>
+                <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)', margin: 0, lineHeight: 1.6 }}>
                   This report summarizes love offering donations made in connection with counseling sessions at No Heart Left Behind.
                   Please consult your tax advisor regarding the deductibility of these contributions.
                   No goods or services were provided in exchange for these donations.

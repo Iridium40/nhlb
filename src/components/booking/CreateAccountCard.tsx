@@ -34,7 +34,7 @@ export default function CreateAccountCard({ clientId, email }: { clientId: strin
         background: '#EAF5EE', border: '1px solid #BBF7D0',
         borderRadius: 12, padding: '20px 24px', textAlign: 'center',
       }}>
-        <p style={{ fontFamily: 'Lato, sans-serif', fontWeight: 700, color: '#065F46', fontSize: '0.875rem', margin: 0 }}>
+        <p style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 700, color: '#065F46', fontSize: '0.875rem', margin: 0 }}>
           Account created! You can now log in for faster scheduling.
         </p>
       </div>
@@ -48,13 +48,13 @@ export default function CreateAccountCard({ clientId, email }: { clientId: strin
         borderRadius: 12, padding: '20px 24px', textAlign: 'center',
       }}>
         <p style={{
-          fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem',
+          fontFamily: 'Playfair Display, serif', fontSize: '1.1rem',
           fontWeight: 600, color: 'var(--nhlb-red-dark)', marginBottom: 6,
         }}>
           Save your card for future visits?
         </p>
         <p style={{
-          fontFamily: 'Lato, sans-serif', fontSize: '0.8rem',
+          fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem',
           color: 'var(--nhlb-muted)', marginBottom: 14,
         }}>
           Create an optional account for faster scheduling next time.
@@ -62,7 +62,7 @@ export default function CreateAccountCard({ clientId, email }: { clientId: strin
         <button onClick={() => setExpanded(true)} style={{
           padding: '10px 24px', borderRadius: 8,
           backgroundColor: 'var(--nhlb-red)', color: 'white',
-          fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
+          fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.8rem',
           border: 'none', cursor: 'pointer',
         }}>
           Create Account
@@ -73,7 +73,7 @@ export default function CreateAccountCard({ clientId, email }: { clientId: strin
 
   const inputStyle: React.CSSProperties = {
     width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-    padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
+    padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Raleway, sans-serif',
     color: 'var(--nhlb-text)', background: 'white', outline: 'none',
   }
 
@@ -83,13 +83,13 @@ export default function CreateAccountCard({ clientId, email }: { clientId: strin
       borderRadius: 12, padding: '24px',
     }}>
       <p style={{
-        fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem',
+        fontFamily: 'Playfair Display, serif', fontSize: '1.1rem',
         fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 4px',
       }}>
         Create your account
       </p>
       <p style={{
-        fontFamily: 'Lato, sans-serif', fontSize: '0.8rem',
+        fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem',
         color: 'var(--nhlb-muted)', margin: '0 0 16px',
       }}>
         Email: <strong>{email}</strong>
@@ -99,7 +99,7 @@ export default function CreateAccountCard({ clientId, email }: { clientId: strin
         <div style={{
           marginBottom: 12, padding: '10px 14px',
           backgroundColor: '#FEF2F2', border: '1px solid #FECACA',
-          borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#B91C1C',
+          borderRadius: 8, fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: '#B91C1C',
         }}>
           {error}
         </div>
@@ -107,7 +107,7 @@ export default function CreateAccountCard({ clientId, email }: { clientId: strin
 
       <div style={{ marginBottom: 12 }}>
         <label style={{
-          display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.7rem',
+          display: 'block', fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem',
           fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', marginBottom: 4,
         }}>PASSWORD</label>
         <div style={{ position: 'relative' }}>
@@ -124,7 +124,7 @@ export default function CreateAccountCard({ clientId, email }: { clientId: strin
       </div>
       <div style={{ marginBottom: 16 }}>
         <label style={{
-          display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.7rem',
+          display: 'block', fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem',
           fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', marginBottom: 4,
         }}>CONFIRM PASSWORD</label>
         <div style={{ position: 'relative' }}>
@@ -144,7 +144,7 @@ export default function CreateAccountCard({ clientId, email }: { clientId: strin
         <button onClick={handleCreate} disabled={creating} style={{
           padding: '10px 22px', borderRadius: 8,
           backgroundColor: 'var(--nhlb-red)', color: 'white',
-          fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
+          fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.8rem',
           border: 'none', cursor: 'pointer', opacity: creating ? 0.6 : 1,
         }}>
           {creating ? 'Creating...' : 'Create Account'}
@@ -152,7 +152,7 @@ export default function CreateAccountCard({ clientId, email }: { clientId: strin
         <button onClick={() => setExpanded(false)} style={{
           padding: '10px 16px', borderRadius: 8,
           backgroundColor: 'white', color: 'var(--nhlb-muted)',
-          fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', border: '1px solid var(--nhlb-border)',
+          fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', border: '1px solid var(--nhlb-border)',
           cursor: 'pointer',
         }}>
           Skip

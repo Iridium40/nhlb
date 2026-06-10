@@ -19,14 +19,14 @@ const S = {
     borderRadius: 8,
     padding: '10px 14px',
     fontSize: '0.875rem',
-    fontFamily: 'Lato, sans-serif',
+    fontFamily: 'Raleway, sans-serif',
     color: 'var(--nhlb-text)',
     background: 'white',
     outline: 'none',
   } as React.CSSProperties,
   label: {
     display: 'block',
-    fontFamily: 'Lato, sans-serif',
+    fontFamily: 'Raleway, sans-serif',
     fontSize: '0.75rem',
     fontWeight: 700,
     letterSpacing: '0.06em',
@@ -41,7 +41,7 @@ const S = {
     border: 'none',
     backgroundColor: 'var(--nhlb-red)',
     color: 'white',
-    fontFamily: 'Lato, sans-serif',
+    fontFamily: 'Raleway, sans-serif',
     fontWeight: 700,
     fontSize: '0.875rem',
     cursor: 'pointer',
@@ -155,7 +155,7 @@ export default function EventSlugClient({ slug }: { slug: string }) {
   if (loading) {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
+        <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
       </div>
     )
   }
@@ -164,11 +164,11 @@ export default function EventSlugClient({ slug }: { slug: string }) {
   if (!event || !event.is_published) {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
-        <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.5rem', color: 'var(--nhlb-red-dark)', marginBottom: 16 }}>
+        <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.5rem', color: 'var(--nhlb-red-dark)', marginBottom: 16 }}>
           Event not found
         </p>
         <Link href="/events" style={{
-          fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', fontWeight: 700,
+          fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', fontWeight: 700,
           color: 'var(--nhlb-red)', textDecoration: 'none',
         }}>
           ← Browse upcoming events
@@ -193,22 +193,22 @@ export default function EventSlugClient({ slug }: { slug: string }) {
               </svg>
             </div>
             <h1 style={{
-              fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem',
+              fontFamily: 'Playfair Display, serif', fontSize: '2rem',
               fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 12px',
             }}>
               Event Cancelled
             </h1>
-            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '1rem', color: 'var(--nhlb-text)', margin: '0 0 8px' }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '1rem', color: 'var(--nhlb-text)', margin: '0 0 8px' }}>
               <strong>{event.title}</strong> has been cancelled.
             </p>
             {event.cancellation_reason && (
-              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)', margin: '0 0 8px' }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)', margin: '0 0 8px' }}>
                 {event.cancellation_reason}
               </p>
             )}
             {event.registration_fee_cents > 0 && (
               <p style={{
-                fontFamily: 'Lato, sans-serif', fontSize: '0.85rem',
+                fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem',
                 color: 'var(--nhlb-muted)', margin: '0 0 24px',
                 padding: '12px 16px', backgroundColor: '#FEF3C7',
                 border: '1px solid #FCD34D', borderRadius: 8, textAlign: 'left',
@@ -219,7 +219,7 @@ export default function EventSlugClient({ slug }: { slug: string }) {
             <Link href="/events" style={{
               display: 'inline-block', padding: '12px 28px', borderRadius: 8,
               backgroundColor: 'var(--nhlb-red)', color: 'white',
-              fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem',
+              fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem',
               textDecoration: 'none',
             }}>
               Browse Upcoming Events
@@ -247,12 +247,12 @@ export default function EventSlugClient({ slug }: { slug: string }) {
         <PageHeader />
         <main style={{ flex: 1, maxWidth: 520, width: '100%', margin: '0 auto', padding: '40px 24px 80px' }}>
           <h2 style={{
-            fontFamily: 'Cormorant Garamond, serif', fontSize: '1.6rem',
+            fontFamily: 'Playfair Display, serif', fontSize: '1.6rem',
             fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 8px',
           }}>
             Complete Payment
           </h2>
-          <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)', marginBottom: 24 }}>
+          <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)', marginBottom: 24 }}>
             {event.fee_label}: {feeDisplay}
           </p>
           <div style={{
@@ -295,7 +295,7 @@ export default function EventSlugClient({ slug }: { slug: string }) {
         <div style={{ maxWidth: 720, margin: '0 auto', padding: '40px 24px 80px' }}>
           {/* Date label */}
           <p style={{
-            fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', fontWeight: 700,
+            fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', fontWeight: 700,
             letterSpacing: '0.08em', textTransform: 'uppercase',
             color: 'var(--nhlb-muted)', margin: '0 0 8px',
           }}>
@@ -304,7 +304,7 @@ export default function EventSlugClient({ slug }: { slug: string }) {
 
           {/* Title */}
           <h1 style={{
-            fontFamily: 'Cormorant Garamond, serif',
+            fontFamily: 'Playfair Display, serif',
             fontSize: 'clamp(2rem, 5vw, 2.75rem)',
             fontWeight: 600, color: 'var(--nhlb-red-dark)',
             margin: '0 0 16px', lineHeight: 1.15,
@@ -314,13 +314,13 @@ export default function EventSlugClient({ slug }: { slug: string }) {
 
           {/* Location */}
           {event.location && (
-            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.95rem', color: 'var(--nhlb-text)', margin: '0 0 6px' }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.95rem', color: 'var(--nhlb-text)', margin: '0 0 6px' }}>
               📍 {event.location}
             </p>
           )}
 
           {/* Time range */}
-          <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.95rem', color: 'var(--nhlb-text)', margin: '0 0 16px' }}>
+          <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.95rem', color: 'var(--nhlb-text)', margin: '0 0 16px' }}>
             🕐 {format(new Date(event.event_date), 'h:mm a')}
             {event.end_date && ` – ${format(new Date(event.end_date), 'h:mm a')}`}
           </p>
@@ -330,7 +330,7 @@ export default function EventSlugClient({ slug }: { slug: string }) {
             display: 'inline-block', padding: '5px 16px',
             backgroundColor: event.registration_fee_cents > 0 ? 'var(--nhlb-cream-dark)' : '#EAF5EE',
             borderRadius: 20,
-            fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700,
+            fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', fontWeight: 700,
             color: event.registration_fee_cents > 0 ? 'var(--nhlb-red-dark)' : '#065F46',
             marginBottom: 28,
           }}>
@@ -342,7 +342,7 @@ export default function EventSlugClient({ slug }: { slug: string }) {
           {/* Description */}
           {event.description && (
             <div style={{
-              fontFamily: 'Lato, sans-serif', fontSize: '0.95rem', lineHeight: 1.75,
+              fontFamily: 'Raleway, sans-serif', fontSize: '0.95rem', lineHeight: 1.75,
               color: 'var(--nhlb-text)', marginBottom: 40,
               whiteSpace: 'pre-wrap',
             }}>
@@ -356,7 +356,7 @@ export default function EventSlugClient({ slug }: { slug: string }) {
             paddingTop: 20, marginBottom: 40,
           }}>
             <p style={{
-              fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', fontWeight: 700,
+              fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', fontWeight: 700,
               letterSpacing: '0.06em', textTransform: 'uppercase',
               color: 'var(--nhlb-muted)', margin: '0 0 12px',
             }}>
@@ -366,7 +366,7 @@ export default function EventSlugClient({ slug }: { slug: string }) {
               <button onClick={handleCopyLink} style={{
                 padding: '8px 16px', borderRadius: 6,
                 border: '1px solid var(--nhlb-border)', backgroundColor: 'white',
-                fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 600,
+                fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', fontWeight: 600,
                 color: 'var(--nhlb-text)', cursor: 'pointer',
               }}>
                 {copied ? '✓ Copied!' : '🔗 Copy link'}
@@ -374,7 +374,7 @@ export default function EventSlugClient({ slug }: { slug: string }) {
               <button onClick={handleShareFacebook} style={{
                 padding: '8px 16px', borderRadius: 6,
                 border: '1px solid var(--nhlb-border)', backgroundColor: 'white',
-                fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 600,
+                fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', fontWeight: 600,
                 color: 'var(--nhlb-text)', cursor: 'pointer',
               }}>
                 📘 Facebook
@@ -382,7 +382,7 @@ export default function EventSlugClient({ slug }: { slug: string }) {
               <button onClick={handleShareEmail} style={{
                 padding: '8px 16px', borderRadius: 6,
                 border: '1px solid var(--nhlb-border)', backgroundColor: 'white',
-                fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 600,
+                fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', fontWeight: 600,
                 color: 'var(--nhlb-text)', cursor: 'pointer',
               }}>
                 ✉️ Email a friend
@@ -397,7 +397,7 @@ export default function EventSlugClient({ slug }: { slug: string }) {
               backgroundColor: 'var(--nhlb-blush-light)', border: '1px solid var(--nhlb-border)',
               borderRadius: 12,
             }}>
-              <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.15rem', color: 'var(--nhlb-red-dark)', margin: 0 }}>
+              <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.15rem', color: 'var(--nhlb-red-dark)', margin: 0 }}>
                 Registration opens {format(new Date(event.registration_opens_at!), 'EEEE, MMMM d, yyyy')}
               </p>
             </div>
@@ -409,7 +409,7 @@ export default function EventSlugClient({ slug }: { slug: string }) {
               backgroundColor: '#FEF2F2', border: '1px solid #FECACA',
               borderRadius: 12,
             }}>
-              <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.15rem', color: '#B91C1C', margin: 0 }}>
+              <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.15rem', color: '#B91C1C', margin: 0 }}>
                 Registration is closed
               </p>
             </div>
@@ -421,7 +421,7 @@ export default function EventSlugClient({ slug }: { slug: string }) {
               backgroundColor: '#FEF2F2', border: '1px solid #FECACA',
               borderRadius: 12,
             }}>
-              <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.15rem', color: '#B91C1C', margin: 0 }}>
+              <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.15rem', color: '#B91C1C', margin: 0 }}>
                 This event is full
               </p>
             </div>
@@ -433,7 +433,7 @@ export default function EventSlugClient({ slug }: { slug: string }) {
               borderRadius: 12, padding: 28,
             }}>
               <h2 style={{
-                fontFamily: 'Cormorant Garamond, serif', fontSize: '1.4rem',
+                fontFamily: 'Playfair Display, serif', fontSize: '1.4rem',
                 fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 20px',
               }}>
                 Register
@@ -443,7 +443,7 @@ export default function EventSlugClient({ slug }: { slug: string }) {
                 <div style={{
                   marginBottom: 16, padding: '12px 14px',
                   backgroundColor: '#FEF2F2', border: '1px solid #FECACA',
-                  borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: '#B91C1C',
+                  borderRadius: 8, fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: '#B91C1C',
                 }}>
                   {error}
                 </div>
@@ -498,7 +498,7 @@ export default function EventSlugClient({ slug }: { slug: string }) {
                         onChange={e => updateCustom(field.name, e.target.checked)}
                         style={{ width: 16, height: 16, accentColor: 'var(--nhlb-red)' }}
                       />
-                      <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem' }}>{field.label}</span>
+                      <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem' }}>{field.label}</span>
                     </label>
                   )}
                 </div>
@@ -522,7 +522,7 @@ export default function EventSlugClient({ slug }: { slug: string }) {
       </main>
 
       <footer style={{ backgroundColor: 'var(--nhlb-blush)', padding: '24px 48px', color: 'white' }}>
-        <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', margin: 0 }}>
+        <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', margin: 0 }}>
           No Heart Left Behind &copy; {new Date().getFullYear()} &ensp;&middot;&ensp; 985-264-8808
         </p>
       </footer>
@@ -538,7 +538,7 @@ function PageHeader() {
       <div style={{
         backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
         textAlign: 'center', fontSize: '0.8rem', letterSpacing: '0.05em',
-        padding: '8px 16px', fontFamily: 'Lato, sans-serif',
+        padding: '8px 16px', fontFamily: 'Raleway, sans-serif',
       }}>
         Let&apos;s Build Hope &amp; Healing TOGETHER!
       </div>
@@ -550,15 +550,13 @@ function PageHeader() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
           <a href="https://www.noheartleftbehind.com" target="_blank" rel="noopener noreferrer"
             style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="https://images.squarespace-cdn.com/content/v1/5e82146501b2e061b5579be0/1587480392593-WRDXDIU2H6V7O9536SHX/NHLBlogo.png?format=300w"
-              alt="No Heart Left Behind"
-              style={{ height: 48, width: 'auto' }}
-            />
+            <span style={{ display: 'inline-flex', backgroundColor: 'var(--nhlb-red-dark)', borderRadius: 10, padding: '8px 14px' }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo-white.png" alt="No Heart Left Behind" style={{ height: 30, width: 'auto', display: 'block' }} />
+            </span>
           </a>
           <Link href="/events" style={{
-            fontFamily: 'Lato, sans-serif', fontSize: '0.85rem',
+            fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem',
             color: 'var(--nhlb-muted)', textDecoration: 'none',
           }}>
             ← All Events
@@ -567,7 +565,7 @@ function PageHeader() {
         <nav style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
           <Link href="/donate" style={{
             backgroundColor: 'var(--nhlb-red)', color: 'white',
-            fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
+            fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.8rem',
             letterSpacing: '0.06em', padding: '8px 20px', borderRadius: 4,
             textDecoration: 'none',
           }}>
@@ -617,7 +615,7 @@ function PaymentForm({ slug, registrationId }: { slug: string; registrationId: s
         <div style={{
           marginTop: 12, padding: '10px 14px',
           backgroundColor: '#FEF2F2', border: '1px solid #FECACA',
-          borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#B91C1C',
+          borderRadius: 8, fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: '#B91C1C',
         }}>
           {error}
         </div>

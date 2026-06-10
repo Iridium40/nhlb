@@ -81,13 +81,13 @@ function ConfirmedContent() {
 
   if (loading) return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
+      <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
     </div>
   )
 
   if (!event) return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>Event not found</p>
+      <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>Event not found</p>
     </div>
   )
 
@@ -96,7 +96,7 @@ function ConfirmedContent() {
       <div style={{
         backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
         textAlign: 'center', fontSize: '0.8rem', letterSpacing: '0.05em',
-        padding: '8px 16px', fontFamily: 'Lato, sans-serif',
+        padding: '8px 16px', fontFamily: 'Raleway, sans-serif',
       }}>
         Registration Confirmed
       </div>
@@ -113,7 +113,7 @@ function ConfirmedContent() {
           </div>
 
           <h1 style={{
-            fontFamily: 'Cormorant Garamond, serif', fontSize: '2.25rem',
+            fontFamily: 'Playfair Display, serif', fontSize: '2.25rem',
             fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 12px',
           }}>
             You&apos;re registered!
@@ -124,23 +124,23 @@ function ConfirmedContent() {
             borderRadius: 12, padding: '24px', textAlign: 'left', marginBottom: 24,
           }}>
             <h2 style={{
-              fontFamily: 'Cormorant Garamond, serif', fontSize: '1.2rem',
+              fontFamily: 'Playfair Display, serif', fontSize: '1.2rem',
               fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 12px',
             }}>
               {event.title}
             </h2>
-            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-text)', margin: '0 0 4px' }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-text)', margin: '0 0 4px' }}>
               📅 {format(new Date(event.event_date), 'EEEE, MMMM d, yyyy')} at {format(new Date(event.event_date), 'h:mm a')}
               {event.end_date && ` – ${format(new Date(event.end_date), 'h:mm a')}`}
             </p>
             {event.location && (
-              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)', margin: 0 }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)', margin: 0 }}>
                 📍 {event.location}
               </p>
             )}
           </div>
 
-          <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', marginBottom: 24 }}>
+          <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', marginBottom: 24 }}>
             A confirmation email has been sent to your email address.
           </p>
 
@@ -148,7 +148,7 @@ function ConfirmedContent() {
             <button onClick={handleDownloadICS} style={{
               padding: '12px 24px', borderRadius: 8,
               backgroundColor: 'var(--nhlb-red)', color: 'white',
-              fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem',
+              fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem',
               border: 'none', cursor: 'pointer',
             }}>
               📅 Add to Calendar
@@ -157,7 +157,7 @@ function ConfirmedContent() {
               padding: '12px 24px', borderRadius: 8,
               border: '1px solid var(--nhlb-border)', backgroundColor: 'white',
               color: 'var(--nhlb-muted)',
-              fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem',
+              fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem',
               textDecoration: 'none', display: 'inline-flex', alignItems: 'center',
             }}>
               View More Events
@@ -169,7 +169,7 @@ function ConfirmedContent() {
             borderTop: '1px solid var(--nhlb-border)', paddingTop: 20,
           }}>
             <p style={{
-              fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', fontWeight: 700,
+              fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', fontWeight: 700,
               letterSpacing: '0.06em', textTransform: 'uppercase',
               color: 'var(--nhlb-muted)', margin: '0 0 12px',
             }}>
@@ -179,7 +179,7 @@ function ConfirmedContent() {
               <button onClick={handleCopyLink} style={{
                 padding: '8px 16px', borderRadius: 6,
                 border: '1px solid var(--nhlb-border)', backgroundColor: 'white',
-                fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 600,
+                fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', fontWeight: 600,
                 color: 'var(--nhlb-text)', cursor: 'pointer',
               }}>
                 {copied ? '✓ Copied!' : '🔗 Copy link'}
@@ -187,7 +187,7 @@ function ConfirmedContent() {
               <button onClick={handleShareFacebook} style={{
                 padding: '8px 16px', borderRadius: 6,
                 border: '1px solid var(--nhlb-border)', backgroundColor: 'white',
-                fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 600,
+                fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', fontWeight: 600,
                 color: 'var(--nhlb-text)', cursor: 'pointer',
               }}>
                 📘 Facebook
@@ -195,7 +195,7 @@ function ConfirmedContent() {
               <button onClick={handleShareEmail} style={{
                 padding: '8px 16px', borderRadius: 6,
                 border: '1px solid var(--nhlb-border)', backgroundColor: 'white',
-                fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 600,
+                fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', fontWeight: 600,
                 color: 'var(--nhlb-text)', cursor: 'pointer',
               }}>
                 ✉️ Email a friend
@@ -204,7 +204,7 @@ function ConfirmedContent() {
           </div>
 
           <p style={{
-            fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic',
+            fontFamily: 'Playfair Display, serif', fontStyle: 'italic',
             fontSize: '1rem', color: 'var(--nhlb-muted)', marginTop: 48,
           }}>
             &ldquo;As a man thinks in his heart, so is he.&rdquo;<br />
@@ -220,7 +220,7 @@ export default function ConfirmedPage() {
   return (
     <Suspense fallback={
       <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
+        <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
       </div>
     }>
       <ConfirmedContent />

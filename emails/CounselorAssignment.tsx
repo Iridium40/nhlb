@@ -23,28 +23,31 @@ export function CounselorAssignmentEmail({
   return (
     <Html>
       <Head />
-      <Body style={{ fontFamily: 'Georgia, serif', background: '#FDFAF8', padding: '40px 0' }}>
+      <Body style={{ fontFamily: 'Georgia, serif', background: '#FAF6F5', padding: '40px 0' }}>
         <Container style={{ background: '#fff', borderRadius: 8, padding: '40px', maxWidth: 520 }}>
-          <Heading style={{ color: '#8B2015', fontFamily: 'Georgia, serif', fontSize: 24, marginBottom: 4 }}>
+          <Section style={{ backgroundColor: '#763535', borderRadius: 8, padding: '20px 24px', textAlign: 'center', marginBottom: 24 }}>
+            <Img src="https://rgssitykmtunydrbuuhc.supabase.co/storage/v1/object/public/NHLB_Images/No-Heart-Left-Behind-Horizontal-White.svg" alt="No Heart Left Behind" width="220" style={{ margin: '0 auto', display: 'block' }} />
+          </Section>
+          <Heading style={{ color: '#763535', fontFamily: 'Georgia, serif', fontSize: 24, marginBottom: 4 }}>
             {isReassignment ? 'Your counselor has been updated' : 'Meet your counselor'}
           </Heading>
-          <Text style={{ color: '#9A5A50', marginTop: 0, fontFamily: 'Arial, sans-serif', fontSize: 13 }}>
+          <Text style={{ color: '#8A6A62', marginTop: 0, fontFamily: 'Arial, sans-serif', fontSize: 13 }}>
             No Heart Left Behind &mdash; Faith-Based Counseling
           </Text>
-          <Hr style={{ borderColor: '#F0E0D8', margin: '24px 0' }} />
+          <Hr style={{ borderColor: '#FCEEE7', margin: '24px 0' }} />
 
-          <Text style={{ color: '#3D1A14', fontSize: 14, fontFamily: 'Arial, sans-serif', lineHeight: '22px', margin: '0 0 20px' }}>
+          <Text style={{ color: '#241F1E', fontSize: 14, fontFamily: 'Arial, sans-serif', lineHeight: '22px', margin: '0 0 20px' }}>
             Hi {client.first_name},
           </Text>
 
-          <Text style={{ color: '#3D1A14', fontSize: 14, fontFamily: 'Arial, sans-serif', lineHeight: '22px', margin: '0 0 24px' }}>
+          <Text style={{ color: '#241F1E', fontSize: 14, fontFamily: 'Arial, sans-serif', lineHeight: '22px', margin: '0 0 24px' }}>
             {isReassignment
               ? 'We wanted to let you know that your counselor assignment has been updated. Your new counselor is ready to support you on your journey.'
               : 'We\'re excited to introduce you to your assigned counselor! They\'ll be working with you throughout your sessions.'}
           </Text>
 
           {/* Counselor Card */}
-          <Section style={{ background: '#FDFAF8', borderRadius: 8, padding: '24px', border: '1px solid #F0E0D8', marginBottom: 24 }}>
+          <Section style={{ background: '#FAF6F5', borderRadius: 8, padding: '24px', border: '1px solid #FCEEE7', marginBottom: 24 }}>
             <Row>
               {counselor.photo_url && (
                 <Column style={{ width: 80, verticalAlign: 'top' }}>
@@ -53,16 +56,16 @@ export function CounselorAssignmentEmail({
                     alt={counselor.name}
                     width={72}
                     height={72}
-                    style={{ borderRadius: '50%', objectFit: 'cover', border: '2px solid #F0E0D8' }}
+                    style={{ borderRadius: '50%', objectFit: 'cover', border: '2px solid #FCEEE7' }}
                   />
                 </Column>
               )}
               <Column style={{ verticalAlign: 'top', paddingLeft: counselor.photo_url ? 12 : 0 }}>
-                <Text style={{ color: '#8B2015', fontSize: 18, fontWeight: 'bold', fontFamily: 'Georgia, serif', margin: '0 0 2px' }}>
+                <Text style={{ color: '#763535', fontSize: 18, fontWeight: 'bold', fontFamily: 'Georgia, serif', margin: '0 0 2px' }}>
                   {counselor.name}
                 </Text>
                 {counselor.title && (
-                  <Text style={{ color: '#9A5A50', fontSize: 14, margin: '0 0 8px', fontFamily: 'Arial, sans-serif' }}>
+                  <Text style={{ color: '#8A6A62', fontSize: 14, margin: '0 0 8px', fontFamily: 'Arial, sans-serif' }}>
                     {counselor.title}
                   </Text>
                 )}
@@ -77,13 +80,13 @@ export function CounselorAssignmentEmail({
 
           {/* Zoom details if available */}
           {counselor.zoom_link && (
-            <Section style={{ background: '#F5EDE8', borderRadius: 6, padding: '16px 20px', border: '1px solid #F0E0D8', marginBottom: 24 }}>
-              <Text style={{ color: '#8B2015', fontSize: 14, fontWeight: 'bold', margin: '0 0 8px', fontFamily: 'Georgia, serif' }}>
+            <Section style={{ background: '#F8F3ED', borderRadius: 6, padding: '16px 20px', border: '1px solid #FCEEE7', marginBottom: 24 }}>
+              <Text style={{ color: '#763535', fontSize: 14, fontWeight: 'bold', margin: '0 0 8px', fontFamily: 'Georgia, serif' }}>
                 💻 Virtual Session Details
               </Text>
               <Text style={{ color: '#555', fontSize: 13, margin: '0 0 4px', fontFamily: 'Arial, sans-serif' }}>
                 <strong>Join link:</strong>{' '}
-                <a href={counselor.zoom_link} style={{ color: '#B8311F' }}>{counselor.zoom_link}</a>
+                <a href={counselor.zoom_link} style={{ color: '#A90113' }}>{counselor.zoom_link}</a>
               </Text>
               {counselor.zoom_meeting_id && (
                 <Text style={{ color: '#555', fontSize: 13, margin: '4px 0 0', fontFamily: 'Arial, sans-serif' }}>
@@ -101,7 +104,7 @@ export function CounselorAssignmentEmail({
           {/* Upcoming sessions */}
           {upcomingSessions.length > 0 && (
             <>
-              <Text style={{ color: '#9A5A50', fontSize: 12, fontWeight: 'bold', letterSpacing: '0.06em', margin: '0 0 12px', fontFamily: 'Arial, sans-serif' }}>
+              <Text style={{ color: '#8A6A62', fontSize: 12, fontWeight: 'bold', letterSpacing: '0.06em', margin: '0 0 12px', fontFamily: 'Arial, sans-serif' }}>
                 YOUR UPCOMING SESSIONS
               </Text>
               {upcomingSessions.map((session) => (
@@ -118,14 +121,14 @@ export function CounselorAssignmentEmail({
                   </Row>
                 </Section>
               ))}
-              <Hr style={{ borderColor: '#F0E0D8', margin: '24px 0' }} />
+              <Hr style={{ borderColor: '#FCEEE7', margin: '24px 0' }} />
             </>
           )}
 
           <Section>
             <Text style={{ color: '#555', fontSize: 13, fontFamily: 'Arial, sans-serif', lineHeight: '20px' }}>
               If you have any questions, feel free to call us at <strong>985-264-8808</strong> or
-              email <a href="mailto:reconnectus@yahoo.com" style={{ color: '#B8311F' }}>reconnectus@yahoo.com</a>.
+              email <a href="mailto:reconnectus@yahoo.com" style={{ color: '#A90113' }}>reconnectus@yahoo.com</a>.
             </Text>
           </Section>
 
@@ -134,7 +137,7 @@ export function CounselorAssignmentEmail({
               href={`${baseUrl}/book`}
               style={{
                 display: 'inline-block', padding: '12px 28px',
-                backgroundColor: '#B8311F', color: '#fff', borderRadius: 6,
+                backgroundColor: '#A90113', color: '#fff', borderRadius: 6,
                 fontSize: 14, fontWeight: 'bold', fontFamily: 'Arial, sans-serif',
                 textDecoration: 'none',
               }}
@@ -143,10 +146,10 @@ export function CounselorAssignmentEmail({
             </Link>
           </Section>
 
-          <Text style={{ color: '#9A5A50', fontSize: 13, marginTop: 32, fontStyle: 'italic', fontFamily: 'Georgia, serif' }}>
+          <Text style={{ color: '#8A6A62', fontSize: 13, marginTop: 32, fontStyle: 'italic', fontFamily: 'Georgia, serif' }}>
             &ldquo;As a man thinks in his heart, so is he.&rdquo; &mdash; Proverbs 23:7
           </Text>
-          <Text style={{ color: '#D4A898', fontSize: 12, fontFamily: 'Arial, sans-serif' }}>
+          <Text style={{ color: '#E5C4B8', fontSize: 12, fontFamily: 'Arial, sans-serif' }}>
             No Heart Left Behind &copy; {new Date().getFullYear()}
           </Text>
         </Container>

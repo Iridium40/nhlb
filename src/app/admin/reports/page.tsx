@@ -95,11 +95,11 @@ export default function AdminReportsPage() {
   }
 
   const S = {
-    label: { display: 'block' as const, fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', marginBottom: 4 },
-    dateInput: { border: '1px solid var(--nhlb-border)', borderRadius: 8, padding: '6px 10px', fontSize: '0.8rem', fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-text)' },
+    label: { display: 'block' as const, fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', marginBottom: 4 },
+    dateInput: { border: '1px solid var(--nhlb-border)', borderRadius: 8, padding: '6px 10px', fontSize: '0.8rem', fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-text)' },
     card: { background: 'white', border: '1px solid var(--nhlb-border)', borderRadius: 12, padding: '20px 24px' },
-    th: { padding: '10px 16px', textAlign: 'left' as const, fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)' },
-    td: { padding: '12px 16px', fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)' },
+    th: { padding: '10px 16px', textAlign: 'left' as const, fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)' },
+    td: { padding: '12px 16px', fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)' },
   }
 
   const funds: Fund[] = ['COUNSELING', 'OPERATIONS', 'EVENTS', 'GENERAL']
@@ -119,7 +119,7 @@ export default function AdminReportsPage() {
           <a href={exportUrl('settlement')} style={{
             padding: '8px 14px', borderRadius: 8, border: '1px solid var(--nhlb-border)',
             backgroundColor: 'white', color: 'var(--nhlb-text)',
-            fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.75rem',
+            fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.75rem',
             textDecoration: 'none',
           }}>
             Export Settlement CSV
@@ -127,7 +127,7 @@ export default function AdminReportsPage() {
           <a href={exportUrl('counselor')} style={{
             padding: '8px 14px', borderRadius: 8,
             backgroundColor: 'var(--nhlb-red)', color: 'white',
-            fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.75rem',
+            fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.75rem',
             textDecoration: 'none',
           }}>
             Export Counselor CSV
@@ -179,7 +179,7 @@ export default function AdminReportsPage() {
                 style={{
                   padding: '6px 10px', borderRadius: 6, border: '1px solid var(--nhlb-border)',
                   backgroundColor: 'white', color: 'var(--nhlb-muted)',
-                  fontFamily: 'Lato, sans-serif', fontSize: '0.65rem', fontWeight: 700,
+                  fontFamily: 'Raleway, sans-serif', fontSize: '0.65rem', fontWeight: 700,
                   cursor: 'pointer',
                 }}>
                 {r.label}
@@ -189,7 +189,7 @@ export default function AdminReportsPage() {
         </div>
 
         {loading || !filtered ? (
-          <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>Loading reports...</p>
+          <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>Loading reports...</p>
         ) : (
           <>
             {/* Counselor filter indicator */}
@@ -199,16 +199,16 @@ export default function AdminReportsPage() {
                 padding: '10px 16px', background: '#FDF2F2', border: '1px solid var(--nhlb-border)',
                 borderRadius: 8,
               }}>
-                <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-red-dark)', fontWeight: 700 }}>
+                <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-red-dark)', fontWeight: 700 }}>
                   Showing: {counselorFilter}
                 </span>
-                <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)' }}>
+                <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)' }}>
                   (counseling revenue only)
                 </span>
                 <button onClick={() => setCounselorFilter('all')} style={{
                   marginLeft: 'auto', padding: '4px 10px', borderRadius: 6, border: '1px solid var(--nhlb-border)',
                   backgroundColor: 'white', color: 'var(--nhlb-muted)',
-                  fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer',
+                  fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer',
                 }}>Clear filter</button>
               </div>
             )}
@@ -216,10 +216,10 @@ export default function AdminReportsPage() {
             {/* Grand totals row */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: 12, marginBottom: 20 }}>
               <div style={{ ...S.card, textAlign: 'center', borderLeft: '4px solid var(--nhlb-red)' }}>
-                <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0 }}>
+                <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0 }}>
                   {dollars(filtered.grand_total_cents)}
                 </p>
-                <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '4px 0 0' }}>
+                <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '4px 0 0' }}>
                   {counselorFilter !== 'all' ? 'COUNSELING REVENUE' : 'TOTAL REVENUE'} ({filtered.total_donations} transactions)
                 </p>
               </div>
@@ -227,10 +227,10 @@ export default function AdminReportsPage() {
                 const fd = filtered.fund_totals[f]
                 return (
                   <div key={f} style={{ ...S.card, textAlign: 'center', borderLeft: `4px solid ${FUND_COLORS[f].text}` }}>
-                    <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.5rem', fontWeight: 600, color: FUND_COLORS[f].text, margin: 0 }}>
+                    <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.5rem', fontWeight: 600, color: FUND_COLORS[f].text, margin: 0 }}>
                       {dollars(fd?.total_cents ?? 0)}
                     </p>
-                    <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '4px 0 0' }}>
+                    <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '4px 0 0' }}>
                       {FUND_LABELS[f].toUpperCase()} ({fd?.count ?? 0})
                     </p>
                   </div>
@@ -247,7 +247,7 @@ export default function AdminReportsPage() {
                     borderColor: tab === t.key ? 'var(--nhlb-red)' : 'var(--nhlb-border)',
                     backgroundColor: tab === t.key ? 'var(--nhlb-red)' : 'white',
                     color: tab === t.key ? 'white' : 'var(--nhlb-muted)',
-                    fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700,
+                    fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', fontWeight: 700,
                     cursor: 'pointer',
                   }}>
                   {t.label}
@@ -259,7 +259,7 @@ export default function AdminReportsPage() {
             {tab === 'settlement' && (
               <div>
                 <div style={{ ...S.card, marginBottom: 16 }}>
-                  <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.2rem', color: 'var(--nhlb-red-dark)', margin: '0 0 16px' }}>
+                  <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.2rem', color: 'var(--nhlb-red-dark)', margin: '0 0 16px' }}>
                     Revenue by Fund
                   </h2>
                   <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -280,7 +280,7 @@ export default function AdminReportsPage() {
                               <span style={{
                                 backgroundColor: FUND_COLORS[f].bg, color: FUND_COLORS[f].text,
                                 padding: '3px 12px', borderRadius: 20, fontSize: '0.8rem', fontWeight: 700,
-                                fontFamily: 'Lato, sans-serif',
+                                fontFamily: 'Raleway, sans-serif',
                               }}>
                                 {FUND_LABELS[f]}
                               </span>
@@ -292,7 +292,7 @@ export default function AdminReportsPage() {
                                 <div style={{ width: 80, height: 8, backgroundColor: 'var(--nhlb-cream-dark)', borderRadius: 4, overflow: 'hidden' }}>
                                   <div style={{ width: `${pct}%`, height: '100%', backgroundColor: FUND_COLORS[f].text, borderRadius: 4 }} />
                                 </div>
-                                <span style={{ fontSize: '0.8rem', fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>{pct.toFixed(1)}%</span>
+                                <span style={{ fontSize: '0.8rem', fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>{pct.toFixed(1)}%</span>
                               </div>
                             </td>
                           </tr>
@@ -309,10 +309,10 @@ export default function AdminReportsPage() {
                 </div>
 
                 <div style={{ ...S.card }}>
-                  <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.2rem', color: 'var(--nhlb-red-dark)', margin: '0 0 12px' }}>
+                  <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.2rem', color: 'var(--nhlb-red-dark)', margin: '0 0 12px' }}>
                     Settlement Notes
                   </h2>
-                  <div style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', lineHeight: 1.7 }}>
+                  <div style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', lineHeight: 1.7 }}>
                     <p style={{ margin: '0 0 8px' }}>
                       <strong>Counseling Services:</strong> Love offerings collected during counseling sessions. Attributable to individual counselors.
                     </p>
@@ -333,11 +333,11 @@ export default function AdminReportsPage() {
             {/* Counselor Revenue */}
             {tab === 'counselors' && (
               <div style={{ ...S.card }}>
-                <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.2rem', color: 'var(--nhlb-red-dark)', margin: '0 0 16px' }}>
+                <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.2rem', color: 'var(--nhlb-red-dark)', margin: '0 0 16px' }}>
                   Revenue by Counselor
                 </h2>
                 {filtered.counselor_stats.length === 0 ? (
-                  <p style={{ textAlign: 'center', padding: 32, fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem', color: 'var(--nhlb-muted)' }}>
+                  <p style={{ textAlign: 'center', padding: 32, fontFamily: 'Playfair Display, serif', fontSize: '1.1rem', color: 'var(--nhlb-muted)' }}>
                     No session data for this period
                   </p>
                 ) : (
@@ -356,13 +356,13 @@ export default function AdminReportsPage() {
                             <td style={{ ...S.td, fontWeight: 700 }}>{c.counselor_name}</td>
                             <td style={S.td}>{c.total_sessions}</td>
                             <td style={S.td}>
-                              <span style={{ backgroundColor: '#D1FAE5', color: '#065F46', padding: '2px 8px', borderRadius: 12, fontSize: '0.8rem', fontWeight: 700, fontFamily: 'Lato, sans-serif' }}>
+                              <span style={{ backgroundColor: '#D1FAE5', color: '#065F46', padding: '2px 8px', borderRadius: 12, fontSize: '0.8rem', fontWeight: 700, fontFamily: 'Raleway, sans-serif' }}>
                                 {c.completed_sessions}
                               </span>
                             </td>
                             <td style={S.td}>
                               {c.cancelled_sessions > 0 ? (
-                                <span style={{ backgroundColor: '#FEE2E2', color: '#991B1B', padding: '2px 8px', borderRadius: 12, fontSize: '0.8rem', fontWeight: 700, fontFamily: 'Lato, sans-serif' }}>
+                                <span style={{ backgroundColor: '#FEE2E2', color: '#991B1B', padding: '2px 8px', borderRadius: 12, fontSize: '0.8rem', fontWeight: 700, fontFamily: 'Raleway, sans-serif' }}>
                                   {c.cancelled_sessions}
                                 </span>
                               ) : (
@@ -377,7 +377,7 @@ export default function AdminReportsPage() {
                                     backgroundColor: c.completion_rate >= 80 ? '#065F46' : c.completion_rate >= 50 ? '#D97706' : '#DC2626',
                                   }} />
                                 </div>
-                                <span style={{ fontSize: '0.8rem', fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>{c.completion_rate}%</span>
+                                <span style={{ fontSize: '0.8rem', fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>{c.completion_rate}%</span>
                               </div>
                             </td>
                             <td style={{ ...S.td, fontWeight: 700, color: 'var(--nhlb-red-dark)' }}>
@@ -417,11 +417,11 @@ export default function AdminReportsPage() {
             {/* Monthly Trends */}
             {tab === 'trends' && (
               <div style={{ ...S.card }}>
-                <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.2rem', color: 'var(--nhlb-red-dark)', margin: '0 0 16px' }}>
+                <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.2rem', color: 'var(--nhlb-red-dark)', margin: '0 0 16px' }}>
                   Monthly Revenue Trends
                 </h2>
                 {filtered.monthly.length === 0 ? (
-                  <p style={{ textAlign: 'center', padding: 32, fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem', color: 'var(--nhlb-muted)' }}>
+                  <p style={{ textAlign: 'center', padding: 32, fontFamily: 'Playfair Display, serif', fontSize: '1.1rem', color: 'var(--nhlb-muted)' }}>
                     No data for this period
                   </p>
                 ) : (
@@ -432,7 +432,7 @@ export default function AdminReportsPage() {
                         {funds.map(f => (
                           <span key={f} style={{
                             display: 'inline-flex', alignItems: 'center', gap: 4,
-                            fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)',
+                            fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)',
                           }}>
                             <span style={{ width: 10, height: 10, borderRadius: 2, backgroundColor: FUND_COLORS[f].text, display: 'inline-block' }} />
                             {FUND_LABELS[f]}
@@ -466,13 +466,13 @@ export default function AdminReportsPage() {
                                     })}
                                   </div>
                                   <p style={{
-                                    fontFamily: 'Lato, sans-serif', fontSize: '0.55rem', color: 'var(--nhlb-muted)',
+                                    fontFamily: 'Raleway, sans-serif', fontSize: '0.55rem', color: 'var(--nhlb-muted)',
                                     margin: '6px 0 0', textAlign: 'center', writingMode: 'horizontal-tb',
                                   }}>
                                     {format(new Date(m.month + '-01'), 'MMM')}
                                   </p>
                                   <p style={{
-                                    fontFamily: 'Lato, sans-serif', fontSize: '0.55rem', fontWeight: 700,
+                                    fontFamily: 'Raleway, sans-serif', fontSize: '0.55rem', fontWeight: 700,
                                     color: 'var(--nhlb-text)', margin: '2px 0 0', textAlign: 'center',
                                   }}>
                                     {total > 0 ? dollars(total) : ''}

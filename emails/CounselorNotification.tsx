@@ -1,5 +1,5 @@
 import {
-  Html, Head, Body, Container, Text, Heading, Hr, Section
+  Html, Head, Body, Container, Text, Heading, Hr, Section, Img
 } from '@react-email/components'
 import type { Booking, Counselor, Client } from '../src/types'
 import { format } from 'date-fns'
@@ -15,7 +15,10 @@ export function CounselorNotificationEmail({ booking, counselor, client }: Props
       <Head />
       <Body style={{ fontFamily: 'Arial, sans-serif', background: '#f4f4f4', padding: '32px 0' }}>
         <Container style={{ background: '#fff', borderRadius: 8, padding: '32px', maxWidth: 480 }}>
-          <Heading style={{ fontSize: 20, marginBottom: 4, color: '#8B2015' }}>New session request</Heading>
+          <Section style={{ backgroundColor: '#763535', borderRadius: 8, padding: '20px 24px', textAlign: 'center', marginBottom: 24 }}>
+            <Img src="https://rgssitykmtunydrbuuhc.supabase.co/storage/v1/object/public/NHLB_Images/No-Heart-Left-Behind-Horizontal-White.svg" alt="No Heart Left Behind" width="220" style={{ margin: '0 auto', display: 'block' }} />
+          </Section>
+          <Heading style={{ fontSize: 20, marginBottom: 4, color: '#763535' }}>New session request</Heading>
           <Text style={{ color: '#666', marginTop: 0 }}>Assigned to {counselor.name}</Text>
           <Hr style={{ margin: '20px 0' }} />
 

@@ -1,5 +1,5 @@
 import {
-  Html, Head, Body, Container, Section,
+  Html, Head, Body, Container, Section, Img,
   Text, Hr, Link
 } from '@react-email/components'
 import type { Event } from '../src/types'
@@ -20,17 +20,20 @@ export function EventMinimumWarningEmail({ event, currentCount, baseUrl = 'https
   return (
     <Html>
       <Head />
-      <Body style={{ fontFamily: 'Georgia, serif', background: '#FDFAF8', padding: '40px 0' }}>
+      <Body style={{ fontFamily: 'Georgia, serif', background: '#FAF6F5', padding: '40px 0' }}>
         <Container style={{ background: '#fff', borderRadius: 8, padding: '40px', maxWidth: 520 }}>
+          <Section style={{ backgroundColor: '#763535', borderRadius: 8, padding: '20px 24px', textAlign: 'center', marginBottom: 24 }}>
+            <Img src="https://rgssitykmtunydrbuuhc.supabase.co/storage/v1/object/public/NHLB_Images/No-Heart-Left-Behind-Horizontal-White.svg" alt="No Heart Left Behind" width="220" style={{ margin: '0 auto', display: 'block' }} />
+          </Section>
           <Text style={{ color: '#92400E', fontSize: 22, fontWeight: 'bold', margin: '0 0 4px', fontFamily: 'Georgia, serif' }}>
             ⚠ Event Below Minimum
           </Text>
-          <Text style={{ color: '#9A5A50', marginTop: 0, fontFamily: 'Arial, sans-serif', fontSize: 13 }}>
+          <Text style={{ color: '#8A6A62', marginTop: 0, fontFamily: 'Arial, sans-serif', fontSize: 13 }}>
             No Heart Left Behind — Admin Alert
           </Text>
-          <Hr style={{ borderColor: '#F0E0D8', margin: '24px 0' }} />
+          <Hr style={{ borderColor: '#FCEEE7', margin: '24px 0' }} />
 
-          <Text style={{ color: '#3D1A14', fontSize: 15, lineHeight: '24px', fontFamily: 'Arial, sans-serif' }}>
+          <Text style={{ color: '#241F1E', fontSize: 15, lineHeight: '24px', fontFamily: 'Arial, sans-serif' }}>
             <strong>{event.title}</strong> is below its minimum attendance of {event.min_capacity}.
           </Text>
 
@@ -51,15 +54,15 @@ export function EventMinimumWarningEmail({ event, currentCount, baseUrl = 'https
             this event will be automatically cancelled and all registrants refunded.
           </Text>
 
-          <Hr style={{ borderColor: '#F0E0D8', margin: '24px 0' }} />
+          <Hr style={{ borderColor: '#FCEEE7', margin: '24px 0' }} />
 
           <Section>
-            <Link href={`${baseUrl}/admin/events`} style={{ color: '#B8311F', fontSize: 14, fontFamily: 'Arial, sans-serif', marginRight: 20 }}>
+            <Link href={`${baseUrl}/admin/events`} style={{ color: '#A90113', fontSize: 14, fontFamily: 'Arial, sans-serif', marginRight: 20 }}>
               View event registrations
             </Link>
           </Section>
 
-          <Text style={{ color: '#D4A898', fontSize: 12, fontFamily: 'Arial, sans-serif', marginTop: 32 }}>
+          <Text style={{ color: '#E5C4B8', fontSize: 12, fontFamily: 'Arial, sans-serif', marginTop: 32 }}>
             No Heart Left Behind &copy; {new Date().getFullYear()}
           </Text>
         </Container>

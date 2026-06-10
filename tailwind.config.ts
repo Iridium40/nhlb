@@ -8,29 +8,29 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        display: ['Cormorant Garamond', 'Georgia', 'serif'],
-        body: ['Lato', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        script: ['Dancing Script', 'cursive'],
+        display: ['Playfair Display', 'Georgia', 'serif'],
+        body: ['Raleway', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        script: ['Birthstone Bounce', 'cursive'],
       },
       colors: {
         brand: {
-          DEFAULT: '#B8311F',
-          dark: '#8B2015',
-          deep: '#6B1510',
-          hover: '#9E2919',
+          DEFAULT: '#A90113',
+          dark: '#763535',
+          deep: '#5A2727',
+          hover: '#8E0110',
         },
         blush: {
-          DEFAULT: '#D4A898',
-          light: '#F0E0D8',
+          DEFAULT: '#E5C4B8',
+          light: '#FCEEE7',
         },
         cream: {
-          DEFAULT: '#FDFAF8',
-          dark: '#F5EDE8',
+          DEFAULT: '#FAF6F5',
+          dark: '#F8F3ED',
         },
         nhlb: {
-          text: '#3D1A14',
-          muted: '#9A5A50',
-          border: '#E8D0C8',
+          text: '#241F1E',
+          muted: '#8A6A62',
+          border: '#ECE3DC',
         },
       },
     },

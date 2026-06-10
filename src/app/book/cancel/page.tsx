@@ -17,7 +17,7 @@ export default function CancelBookingPage() {
   return (
     <Suspense fallback={
       <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
+        <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
       </div>
     }>
       <CancelBookingInner />
@@ -83,16 +83,16 @@ function CancelBookingInner() {
 
   const S = {
     page: { minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', flexDirection: 'column' as const },
-    topbar: { backgroundColor: 'var(--nhlb-red-dark)', color: 'white', textAlign: 'center' as const, fontSize: '0.8rem', letterSpacing: '0.05em', padding: '8px 16px', fontFamily: 'Lato, sans-serif' },
+    topbar: { backgroundColor: 'var(--nhlb-red-dark)', color: 'white', textAlign: 'center' as const, fontSize: '0.8rem', letterSpacing: '0.05em', padding: '8px 16px', fontFamily: 'Raleway, sans-serif' },
     main: { flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '60px 24px' },
     card: { maxWidth: 520, width: '100%', background: 'white', border: '1px solid var(--nhlb-border)', borderRadius: 12, padding: '32px' },
-    h1: { fontFamily: 'Cormorant Garamond, serif', fontSize: '1.75rem', fontWeight: 600 as const, color: 'var(--nhlb-red-dark)', margin: '0 0 8px' },
-    label: { display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', marginBottom: 4 },
-    input: { width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid var(--nhlb-border)', fontFamily: 'Lato, sans-serif', fontSize: '0.95rem', boxSizing: 'border-box' as const },
-    btn: { width: '100%', padding: '12px', borderRadius: 8, border: 'none', fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer' },
+    h1: { fontFamily: 'Playfair Display, serif', fontSize: '1.75rem', fontWeight: 600 as const, color: 'var(--nhlb-red-dark)', margin: '0 0 8px' },
+    label: { display: 'block', fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', marginBottom: 4 },
+    input: { width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid var(--nhlb-border)', fontFamily: 'Raleway, sans-serif', fontSize: '0.95rem', boxSizing: 'border-box' as const },
+    btn: { width: '100%', padding: '12px', borderRadius: 8, border: 'none', fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer' },
     row: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 },
-    meta: { fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px' },
-    val: { fontFamily: 'Lato, sans-serif', fontWeight: 700, color: 'var(--nhlb-text)', margin: 0, fontSize: '0.95rem' },
+    meta: { fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px' },
+    val: { fontFamily: 'Raleway, sans-serif', fontWeight: 700, color: 'var(--nhlb-text)', margin: 0, fontSize: '0.95rem' },
   }
 
   return (
@@ -104,7 +104,7 @@ function CancelBookingInner() {
           {step === 'lookup' && (
             <>
               <h1 style={S.h1}>Cancel Your Appointment</h1>
-              <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.9rem', marginBottom: 24 }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.9rem', marginBottom: 24 }}>
                 Please confirm your email address to proceed.
               </p>
               <div style={{ marginBottom: 16 }}>
@@ -113,7 +113,7 @@ function CancelBookingInner() {
                   style={S.input} placeholder="you@example.com"
                   onKeyDown={e => e.key === 'Enter' && handleLookup()} />
               </div>
-              {error && <p style={{ color: '#c0392b', fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', margin: '0 0 12px' }}>{error}</p>}
+              {error && <p style={{ color: '#c0392b', fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', margin: '0 0 12px' }}>{error}</p>}
               <button onClick={handleLookup} style={{ ...S.btn, background: 'var(--nhlb-red)', color: 'white' }}>
                 Continue
               </button>
@@ -123,11 +123,11 @@ function CancelBookingInner() {
           {step === 'confirm' && booking && (
             <>
               <h1 style={S.h1}>Confirm Cancellation</h1>
-              <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.9rem', marginBottom: 24 }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.9rem', marginBottom: 24 }}>
                 Are you sure you want to cancel this session?
               </p>
 
-              <div style={{ background: '#FDFAF8', borderRadius: 8, padding: 16, marginBottom: 20, border: '1px solid var(--nhlb-border)' }}>
+              <div style={{ background: '#FAF6F5', borderRadius: 8, padding: 16, marginBottom: 20, border: '1px solid var(--nhlb-border)' }}>
                 <div style={S.row}>
                   <div>
                     <p style={S.meta}>DATE</p>
@@ -152,7 +152,7 @@ function CancelBookingInner() {
 
               {error && (
                 <div style={{ background: '#FDF2F2', border: '1px solid #E8AAAA', borderRadius: 8, padding: '12px 16px', marginBottom: 16 }}>
-                  <p style={{ color: '#8B2015', fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', margin: 0 }}>{error}</p>
+                  <p style={{ color: '#A90113', fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', margin: 0 }}>{error}</p>
                 </div>
               )}
 
@@ -178,17 +178,17 @@ function CancelBookingInner() {
                 </svg>
               </div>
               <h1 style={S.h1}>Session Cancelled</h1>
-              <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.9rem', marginBottom: 24 }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.9rem', marginBottom: 24 }}>
                 Your appointment has been cancelled. We hope to see you again soon.
               </p>
               <a href="/book" style={{
                 display: 'inline-block', padding: '12px 28px', backgroundColor: 'var(--nhlb-red)', color: 'white',
-                fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem', borderRadius: 8, textDecoration: 'none',
+                fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem', borderRadius: 8, textDecoration: 'none',
               }}>
                 Book a New Session
               </a>
               <p style={{
-                fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: '1rem',
+                fontFamily: 'Playfair Display, serif', fontStyle: 'italic', fontSize: '1rem',
                 color: 'var(--nhlb-muted)', marginTop: 40,
               }}>
                 &ldquo;As a man thinks in his heart, so is he.&rdquo;<br />
@@ -208,12 +208,12 @@ function CancelBookingInner() {
                 </svg>
               </div>
               <h1 style={S.h1}>Unable to Cancel</h1>
-              <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.9rem', marginBottom: 24 }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.9rem', marginBottom: 24 }}>
                 {error}
               </p>
               <a href="/book" style={{
                 display: 'inline-block', padding: '12px 28px', backgroundColor: 'var(--nhlb-red)', color: 'white',
-                fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem', borderRadius: 8, textDecoration: 'none',
+                fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem', borderRadius: 8, textDecoration: 'none',
               }}>
                 Back to Sessions
               </a>

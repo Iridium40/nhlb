@@ -100,7 +100,7 @@ export default function PaymentMethodsPage() {
   if (loading) {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
+        <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
       </div>
     )
   }
@@ -110,7 +110,7 @@ export default function PaymentMethodsPage() {
       <div style={{
         backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
         textAlign: 'center', fontSize: '0.8rem', letterSpacing: '0.05em',
-        padding: '8px 16px', fontFamily: 'Lato, sans-serif',
+        padding: '8px 16px', fontFamily: 'Raleway, sans-serif',
       }}>
         Payment Methods
       </div>
@@ -120,11 +120,11 @@ export default function PaymentMethodsPage() {
         padding: '0 40px', display: 'flex', alignItems: 'center', height: 64,
       }}>
         <Link href="/book" style={{
-          fontFamily: 'Lato, sans-serif', fontSize: '0.85rem',
+          fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem',
           color: 'var(--nhlb-muted)', textDecoration: 'none',
         }}>&larr; Back</Link>
         <h1 style={{
-          fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem',
+          fontFamily: 'Playfair Display, serif', fontSize: '1.3rem',
           fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 0 20px',
         }}>Payment Methods</h1>
       </header>
@@ -133,7 +133,7 @@ export default function PaymentMethodsPage() {
         <div style={{
           position: 'fixed', top: 20, left: '50%', transform: 'translateX(-50%)',
           backgroundColor: '#065F46', color: 'white', padding: '12px 24px',
-          borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.875rem',
+          borderRadius: 8, fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem',
           fontWeight: 600, zIndex: 50, boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
         }}>
           {toast}
@@ -146,7 +146,7 @@ export default function PaymentMethodsPage() {
           <div style={{
             marginBottom: 24, padding: '14px 16px',
             backgroundColor: '#FEF3C7', border: '1px solid #FCD34D',
-            borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#92400E',
+            borderRadius: 8, fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: '#92400E',
           }}>
             Payment integration is not configured yet. This feature will be available once Stripe is set up.
           </div>
@@ -166,23 +166,23 @@ export default function PaymentMethodsPage() {
                     width: 40, height: 28, borderRadius: 4,
                     backgroundColor: '#F3F4F6', display: 'flex',
                     alignItems: 'center', justifyContent: 'center',
-                    fontFamily: 'Lato, sans-serif', fontSize: '0.65rem',
+                    fontFamily: 'Raleway, sans-serif', fontSize: '0.65rem',
                     fontWeight: 700, color: '#374151', textTransform: 'uppercase',
                   }}>
                     {BRAND_LABELS[card.brand] ?? card.brand}
                   </div>
                   <div>
-                    <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.9rem', fontWeight: 600, color: 'var(--nhlb-text)', margin: '0 0 2px' }}>
+                    <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.9rem', fontWeight: 600, color: 'var(--nhlb-text)', margin: '0 0 2px' }}>
                       •••• {card.last4}
                     </p>
-                    <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)', margin: 0 }}>
+                    <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)', margin: 0 }}>
                       Expires {String(card.expMonth).padStart(2, '0')}/{card.expYear}
                     </p>
                   </div>
                 </div>
                 <button onClick={() => handleRemoveCard(card.id)} disabled={removingId === card.id} style={{
                   padding: '6px 14px', borderRadius: 6, cursor: 'pointer',
-                  fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', fontWeight: 600,
+                  fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', fontWeight: 600,
                   backgroundColor: 'white', color: '#B91C1C', border: '1px solid #FECACA',
                   opacity: removingId === card.id ? 0.5 : 1,
                 }}>
@@ -196,10 +196,10 @@ export default function PaymentMethodsPage() {
             textAlign: 'center', padding: '40px 20px', marginBottom: 24,
             background: 'white', border: '1px solid var(--nhlb-border)', borderRadius: 12,
           }}>
-            <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>
               No saved payment methods.
             </p>
-            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: 0 }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: 0 }}>
               Add a card below for faster checkout.
             </p>
           </div>
@@ -210,7 +210,7 @@ export default function PaymentMethodsPage() {
           <button onClick={startAddCard} style={{
             width: '100%', padding: '14px 24px', borderRadius: 8, border: '2px dashed var(--nhlb-border)',
             backgroundColor: 'white', color: 'var(--nhlb-red-dark)',
-            fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem',
+            fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem',
             cursor: 'pointer', transition: 'all 0.12s',
           }}>
             + Add Payment Method
@@ -223,7 +223,7 @@ export default function PaymentMethodsPage() {
             borderRadius: 12, padding: '24px', marginTop: 8,
           }}>
             <h3 style={{
-              fontFamily: 'Cormorant Garamond, serif', fontSize: '1.2rem',
+              fontFamily: 'Playfair Display, serif', fontSize: '1.2rem',
               fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 16px',
             }}>
               Add a Card
@@ -273,7 +273,7 @@ function SetupForm({ onSuccess, onCancel }: { onSuccess: () => void; onCancel: (
         <div style={{
           marginTop: 12, padding: '10px 14px',
           backgroundColor: '#FEF2F2', border: '1px solid #FECACA',
-          borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#B91C1C',
+          borderRadius: 8, fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: '#B91C1C',
         }}>
           {error}
         </div>
@@ -282,7 +282,7 @@ function SetupForm({ onSuccess, onCancel }: { onSuccess: () => void; onCancel: (
         <button type="submit" disabled={!stripe || submitting} style={{
           flex: 1, padding: '12px 20px', borderRadius: 8, border: 'none',
           backgroundColor: 'var(--nhlb-red)', color: 'white',
-          fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.85rem',
+          fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.85rem',
           cursor: 'pointer', opacity: submitting ? 0.6 : 1,
         }}>
           {submitting ? 'Saving...' : 'Save Card'}
@@ -291,7 +291,7 @@ function SetupForm({ onSuccess, onCancel }: { onSuccess: () => void; onCancel: (
           padding: '12px 20px', borderRadius: 8,
           backgroundColor: 'white', color: 'var(--nhlb-muted)',
           border: '1px solid var(--nhlb-border)',
-          fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', cursor: 'pointer',
+          fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', cursor: 'pointer',
         }}>
           Cancel
         </button>

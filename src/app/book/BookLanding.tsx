@@ -78,12 +78,12 @@ export default function BookLanding() {
   const S = {
     input: {
       width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-      padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
+      padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Raleway, sans-serif',
       color: 'var(--nhlb-text)', background: 'white', outline: 'none',
       boxSizing: 'border-box' as const,
     },
     label: {
-      display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.75rem',
+      display: 'block', fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem',
       fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' as const,
       color: 'var(--nhlb-muted)', marginBottom: 6,
     },
@@ -95,7 +95,7 @@ export default function BookLanding() {
       <div style={{
         backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
         textAlign: 'center', fontSize: '0.8rem', letterSpacing: '0.05em',
-        padding: '8px 16px', fontFamily: 'Lato, sans-serif',
+        padding: '8px 16px', fontFamily: 'Raleway, sans-serif',
       }}>
         Let&apos;s Build Hope &amp; Healing TOGETHER!
       </div>
@@ -108,16 +108,15 @@ export default function BookLanding() {
       }}>
         <a href="https://www.noheartleftbehind.com" target="_blank" rel="noopener noreferrer"
           style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://images.squarespace-cdn.com/content/v1/5e82146501b2e061b5579be0/1587480392593-WRDXDIU2H6V7O9536SHX/NHLBlogo.png?format=300w"
-            alt="No Heart Left Behind" style={{ height: 56, width: 'auto' }}
-          />
+          <span style={{ display: 'inline-flex', backgroundColor: 'var(--nhlb-red-dark)', borderRadius: 10, padding: '10px 16px' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo-white.png" alt="No Heart Left Behind" style={{ height: 34, width: 'auto', display: 'block' }} />
+          </span>
         </a>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
           {view === 'loggedIn' && client && (
             <button onClick={handleSignOut} style={{
-              background: 'none', border: 'none', fontFamily: 'Lato, sans-serif',
+              background: 'none', border: 'none', fontFamily: 'Raleway, sans-serif',
               fontSize: '0.8rem', color: 'var(--nhlb-muted)', cursor: 'pointer',
               textDecoration: 'underline',
             }}>
@@ -127,7 +126,7 @@ export default function BookLanding() {
           <a href="https://www.noheartleftbehind.com/donate" target="_blank" rel="noopener noreferrer"
             style={{
               backgroundColor: 'var(--nhlb-red)', color: 'white',
-              fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
+              fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.8rem',
               letterSpacing: '0.06em', padding: '8px 20px', borderRadius: 4,
               textDecoration: 'none',
             }}>
@@ -139,13 +138,13 @@ export default function BookLanding() {
       <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '60px 24px' }}>
         <div style={{ maxWidth: 520, width: '100%', textAlign: 'center' }}>
           <h1 style={{
-            fontFamily: 'Cormorant Garamond, serif', fontSize: 'clamp(2rem, 5vw, 2.75rem)',
+            fontFamily: 'Playfair Display, serif', fontSize: 'clamp(2rem, 5vw, 2.75rem)',
             fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 12px',
           }}>
             Book a Counseling Session
           </h1>
           <p style={{
-            fontFamily: 'Lato, sans-serif', fontSize: '1rem', lineHeight: 1.7,
+            fontFamily: 'Raleway, sans-serif', fontSize: '1rem', lineHeight: 1.7,
             color: 'var(--nhlb-muted)', margin: '0 0 40px',
           }}>
             Affordable, faith-based counseling for individuals, couples, and families.<br />
@@ -153,7 +152,7 @@ export default function BookLanding() {
           </p>
 
           {view === 'loading' && (
-            <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', padding: '20px 0' }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)', padding: '20px 0' }}>
               Loading...
             </p>
           )}
@@ -166,13 +165,13 @@ export default function BookLanding() {
                 borderRadius: 12, padding: '20px 24px', marginBottom: 24, textAlign: 'center',
               }}>
                 <p style={{
-                  fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem',
+                  fontFamily: 'Playfair Display, serif', fontSize: '1.3rem',
                   fontWeight: 600, color: '#065F46', margin: '0 0 4px',
                 }}>
                   Welcome back, {client.first_name}!
                 </p>
                 <p style={{
-                  fontFamily: 'Lato, sans-serif', fontSize: '0.8rem',
+                  fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem',
                   color: '#065F46', margin: 0, opacity: 0.8,
                 }}>
                   Signed in as {client.email}
@@ -186,13 +185,13 @@ export default function BookLanding() {
                     border: '1px solid #FCD34D', borderRadius: 12, textAlign: 'center',
                   }}>
                     <p style={{
-                      fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.9rem',
+                      fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.9rem',
                       color: '#92400E', margin: '0 0 6px',
                     }}>
                       You already have an upcoming session
                     </p>
                     <p style={{
-                      fontFamily: 'Lato, sans-serif', fontSize: '0.8rem',
+                      fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem',
                       color: '#92400E', margin: 0, opacity: 0.85,
                     }}>
                       View or manage it under &ldquo;My Sessions&rdquo; below.
@@ -202,7 +201,7 @@ export default function BookLanding() {
                   <button onClick={() => router.push('/book/returning?auto=1')} style={{
                     display: 'block', width: '100%', padding: '20px 24px',
                     backgroundColor: 'var(--nhlb-red)', color: 'white',
-                    fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '1rem',
+                    fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '1rem',
                     letterSpacing: '0.04em', borderRadius: 12, border: 'none',
                     cursor: 'pointer',
                   }}>
@@ -217,7 +216,7 @@ export default function BookLanding() {
                   display: 'block', width: '100%', padding: '16px 24px',
                   backgroundColor: 'white', color: 'var(--nhlb-red-dark)',
                   border: '2px solid var(--nhlb-border)',
-                  fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.95rem',
+                  fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.95rem',
                   letterSpacing: '0.04em', borderRadius: 12, cursor: 'pointer',
                 }}>
                   My Sessions
@@ -228,7 +227,7 @@ export default function BookLanding() {
                     padding: '14px 16px',
                     backgroundColor: 'white', color: 'var(--nhlb-text)',
                     border: '1px solid var(--nhlb-border)',
-                    fontFamily: 'Lato, sans-serif', fontWeight: 600, fontSize: '0.85rem',
+                    fontFamily: 'Raleway, sans-serif', fontWeight: 600, fontSize: '0.85rem',
                     borderRadius: 10, cursor: 'pointer',
                   }}>
                     My Profile
@@ -237,7 +236,7 @@ export default function BookLanding() {
                     padding: '14px 16px',
                     backgroundColor: 'white', color: 'var(--nhlb-text)',
                     border: '1px solid var(--nhlb-border)',
-                    fontFamily: 'Lato, sans-serif', fontWeight: 600, fontSize: '0.85rem',
+                    fontFamily: 'Raleway, sans-serif', fontWeight: 600, fontSize: '0.85rem',
                     borderRadius: 10, cursor: 'pointer',
                   }}>
                     Payment Methods
@@ -253,7 +252,7 @@ export default function BookLanding() {
               <Link href="/book/new" style={{
                 display: 'block', padding: '20px 24px',
                 backgroundColor: 'var(--nhlb-red)', color: 'white',
-                fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '1rem',
+                fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '1rem',
                 letterSpacing: '0.04em', borderRadius: 12, textDecoration: 'none',
               }}>
                 I&apos;m a New Client
@@ -266,7 +265,7 @@ export default function BookLanding() {
                 display: 'block', width: '100%', padding: '20px 24px',
                 backgroundColor: 'white', color: 'var(--nhlb-red-dark)',
                 border: '2px solid var(--nhlb-border)',
-                fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '1rem',
+                fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '1rem',
                 letterSpacing: '0.04em', borderRadius: 12, cursor: 'pointer',
                 textAlign: 'center',
               }}>
@@ -286,7 +285,7 @@ export default function BookLanding() {
                 borderRadius: 12, padding: '28px', textAlign: 'left',
               }}>
                 <h2 style={{
-                  fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem',
+                  fontFamily: 'Playfair Display, serif', fontSize: '1.3rem',
                   fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 20px',
                   textAlign: 'center',
                 }}>
@@ -297,7 +296,7 @@ export default function BookLanding() {
                   <div style={{
                     marginBottom: 16, padding: '12px 14px',
                     backgroundColor: '#FEF2F2', border: '1px solid #FECACA',
-                    borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: '#B91C1C',
+                    borderRadius: 8, fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: '#B91C1C',
                   }}>
                     {loginError}
                   </div>
@@ -344,7 +343,7 @@ export default function BookLanding() {
                 <button onClick={handleSignIn} disabled={loggingIn} style={{
                   width: '100%', padding: '14px 24px', borderRadius: 8, border: 'none',
                   backgroundColor: 'var(--nhlb-red)', color: 'white',
-                  fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem',
+                  fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem',
                   cursor: 'pointer', opacity: loggingIn ? 0.6 : 1,
                 }}>
                   {loggingIn ? 'Signing in...' : 'Sign In'}
@@ -352,7 +351,7 @@ export default function BookLanding() {
 
                 <div style={{ textAlign: 'center', marginTop: 14 }}>
                   <Link href="/book/forgot-password" style={{
-                    fontFamily: 'Lato, sans-serif', fontSize: '0.8rem',
+                    fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem',
                     color: 'var(--nhlb-red)', textDecoration: 'none',
                   }}>
                     Forgot your password?
@@ -361,7 +360,7 @@ export default function BookLanding() {
               </div>
 
               <button onClick={() => { setView('guest'); setLoginError(null) }} style={{
-                background: 'none', border: 'none', fontFamily: 'Lato, sans-serif',
+                background: 'none', border: 'none', fontFamily: 'Raleway, sans-serif',
                 fontSize: '0.875rem', color: 'var(--nhlb-muted)', cursor: 'pointer',
                 padding: '12px 0', margin: '0 auto', display: 'block',
               }}>
@@ -371,7 +370,7 @@ export default function BookLanding() {
           )}
 
           <p style={{
-            fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic',
+            fontFamily: 'Playfair Display, serif', fontStyle: 'italic',
             fontSize: '1rem', color: 'var(--nhlb-muted)', marginTop: 48,
           }}>
             &ldquo;As a man thinks in his heart, so is he.&rdquo;<br />
@@ -381,14 +380,14 @@ export default function BookLanding() {
       </main>
 
       <footer style={{ backgroundColor: 'var(--nhlb-blush)', padding: '24px 48px', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
-        <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', margin: 0 }}>
+        <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', margin: 0 }}>
           No Heart Left Behind &copy; {new Date().getFullYear()} &ensp;&middot;&ensp; 985-264-8808 &ensp;&middot;&ensp; reconnectus@yahoo.com
         </p>
         <div style={{ display: 'flex', gap: 16 }}>
-          <Link href="/counselor/login" style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}>
+          <Link href="/counselor/login" style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}>
             Counselor Login
           </Link>
-          <Link href="/admin/bookings" style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}>
+          <Link href="/admin/bookings" style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}>
             Admin
           </Link>
         </div>

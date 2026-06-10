@@ -35,7 +35,7 @@ function PreviousNotes({ booking }: { booking: EnrichedBooking }) {
     }}>
       <button onClick={() => setExpanded(!expanded)} style={{
         background: 'none', border: 'none', cursor: 'pointer', padding: 0,
-        fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', fontWeight: 700,
+        fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', fontWeight: 700,
         color: '#1D4ED8',
       }}>
         {expanded ? '▾' : '▸'} Previous Session Notes
@@ -47,15 +47,15 @@ function PreviousNotes({ booking }: { booking: EnrichedBooking }) {
       </button>
       {expanded && (
         <div style={{ marginTop: 8 }}>
-          <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#1E3A5F', lineHeight: 1.5, margin: '0 0 4px', whiteSpace: 'pre-wrap' }}>
+          <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: '#1E3A5F', lineHeight: 1.5, margin: '0 0 4px', whiteSpace: 'pre-wrap' }}>
             {booking.previous_note.content}
           </p>
           {booking.previous_note.private_notes && (
             <div style={{ marginTop: 6, paddingTop: 6, borderTop: '1px solid #BFDBFE' }}>
-              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, color: '#1D4ED8', margin: '0 0 2px', letterSpacing: '0.06em' }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700, color: '#1D4ED8', margin: '0 0 2px', letterSpacing: '0.06em' }}>
                 PRIVATE
               </p>
-              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#1E3A5F', lineHeight: 1.5, margin: 0, fontStyle: 'italic', whiteSpace: 'pre-wrap' }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: '#1E3A5F', lineHeight: 1.5, margin: 0, fontStyle: 'italic', whiteSpace: 'pre-wrap' }}>
                 {booking.previous_note.private_notes}
               </p>
             </div>
@@ -174,7 +174,7 @@ export default function CounselorDashboard() {
 
   if (loading) return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>Loading your schedule...</p>
+      <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>Loading your schedule...</p>
     </div>
   )
 
@@ -198,26 +198,26 @@ export default function CounselorDashboard() {
             background: 'white', border: '1px solid var(--nhlb-border)',
             borderRadius: 12, padding: '20px 24px',
           }}>
-            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 8px' }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 8px' }}>
               TODAY &mdash; {format(new Date(), 'EEEE, MMMM d')}
             </p>
             {todayBookings.length === 0 ? (
-              <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem', color: 'var(--nhlb-muted)' }}>No sessions today</p>
+              <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.1rem', color: 'var(--nhlb-muted)' }}>No sessions today</p>
             ) : (
               todayBookings.map(b => (
                 <div key={b.id} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
                   <span style={{
-                    fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.85rem', color: 'var(--nhlb-red-dark)',
+                    fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.85rem', color: 'var(--nhlb-red-dark)',
                     minWidth: 70,
                   }}>
                     {format(new Date(b.scheduled_at), 'h:mm a')}
                   </span>
-                  <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)' }}>
+                  <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)' }}>
                     {b.client?.first_name} {b.client?.last_name}
                   </span>
                   <span style={{
                     padding: '1px 8px', borderRadius: 20, fontSize: '0.65rem',
-                    fontWeight: 700, fontFamily: 'Lato, sans-serif',
+                    fontWeight: 700, fontFamily: 'Raleway, sans-serif',
                     backgroundColor: b.type === 'VIRTUAL' ? '#EFF6FF' : 'var(--nhlb-cream-dark)',
                     color: b.type === 'VIRTUAL' ? '#1D4ED8' : 'var(--nhlb-muted)',
                   }}>
@@ -232,21 +232,21 @@ export default function CounselorDashboard() {
             background: 'white', border: '1px solid var(--nhlb-border)',
             borderRadius: 12, padding: '20px 24px',
           }}>
-            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 8px' }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 8px' }}>
               UPCOMING
             </p>
             {upcomingBookings.length === 0 ? (
-              <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem', color: 'var(--nhlb-muted)' }}>No upcoming sessions</p>
+              <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.1rem', color: 'var(--nhlb-muted)' }}>No upcoming sessions</p>
             ) : (
               upcomingBookings.map(b => (
                 <div key={b.id} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-                  <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', minWidth: 90 }}>
+                  <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', minWidth: 90 }}>
                     {format(new Date(b.scheduled_at), 'EEE, MMM d')}
                   </span>
-                  <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: 'var(--nhlb-red-dark)', minWidth: 60 }}>
+                  <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: 'var(--nhlb-red-dark)', minWidth: 60 }}>
                     {format(new Date(b.scheduled_at), 'h:mm a')}
                   </span>
-                  <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-text)' }}>
+                  <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-text)' }}>
                     {b.client?.first_name} {b.client?.last_name}
                   </span>
                 </div>
@@ -263,14 +263,14 @@ export default function CounselorDashboard() {
               borderColor: view === 'week' ? 'var(--nhlb-red)' : 'var(--nhlb-border)',
               backgroundColor: view === 'week' ? 'var(--nhlb-red)' : 'white',
               color: view === 'week' ? 'white' : 'var(--nhlb-muted)',
-              fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer',
+              fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer',
             }}>Week</button>
             <button onClick={() => setView('list')} style={{
               padding: '6px 14px', borderRadius: 6, border: '1px solid',
               borderColor: view === 'list' ? 'var(--nhlb-red)' : 'var(--nhlb-border)',
               backgroundColor: view === 'list' ? 'var(--nhlb-red)' : 'white',
               color: view === 'list' ? 'white' : 'var(--nhlb-muted)',
-              fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer',
+              fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer',
             }}>List</button>
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
@@ -278,7 +278,7 @@ export default function CounselorDashboard() {
               background: 'none', border: '1px solid var(--nhlb-border)', borderRadius: 6,
               padding: '4px 10px', cursor: 'pointer', fontSize: '0.85rem', color: 'var(--nhlb-muted)',
             }}>&larr;</button>
-            <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: 'var(--nhlb-text)', minWidth: 160, textAlign: 'center' }}>
+            <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: 'var(--nhlb-text)', minWidth: 160, textAlign: 'center' }}>
               {format(weekStart, 'MMM d')} &ndash; {format(addDays(weekStart, 6), 'MMM d, yyyy')}
             </span>
             <button onClick={() => setWeekStart(addDays(weekStart, 7))} style={{
@@ -288,18 +288,18 @@ export default function CounselorDashboard() {
             <button onClick={() => { setWeekStart(startOfWeek(new Date(), { weekStartsOn: 1 })); setListFilterDay(null) }} style={{
               padding: '4px 10px', borderRadius: 6, border: '1px solid var(--nhlb-border)',
               backgroundColor: 'white', color: 'var(--nhlb-muted)',
-              fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer',
+              fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer',
             }}>Today</button>
           </div>
           {view === 'list' && listFilterDay && (
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: 'var(--nhlb-red-dark)' }}>
+              <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: 'var(--nhlb-red-dark)' }}>
                 {format(listFilterDay, 'EEEE, MMMM d, yyyy')}
               </span>
               <button onClick={() => setListFilterDay(null)} style={{
                 padding: '4px 12px', borderRadius: 6, border: '1px solid var(--nhlb-border)',
                 backgroundColor: 'white', color: 'var(--nhlb-muted)',
-                fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer',
+                fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer',
               }}>Show All</button>
             </div>
           )}
@@ -321,10 +321,10 @@ export default function CounselorDashboard() {
                   color: isToday(day) ? 'white' : 'var(--nhlb-text)',
                   borderLeft: '1px solid var(--nhlb-border)',
                 }}>
-                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.06em', margin: 0 }}>
+                  <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.06em', margin: 0 }}>
                     {format(day, 'EEE').toUpperCase()}
                   </p>
-                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '1rem', fontWeight: 700, margin: 0 }}>
+                  <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '1rem', fontWeight: 700, margin: 0 }}>
                     {format(day, 'd')}
                   </p>
                 </div>
@@ -338,7 +338,7 @@ export default function CounselorDashboard() {
                 minHeight: 56, borderBottom: '1px solid var(--nhlb-border)',
               }}>
                 <div style={{
-                  padding: '4px 8px', fontFamily: 'Lato, sans-serif', fontSize: '0.7rem',
+                  padding: '4px 8px', fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem',
                   color: 'var(--nhlb-muted)', textAlign: 'right', borderRight: '1px solid var(--nhlb-border)',
                 }}>
                   {hour > 12 ? hour - 12 : hour}{hour >= 12 ? 'pm' : 'am'}
@@ -361,7 +361,7 @@ export default function CounselorDashboard() {
                           <div key={b.id} style={{
                             backgroundColor: colors.bg, color: colors.text,
                             borderRadius: 4, padding: '3px 6px', fontSize: '0.7rem',
-                            fontFamily: 'Lato, sans-serif', fontWeight: 700,
+                            fontFamily: 'Raleway, sans-serif', fontWeight: 700,
                             lineHeight: 1.3, overflow: 'hidden',
                             borderLeft: `3px solid ${b.type === 'VIRTUAL' ? '#3B82F6' : 'var(--nhlb-red)'}`,
                           }}>
@@ -392,7 +392,7 @@ export default function CounselorDashboard() {
           return (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {listBookings.length === 0 ? (
-              <p style={{ textAlign: 'center', padding: '40px 0', fontFamily: 'Cormorant Garamond, serif', fontSize: '1.2rem', color: 'var(--nhlb-muted)' }}>
+              <p style={{ textAlign: 'center', padding: '40px 0', fontFamily: 'Playfair Display, serif', fontSize: '1.2rem', color: 'var(--nhlb-muted)' }}>
                 {listFilterDay ? 'No sessions on this day' : 'No sessions this week'}
               </p>
             ) : (
@@ -408,29 +408,29 @@ export default function CounselorDashboard() {
                     <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
                       <div style={{ flex: 1 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                          <span style={{ fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.9rem', color: 'var(--nhlb-red-dark)' }}>
+                          <span style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.9rem', color: 'var(--nhlb-red-dark)' }}>
                             {format(new Date(b.scheduled_at), 'EEE, MMM d')} at {format(new Date(b.scheduled_at), 'h:mm a')}
                           </span>
                           <span style={{
                             backgroundColor: STATUS_COLORS[b.status]?.bg,
                             color: STATUS_COLORS[b.status]?.text,
                             padding: '2px 8px', borderRadius: 20, fontSize: '0.65rem', fontWeight: 700,
-                            fontFamily: 'Lato, sans-serif', textTransform: 'capitalize',
+                            fontFamily: 'Raleway, sans-serif', textTransform: 'capitalize',
                           }}>
                             {b.status.replace('_', ' ')}
                           </span>
                         </div>
-                        <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '1rem', fontWeight: 700, color: 'var(--nhlb-text)', margin: '0 0 2px' }}>
+                        <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '1rem', fontWeight: 700, color: 'var(--nhlb-text)', margin: '0 0 2px' }}>
                           {b.client?.first_name} {b.client?.last_name}
                         </p>
-                        <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: 0 }}>
+                        <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: 0 }}>
                           {b.type === 'VIRTUAL' ? '💻 Virtual' : '🏠 In Person'}
                           {' · '}{b.client?.service_type}
                           {b.client?.email ? <> · <a href={`mailto:${b.client.email}`} style={{ color: 'var(--nhlb-red)', textDecoration: 'none' }}>{b.client.email}</a></> : ''}
                           {b.client?.phone ? <> · <a href={`tel:${b.client.phone}`} style={{ color: 'var(--nhlb-red)', textDecoration: 'none' }}>{b.client.phone}</a></> : ''}
                         </p>
                         {b.type === 'VIRTUAL' && counselor?.zoom_link && (
-                          <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: '#1D4ED8', margin: '4px 0 0' }}>
+                          <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', color: '#1D4ED8', margin: '4px 0 0' }}>
                             <a href={counselor.zoom_link} target="_blank" rel="noopener noreferrer" style={{ color: '#1D4ED8', textDecoration: 'none' }}>
                               Start Zoom Meeting
                             </a>
@@ -448,7 +448,7 @@ export default function CounselorDashboard() {
                             style={{
                               padding: '6px 12px', borderRadius: 6, border: 'none',
                               backgroundColor: '#3C3489', color: 'white',
-                              fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem',
+                              fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.7rem',
                               cursor: isFutureSession(b.scheduled_at) ? 'not-allowed' : 'pointer',
                               opacity: isFutureSession(b.scheduled_at) ? 0.4 : 1,
                             }}>Start session</button>
@@ -468,7 +468,7 @@ export default function CounselorDashboard() {
                             style={{
                               padding: '6px 12px', borderRadius: 6, border: 'none',
                               backgroundColor: '#065F46', color: 'white',
-                              fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem',
+                              fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.7rem',
                               cursor: isFutureSession(b.scheduled_at) ? 'not-allowed' : 'pointer',
                               opacity: isFutureSession(b.scheduled_at) ? 0.4 : 1,
                             }}>Complete session</button>
@@ -477,13 +477,13 @@ export default function CounselorDashboard() {
                           <button onClick={() => updateBooking(b.id, 'cancelled')} style={{
                             padding: '6px 12px', borderRadius: 6, border: '1px solid #FECACA',
                             backgroundColor: 'white', color: '#DC2626',
-                            fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem', cursor: 'pointer',
+                            fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.7rem', cursor: 'pointer',
                           }}>Cancel</button>
                         )}
                         <a href={`/counselor/clients/${b.client_id}`} style={{
                           padding: '6px 12px', borderRadius: 6, border: '1px solid var(--nhlb-border)',
                           backgroundColor: 'white', color: 'var(--nhlb-muted)', textDecoration: 'none',
-                          fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem',
+                          fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.7rem',
                           display: 'inline-flex', alignItems: 'center',
                         }}>View client</a>
                       </div>
@@ -494,7 +494,7 @@ export default function CounselorDashboard() {
                       <div style={{ marginTop: 12 }}>
                         <button onClick={() => setExpandedPreCall(isPreCallOpen ? null : b.id)} style={{
                           background: 'none', border: 'none', cursor: 'pointer', padding: 0,
-                          fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                          fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700,
                           color: '#633806', letterSpacing: '0.06em',
                         }}>
                           {isPreCallOpen ? '▾' : '▸'} PRE-CALL NOTES
@@ -509,12 +509,12 @@ export default function CounselorDashboard() {
                               onChange={e => setLocalPreCallNotes(prev => ({ ...prev, [b.id]: e.target.value }))}
                               rows={2}
                               placeholder="Notes from the intake phone call..."
-                              style={{ width: '100%', border: '1px solid #E3A008', borderRadius: 6, padding: '8px 12px', fontSize: '0.85rem', fontFamily: 'Lato, sans-serif', color: '#633806', background: 'white', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}
+                              style={{ width: '100%', border: '1px solid #E3A008', borderRadius: 6, padding: '8px 12px', fontSize: '0.85rem', fontFamily: 'Raleway, sans-serif', color: '#633806', background: 'white', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}
                             />
                             <button
                               onClick={() => savePreCallNotes(b.id)}
                               disabled={savingPreCall[b.id]}
-                              style={{ marginTop: 6, padding: '5px 14px', borderRadius: 6, border: 'none', cursor: 'pointer', backgroundColor: '#633806', color: 'white', fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.72rem', opacity: savingPreCall[b.id] ? 0.6 : 1 }}>
+                              style={{ marginTop: 6, padding: '5px 14px', borderRadius: 6, border: 'none', cursor: 'pointer', backgroundColor: '#633806', color: 'white', fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.72rem', opacity: savingPreCall[b.id] ? 0.6 : 1 }}>
                               {savingPreCall[b.id] ? 'Saving...' : 'Save pre-call notes'}
                             </button>
                           </div>
@@ -529,7 +529,7 @@ export default function CounselorDashboard() {
                     <div style={{ marginTop: 8 }}>
                       <button onClick={() => setExpandedSessionNotes(expandedSessionNotes === b.id ? null : b.id)} style={{
                         background: 'none', border: 'none', cursor: 'pointer', padding: 0,
-                        fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                        fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700,
                         color: '#085041', letterSpacing: '0.06em',
                       }}>
                         {expandedSessionNotes === b.id ? '▾' : '▸'} SESSION NOTES
@@ -544,12 +544,12 @@ export default function CounselorDashboard() {
                             onChange={e => setLocalSessionNoteContent(prev => ({ ...prev, [b.id]: e.target.value }))}
                             rows={3}
                             placeholder="Session summary, goals discussed, homework assigned..."
-                            style={{ width: '100%', border: '1px solid #34D399', borderRadius: 6, padding: '8px 12px', fontSize: '0.85rem', fontFamily: 'Lato, sans-serif', color: '#085041', background: 'white', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}
+                            style={{ width: '100%', border: '1px solid #34D399', borderRadius: 6, padding: '8px 12px', fontSize: '0.85rem', fontFamily: 'Raleway, sans-serif', color: '#085041', background: 'white', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}
                           />
                           <button
                             onClick={() => saveSessionNote(b.id, b)}
                             disabled={savingSessionNote[b.id]}
-                            style={{ marginTop: 6, padding: '5px 14px', borderRadius: 6, border: 'none', cursor: 'pointer', backgroundColor: '#085041', color: 'white', fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.72rem', opacity: savingSessionNote[b.id] ? 0.6 : 1 }}>
+                            style={{ marginTop: 6, padding: '5px 14px', borderRadius: 6, border: 'none', cursor: 'pointer', backgroundColor: '#085041', color: 'white', fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.72rem', opacity: savingSessionNote[b.id] ? 0.6 : 1 }}>
                             {savingSessionNote[b.id] ? 'Saving...' : 'Save session notes'}
                           </button>
                         </div>
@@ -560,7 +560,7 @@ export default function CounselorDashboard() {
                     <div style={{ marginTop: 8 }}>
                       <button onClick={() => setExpandedPrivateNotes(expandedPrivateNotes === b.id ? null : b.id)} style={{
                         background: 'none', border: 'none', cursor: 'pointer', padding: 0,
-                        fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                        fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700,
                         color: '#4338CA', letterSpacing: '0.06em',
                       }}>
                         {expandedPrivateNotes === b.id ? '▾' : '▸'} PRIVATE NOTES
@@ -570,7 +570,7 @@ export default function CounselorDashboard() {
                       </button>
                       {expandedPrivateNotes === b.id && (
                         <div style={{ marginTop: 6, padding: '12px 16px', backgroundColor: '#EEEDFE', borderRadius: 8 }}>
-                          <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.65rem', color: '#6366F1', margin: '0 0 6px', fontStyle: 'italic' }}>
+                          <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.65rem', color: '#6366F1', margin: '0 0 6px', fontStyle: 'italic' }}>
                             Only you can see these notes
                           </p>
                           <textarea
@@ -578,12 +578,12 @@ export default function CounselorDashboard() {
                             onChange={e => setLocalPrivateNotes(prev => ({ ...prev, [b.id]: e.target.value }))}
                             rows={2}
                             placeholder="Clinical observations, treatment plan notes..."
-                            style={{ width: '100%', border: '1px solid #A5B4FC', borderRadius: 6, padding: '8px 12px', fontSize: '0.85rem', fontFamily: 'Lato, sans-serif', color: '#3730A3', background: 'white', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}
+                            style={{ width: '100%', border: '1px solid #A5B4FC', borderRadius: 6, padding: '8px 12px', fontSize: '0.85rem', fontFamily: 'Raleway, sans-serif', color: '#3730A3', background: 'white', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}
                           />
                           <button
                             onClick={() => savePrivateNote(b.id, b)}
                             disabled={savingPrivateNote[b.id]}
-                            style={{ marginTop: 6, padding: '5px 14px', borderRadius: 6, border: 'none', cursor: 'pointer', backgroundColor: '#4338CA', color: 'white', fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.72rem', opacity: savingPrivateNote[b.id] ? 0.6 : 1 }}>
+                            style={{ marginTop: 6, padding: '5px 14px', borderRadius: 6, border: 'none', cursor: 'pointer', backgroundColor: '#4338CA', color: 'white', fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.72rem', opacity: savingPrivateNote[b.id] ? 0.6 : 1 }}>
                             {savingPrivateNote[b.id] ? 'Saving...' : 'Save private notes'}
                           </button>
                         </div>
@@ -608,12 +608,12 @@ export default function CounselorDashboard() {
             width: '90%', boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
           }}>
             <h3 style={{
-              fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem',
+              fontFamily: 'Playfair Display, serif', fontSize: '1.3rem',
               fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px',
             }}>
               Complete Session
             </h3>
-            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', margin: '0 0 20px' }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', margin: '0 0 20px' }}>
               {completeModal.name} &mdash; Would you like to add session notes?
             </p>
             <textarea
@@ -623,7 +623,7 @@ export default function CounselorDashboard() {
               rows={4}
               style={{
                 width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-                padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
+                padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Raleway, sans-serif',
                 color: 'var(--nhlb-text)', background: 'white', outline: 'none', resize: 'vertical',
                 boxSizing: 'border-box', marginBottom: 20,
               }}
@@ -632,14 +632,14 @@ export default function CounselorDashboard() {
               <button onClick={() => setCompleteModal(null)} style={{
                 padding: '10px 20px', borderRadius: 8, border: '1px solid var(--nhlb-border)',
                 backgroundColor: 'white', color: 'var(--nhlb-muted)',
-                fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', cursor: 'pointer',
+                fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', cursor: 'pointer',
               }}>
                 Cancel
               </button>
               <button onClick={handleCompleteConfirm} style={{
                 padding: '10px 20px', borderRadius: 8, border: 'none',
                 backgroundColor: '#065F46', color: 'white',
-                fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
+                fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
               }}>
                 Complete Session
               </button>

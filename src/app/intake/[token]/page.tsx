@@ -7,11 +7,11 @@ import type { HipaaFormData } from '@/types'
 const S = {
   input: {
     width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-    padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
+    padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Raleway, sans-serif',
     color: 'var(--nhlb-text)', background: 'white', outline: 'none',
   } as React.CSSProperties,
   label: {
-    display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.75rem',
+    display: 'block', fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem',
     fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' as const,
     color: 'var(--nhlb-muted)', marginBottom: 6,
   } as React.CSSProperties,
@@ -71,15 +71,15 @@ export default function HipaaIntakePage() {
 
   if (loading) return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
+      <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
     </div>
   )
 
   if (notFound) return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ textAlign: 'center', padding: 24 }}>
-        <h1 style={{ fontFamily: 'Cormorant Garamond, serif', color: 'var(--nhlb-red-dark)' }}>Form Not Found</h1>
-        <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>This intake link is invalid or has expired.</p>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', color: 'var(--nhlb-red-dark)' }}>Form Not Found</h1>
+        <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>This intake link is invalid or has expired.</p>
       </div>
     </div>
   )
@@ -95,10 +95,10 @@ export default function HipaaIntakePage() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h1 style={{ fontFamily: 'Cormorant Garamond, serif', color: 'var(--nhlb-red-dark)', fontSize: '1.8rem' }}>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', color: 'var(--nhlb-red-dark)', fontSize: '1.8rem' }}>
           {submitted ? 'Thank you!' : 'Already Submitted'}
         </h1>
-        <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>
+        <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>
           {submitted
             ? 'Your intake form has been submitted. We look forward to meeting you.'
             : 'This intake form has already been completed.'}
@@ -112,21 +112,21 @@ export default function HipaaIntakePage() {
       <div style={{
         backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
         textAlign: 'center', fontSize: '0.8rem', letterSpacing: '0.05em',
-        padding: '8px 16px', fontFamily: 'Lato, sans-serif',
+        padding: '8px 16px', fontFamily: 'Raleway, sans-serif',
       }}>
         Confidential Health Intake Form
       </div>
 
       <div style={{ maxWidth: 600, margin: '0 auto', padding: '40px 24px 80px' }}>
-        <h1 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
+        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
           HIPAA Intake Form
         </h1>
         {clientName && (
-          <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', marginBottom: 8 }}>
+          <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', marginBottom: 8 }}>
             For: <strong style={{ color: 'var(--nhlb-red-dark)' }}>{clientName}</strong>
           </p>
         )}
-        <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.85rem', lineHeight: 1.6, marginBottom: 32 }}>
+        <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.85rem', lineHeight: 1.6, marginBottom: 32 }}>
           This information is protected under HIPAA and will only be shared with your counselor. Please complete this form before your first session.
         </p>
 
@@ -134,7 +134,7 @@ export default function HipaaIntakePage() {
           <div style={{
             marginBottom: 20, padding: '12px 16px',
             backgroundColor: '#FEF2F2', border: '1px solid #FECACA',
-            borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: '#B91C1C',
+            borderRadius: 8, fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: '#B91C1C',
           }}>
             {error}
           </div>
@@ -166,7 +166,7 @@ export default function HipaaIntakePage() {
             backgroundColor: 'white', border: '1px solid var(--nhlb-border)',
             borderRadius: 12, padding: '20px 24px',
           }}>
-            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', marginBottom: 16 }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', marginBottom: 16 }}>
               EMERGENCY CONTACT
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
@@ -196,7 +196,7 @@ export default function HipaaIntakePage() {
               <input type="checkbox" checked={form.consent_given}
                 onChange={e => update('consent_given', e.target.checked)}
                 style={{ width: 20, height: 20, accentColor: 'var(--nhlb-red)', marginTop: 2, flexShrink: 0 }} />
-              <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: '#92400E', lineHeight: 1.5 }}>
+              <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: '#92400E', lineHeight: 1.5 }}>
                 I acknowledge that the information I have provided is accurate and complete to the best of my knowledge. I consent to the use of this information for the purpose of counseling services at No Heart Left Behind. I understand this information is protected under HIPAA.
               </span>
             </label>
@@ -205,7 +205,7 @@ export default function HipaaIntakePage() {
           <button onClick={handleSubmit} disabled={submitting || !form.consent_given}
             style={{
               width: '100%', backgroundColor: 'var(--nhlb-red)', color: 'white',
-              fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem',
+              fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem',
               padding: '14px 24px', borderRadius: 8, border: 'none', cursor: 'pointer',
               opacity: submitting || !form.consent_given ? 0.5 : 1,
             }} className="btn-primary">

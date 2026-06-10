@@ -17,17 +17,17 @@ type Step = 'info' | 'schedule' | 'payment' | 'checkout'
 const S = {
   input: {
     width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-    padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
+    padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Raleway, sans-serif',
     color: 'var(--nhlb-text)', background: 'white', outline: 'none',
   } as React.CSSProperties,
   label: {
-    display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.75rem',
+    display: 'block', fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem',
     fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' as const,
     color: 'var(--nhlb-muted)', marginBottom: 6,
   } as React.CSSProperties,
   btn: {
     width: '100%', backgroundColor: 'var(--nhlb-red)', color: 'white',
-    fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem',
+    fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem',
     letterSpacing: '0.05em', padding: '14px 24px', borderRadius: 8,
     border: 'none', cursor: 'pointer',
   } as React.CSSProperties,
@@ -208,7 +208,7 @@ export default function NewClientBookingPage() {
       <div style={{
         backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
         textAlign: 'center', fontSize: '0.8rem', letterSpacing: '0.05em',
-        padding: '8px 16px', fontFamily: 'Lato, sans-serif',
+        padding: '8px 16px', fontFamily: 'Raleway, sans-serif',
       }}>
         New Client &mdash; In-Person Session
       </div>
@@ -218,11 +218,11 @@ export default function NewClientBookingPage() {
         padding: '0 40px', display: 'flex', alignItems: 'center', height: 64,
       }}>
         <a href="/book" style={{
-          fontFamily: 'Lato, sans-serif', fontSize: '0.85rem',
+          fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem',
           color: 'var(--nhlb-muted)', textDecoration: 'none',
         }}>&larr; Back</a>
         <h1 style={{
-          fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem',
+          fontFamily: 'Playfair Display, serif', fontSize: '1.3rem',
           fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 0 20px',
         }}>Book Your First Session</h1>
       </header>
@@ -236,14 +236,14 @@ export default function NewClientBookingPage() {
               <div style={{
                 width: 28, height: 28, borderRadius: '50%', flexShrink: 0,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '0.75rem', fontWeight: 700, fontFamily: 'Lato, sans-serif',
+                fontSize: '0.75rem', fontWeight: 700, fontFamily: 'Raleway, sans-serif',
                 backgroundColor: i < stepIndex ? '#2D7A4F' : i === stepIndex ? 'var(--nhlb-red)' : 'var(--nhlb-blush-light)',
                 color: i <= stepIndex ? 'white' : 'var(--nhlb-muted)',
               }}>
                 {i < stepIndex ? '✓' : i + 1}
               </div>
               <span style={{
-                fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', whiteSpace: 'nowrap',
+                fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', whiteSpace: 'nowrap',
                 color: i === stepIndex ? 'var(--nhlb-red-dark)' : 'var(--nhlb-muted)',
                 fontWeight: i === stepIndex ? 700 : 400,
               }}>{label}</span>
@@ -256,7 +256,7 @@ export default function NewClientBookingPage() {
           <div style={{
             marginBottom: 24, padding: '14px 16px',
             backgroundColor: '#FEF2F2', border: '1px solid #FECACA',
-            borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: '#B91C1C',
+            borderRadius: 8, fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', color: '#B91C1C',
           }}>
             {error}
           </div>
@@ -265,10 +265,10 @@ export default function NewClientBookingPage() {
         {/* Step 1: Info */}
         {step === 'info' && (
           <div>
-            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
               Tell us about yourself
             </h2>
-            <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', marginBottom: 28 }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', marginBottom: 28 }}>
               All information is kept private and confidential.
             </p>
 
@@ -356,7 +356,7 @@ export default function NewClientBookingPage() {
                     borderRadius: 10, transition: 'all 0.12s',
                   }}>
                     <span style={{ fontSize: '1.3rem', display: 'block', marginBottom: 4 }}>{emoji}</span>
-                    <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700 }}>{label}</span>
+                    <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', fontWeight: 700 }}>{label}</span>
                   </button>
                 ))}
               </div>
@@ -376,19 +376,19 @@ export default function NewClientBookingPage() {
         {/* Step 2: Schedule */}
         {step === 'schedule' && (
           <div>
-            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
               Choose your counselor &amp; time
             </h2>
-            <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', marginBottom: 24 }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', marginBottom: 24 }}>
               In-person &middot; 60 minutes &middot; 430 N. Jefferson Ave, Covington
             </p>
 
             {loadingSlots ? (
-              <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>
+              <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>
                 Loading available times...
               </p>
             ) : counselors.length === 0 ? (
-              <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>
+              <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>
                 No available slots right now. Please check back later.
               </p>
             ) : (
@@ -403,7 +403,7 @@ export default function NewClientBookingPage() {
                       border: `2px solid ${!selectedCounselorId ? 'var(--nhlb-red)' : 'var(--nhlb-border)'}`,
                       backgroundColor: !selectedCounselorId ? 'var(--nhlb-red)' : 'white',
                       color: !selectedCounselorId ? 'white' : 'var(--nhlb-text)',
-                      fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
+                      fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.8rem',
                       cursor: 'pointer', transition: 'all 0.12s',
                     }}
                   >
@@ -419,7 +419,7 @@ export default function NewClientBookingPage() {
                         border: `2px solid ${selectedCounselorId === c.id ? 'var(--nhlb-red)' : 'var(--nhlb-border)'}`,
                         backgroundColor: selectedCounselorId === c.id ? 'var(--nhlb-red)' : 'white',
                         color: selectedCounselorId === c.id ? 'white' : 'var(--nhlb-text)',
-                        fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
+                        fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.8rem',
                         cursor: 'pointer', transition: 'all 0.12s',
                       }}
                     >
@@ -446,7 +446,7 @@ export default function NewClientBookingPage() {
 
                 {/* Time slots */}
                 {Object.keys(groupedSlots).length === 0 ? (
-                  <p style={{ textAlign: 'center', padding: '40px 0', fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>
+                  <p style={{ textAlign: 'center', padding: '40px 0', fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>
                     No available times for this counselor.
                   </p>
                 ) : (
@@ -454,7 +454,7 @@ export default function NewClientBookingPage() {
                     {Object.entries(groupedSlots).map(([day, daySlots]) => (
                       <div key={day} style={{ marginBottom: 24 }}>
                         <p style={{
-                          fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                          fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700,
                           letterSpacing: '0.1em', textTransform: 'uppercase',
                           color: 'var(--nhlb-muted)', marginBottom: 10,
                         }}>{day}</p>
@@ -463,7 +463,7 @@ export default function NewClientBookingPage() {
                             <button key={`${slot.counselorId}_${slot.start}`} onClick={() => selectSlot(slot)} style={{
                               padding: '10px 4px',
                               border: '1px solid var(--nhlb-border)', borderRadius: 8,
-                              backgroundColor: 'white', fontFamily: 'Lato, sans-serif',
+                              backgroundColor: 'white', fontFamily: 'Raleway, sans-serif',
                               fontSize: '0.8rem', color: 'var(--nhlb-text)',
                               cursor: 'pointer', transition: 'all 0.12s',
                             }}
@@ -489,7 +489,7 @@ export default function NewClientBookingPage() {
             )}
 
             <button onClick={() => setStep('info')} style={{
-              background: 'none', border: 'none', fontFamily: 'Lato, sans-serif',
+              background: 'none', border: 'none', fontFamily: 'Raleway, sans-serif',
               fontSize: '0.875rem', color: 'var(--nhlb-muted)', cursor: 'pointer', padding: 0,
             }}>&larr; Back</button>
           </div>
@@ -498,7 +498,7 @@ export default function NewClientBookingPage() {
         {/* Step 3: Payment / Love Offering */}
         {step === 'payment' && selectedSlot && (
           <div>
-            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
               Love Offering
             </h2>
             <div style={{
@@ -523,27 +523,27 @@ export default function NewClientBookingPage() {
                   )}
                 </div>
                 <div>
-                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px', textTransform: 'uppercase' }}>
+                  <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px', textTransform: 'uppercase' }}>
                     Your Counselor
                   </p>
-                  <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0 }}>
+                  <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0 }}>
                     {selectedSlot.counselorName}
                   </p>
                 </div>
               </div>
               <div style={{ borderTop: '1px solid var(--nhlb-border)', marginTop: 14, paddingTop: 14 }}>
-                <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', margin: 0 }}>
+                <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', margin: 0 }}>
                   <strong style={{ color: 'var(--nhlb-red-dark)' }}>{format(new Date(selectedSlot.start), 'EEEE, MMMM d')}</strong> at <strong style={{ color: 'var(--nhlb-red-dark)' }}>{format(new Date(selectedSlot.start), 'h:mm a')}</strong> &middot; In-person
                 </p>
               </div>
             </div>
-            <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', lineHeight: 1.7, marginBottom: 24 }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', lineHeight: 1.7, marginBottom: 24 }}>
               We ask for a minimum $10 love offering. Give what you have decided in your heart.
             </p>
 
             <blockquote style={{
               borderLeft: '3px solid var(--nhlb-blush)', paddingLeft: 16, margin: '0 0 28px',
-              fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic',
+              fontFamily: 'Playfair Display, serif', fontStyle: 'italic',
               fontSize: '1.05rem', color: 'var(--nhlb-muted)', lineHeight: 1.6,
             }}>
               &ldquo;Each of you should give what you have decided in your heart to give, not reluctantly or under compulsion, for God loves a cheerful giver.&rdquo;
@@ -562,7 +562,7 @@ export default function NewClientBookingPage() {
                     borderRadius: 8,
                     backgroundColor: donationAmount === amt ? 'var(--nhlb-red)' : 'white',
                     color: donationAmount === amt ? 'white' : 'var(--nhlb-text)',
-                    fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem',
+                    fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem',
                     cursor: 'pointer', transition: 'all 0.12s',
                   }}>
                     ${amt}
@@ -572,7 +572,7 @@ export default function NewClientBookingPage() {
               <div style={{ position: 'relative' }}>
                 <span style={{
                   position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)',
-                  fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)',
+                  fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)',
                 }}>$</span>
                 <input type="number" min="10" step="1" value={donationAmount}
                   onChange={e => setDonationAmount(e.target.value)}
@@ -580,7 +580,7 @@ export default function NewClientBookingPage() {
                   placeholder="Minimum $10" />
               </div>
               {parseFloat(donationAmount) < 10 && donationAmount !== '' && (
-                <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: '#B91C1C', marginTop: 4 }}>
+                <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', color: '#B91C1C', marginTop: 4 }}>
                   Minimum donation is $10
                 </p>
               )}
@@ -605,7 +605,7 @@ export default function NewClientBookingPage() {
 
             <button onClick={() => { setStep('schedule'); setSelectedSlot(null) }} style={{
               display: 'block', margin: '16px auto 0', background: 'none', border: 'none',
-              fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)',
+              fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)',
               cursor: 'pointer', padding: 0,
             }}>&larr; Choose a different time</button>
           </div>
@@ -614,21 +614,21 @@ export default function NewClientBookingPage() {
         {/* Step 4: Stripe Checkout */}
         {step === 'checkout' && clientSecret && bookingId && selectedSlot && (
           <div>
-            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
               Complete Payment
             </h2>
             <div style={{
               background: 'white', border: '1px solid var(--nhlb-border)',
               borderRadius: 12, padding: '20px', marginBottom: 20,
             }}>
-              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>
                 Love offering for your session with <strong style={{ color: 'var(--nhlb-red-dark)' }}>{selectedSlot.counselorName}</strong>
               </p>
-              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)', margin: 0 }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)', margin: 0 }}>
                 <strong style={{ color: 'var(--nhlb-red-dark)' }}>{format(new Date(selectedSlot.start), 'EEEE, MMMM d')}</strong> at <strong style={{ color: 'var(--nhlb-red-dark)' }}>{format(new Date(selectedSlot.start), 'h:mm a')}</strong>
               </p>
             </div>
-            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.5rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', marginBottom: 20 }}>
+            <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.5rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', marginBottom: 20 }}>
               ${parseFloat(donationAmount).toFixed(2)}
             </p>
             <div style={{
@@ -682,7 +682,7 @@ function BookingPaymentForm({ bookingId }: { bookingId: string }) {
         <div style={{
           marginTop: 12, padding: '10px 14px',
           backgroundColor: '#FEF2F2', border: '1px solid #FECACA',
-          borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#B91C1C',
+          borderRadius: 8, fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: '#B91C1C',
         }}>
           {error}
         </div>
@@ -692,7 +692,7 @@ function BookingPaymentForm({ bookingId }: { bookingId: string }) {
         disabled={!stripe || submitting}
         style={{
           width: '100%', backgroundColor: 'var(--nhlb-red)', color: 'white',
-          fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem',
+          fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem',
           letterSpacing: '0.05em', padding: '14px 24px', borderRadius: 8,
           border: 'none', cursor: submitting ? 'not-allowed' : 'pointer',
           marginTop: 20, opacity: submitting ? 0.6 : 1,

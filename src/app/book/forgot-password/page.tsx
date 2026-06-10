@@ -33,12 +33,12 @@ export default function ClientForgotPasswordPage() {
   const S = {
     input: {
       width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-      padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
+      padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Raleway, sans-serif',
       color: 'var(--nhlb-text)', background: 'white', outline: 'none',
       boxSizing: 'border-box' as const,
     },
     label: {
-      display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.75rem',
+      display: 'block', fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem',
       fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' as const,
       color: 'var(--nhlb-muted)', marginBottom: 6,
     },
@@ -49,7 +49,7 @@ export default function ClientForgotPasswordPage() {
       <div style={{
         backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
         textAlign: 'center', fontSize: '0.8rem', letterSpacing: '0.05em',
-        padding: '8px 16px', fontFamily: 'Lato, sans-serif',
+        padding: '8px 16px', fontFamily: 'Raleway, sans-serif',
       }}>
         No Heart Left Behind
       </div>
@@ -59,7 +59,7 @@ export default function ClientForgotPasswordPage() {
         padding: '0 40px', display: 'flex', alignItems: 'center', height: 56,
       }}>
         <Link href="/book" style={{
-          fontFamily: 'Lato, sans-serif', fontSize: '0.85rem',
+          fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem',
           color: 'var(--nhlb-muted)', textDecoration: 'none',
         }}>&larr; Back to Home</Link>
       </header>
@@ -68,13 +68,13 @@ export default function ClientForgotPasswordPage() {
         <div style={{ maxWidth: 420, width: '100%' }}>
           <div style={{ textAlign: 'center', marginBottom: 32 }}>
             <h1 style={{
-              fontFamily: 'Cormorant Garamond, serif', fontSize: '1.8rem',
+              fontFamily: 'Playfair Display, serif', fontSize: '1.8rem',
               fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 8px',
             }}>
               Reset Your Password
             </h1>
             <p style={{
-              fontFamily: 'Lato, sans-serif', fontSize: '0.875rem',
+              fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem',
               color: 'var(--nhlb-muted)', margin: 0,
             }}>
               Enter your email and we&apos;ll send you a link to reset your password.
@@ -87,13 +87,13 @@ export default function ClientForgotPasswordPage() {
               borderRadius: 12, padding: '24px', textAlign: 'center',
             }}>
               <p style={{
-                fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem',
+                fontFamily: 'Playfair Display, serif', fontSize: '1.3rem',
                 fontWeight: 600, color: '#065F46', margin: '0 0 8px',
               }}>
                 Check your email
               </p>
               <p style={{
-                fontFamily: 'Lato, sans-serif', fontSize: '0.85rem',
+                fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem',
                 color: '#065F46', margin: 0, lineHeight: 1.6,
               }}>
                 If an account exists for <strong>{email}</strong>, you&apos;ll receive a password reset link shortly. Check your spam folder if you don&apos;t see it.
@@ -108,7 +108,7 @@ export default function ClientForgotPasswordPage() {
                 <div style={{
                   marginBottom: 16, padding: '12px 14px',
                   backgroundColor: '#FEF2F2', border: '1px solid #FECACA',
-                  borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: '#B91C1C',
+                  borderRadius: 8, fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: '#B91C1C',
                 }}>
                   {error}
                 </div>
@@ -124,7 +124,7 @@ export default function ClientForgotPasswordPage() {
               <button onClick={handleSubmit} disabled={loading} style={{
                 width: '100%', padding: '14px 24px', borderRadius: 8, border: 'none',
                 backgroundColor: 'var(--nhlb-red)', color: 'white',
-                fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem',
+                fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem',
                 cursor: 'pointer', opacity: loading ? 0.6 : 1,
               }}>
                 {loading ? 'Sending...' : 'Send Reset Link'}

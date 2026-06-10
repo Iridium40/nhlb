@@ -48,26 +48,26 @@ function SessionNoteEditor({ booking, onSaved, existingNote }: {
     }}>
       <div style={{ marginBottom: 10 }}>
         <label style={{
-          display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.7rem',
+          display: 'block', fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem',
           fontWeight: 700, color: 'var(--nhlb-muted)', letterSpacing: '0.06em', marginBottom: 4,
         }}>Notes</label>
         <textarea value={content} onChange={e => setContent(e.target.value)}
           style={{
             width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-            padding: '10px 14px', fontSize: '0.85rem', fontFamily: 'Lato, sans-serif',
+            padding: '10px 14px', fontSize: '0.85rem', fontFamily: 'Raleway, sans-serif',
             color: 'var(--nhlb-text)', background: 'white', outline: 'none', resize: 'none',
           }} rows={3}
           placeholder="Session summary, goals discussed, homework assigned..." />
       </div>
       <div style={{ marginBottom: 10 }}>
         <label style={{
-          display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.7rem',
+          display: 'block', fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem',
           fontWeight: 700, color: 'var(--nhlb-muted)', letterSpacing: '0.06em', marginBottom: 4,
         }}>Private Notes (only you see these)</label>
         <textarea value={privateNotes} onChange={e => setPrivateNotes(e.target.value)}
           style={{
             width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-            padding: '10px 14px', fontSize: '0.85rem', fontFamily: 'Lato, sans-serif',
+            padding: '10px 14px', fontSize: '0.85rem', fontFamily: 'Raleway, sans-serif',
             color: 'var(--nhlb-text)', background: 'white', outline: 'none', resize: 'none',
           }} rows={2}
           placeholder="Clinical observations, treatment plan notes..." />
@@ -76,12 +76,12 @@ function SessionNoteEditor({ booking, onSaved, existingNote }: {
         <button onClick={save} disabled={saving} style={{
           padding: '8px 18px', borderRadius: 8, border: 'none', cursor: 'pointer',
           backgroundColor: 'var(--nhlb-red)', color: 'white',
-          fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
+          fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.8rem',
           opacity: saving ? 0.6 : 1,
         }}>
           {saving ? 'Saving...' : existingNote ? 'Update Notes' : 'Save Notes'}
         </button>
-        {saved && <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#065F46' }}>Saved</span>}
+        {saved && <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: '#065F46' }}>Saved</span>}
       </div>
     </div>
   )
@@ -131,7 +131,7 @@ export default function CounselorClientDetailPage() {
 
   if (loading) return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
+      <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
     </div>
   )
 
@@ -143,13 +143,13 @@ export default function CounselorClientDetailPage() {
           padding: '20px 24px', backgroundColor: '#FEF2F2', border: '1px solid #FECACA',
           borderRadius: 12, marginBottom: 24,
         }}>
-          <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.9rem', color: '#B91C1C', margin: 0 }}>
+          <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.9rem', color: '#B91C1C', margin: 0 }}>
             {loadError ?? 'Client not found'}
           </p>
         </div>
         <a href="/counselor/clients" style={{
           padding: '10px 20px', borderRadius: 8, backgroundColor: 'var(--nhlb-red)',
-          color: 'white', fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.85rem',
+          color: 'white', fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.85rem',
           textDecoration: 'none',
         }}>
           Back to My Clients
@@ -164,7 +164,7 @@ export default function CounselorClientDetailPage() {
 
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '32px 24px' }}>
         <a href="/counselor/clients" style={{
-          fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)',
+          fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)',
           textDecoration: 'none', display: 'inline-block', marginBottom: 16,
         }}>
           &larr; Back to My Clients
@@ -180,18 +180,18 @@ export default function CounselorClientDetailPage() {
               width: 48, height: 48, borderRadius: '50%', flexShrink: 0,
               backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem', fontWeight: 600,
+              fontFamily: 'Playfair Display, serif', fontSize: '1.1rem', fontWeight: 600,
             }}>
               {client.first_name[0]}{client.last_name[0]}
             </div>
             <div>
               <h2 style={{
-                fontFamily: 'Cormorant Garamond, serif', fontSize: '1.5rem',
+                fontFamily: 'Playfair Display, serif', fontSize: '1.5rem',
                 fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0,
               }}>
                 {client.first_name} {client.last_name}
               </h2>
-              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: 0 }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: 0 }}>
                 {client.email}{client.phone ? ` · ${client.phone}` : ''}
               </p>
             </div>
@@ -200,14 +200,14 @@ export default function CounselorClientDetailPage() {
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             <span style={{
               padding: '3px 12px', borderRadius: 20, fontSize: '0.7rem', fontWeight: 700,
-              fontFamily: 'Lato, sans-serif', backgroundColor: 'var(--nhlb-cream-dark)',
+              fontFamily: 'Raleway, sans-serif', backgroundColor: 'var(--nhlb-cream-dark)',
               color: 'var(--nhlb-muted)', textTransform: 'capitalize',
             }}>
               {client.service_type}
             </span>
             <span style={{
               padding: '3px 12px', borderRadius: 20, fontSize: '0.7rem', fontWeight: 700,
-              fontFamily: 'Lato, sans-serif',
+              fontFamily: 'Raleway, sans-serif',
               backgroundColor: hipaaCompleted ? '#D1FAE5' : '#FEF3C7',
               color: hipaaCompleted ? '#065F46' : '#92400E',
             }}>
@@ -215,7 +215,7 @@ export default function CounselorClientDetailPage() {
             </span>
             <span style={{
               padding: '3px 12px', borderRadius: 20, fontSize: '0.7rem',
-              fontFamily: 'Lato, sans-serif', backgroundColor: 'var(--nhlb-cream-dark)', color: 'var(--nhlb-muted)',
+              fontFamily: 'Raleway, sans-serif', backgroundColor: 'var(--nhlb-cream-dark)', color: 'var(--nhlb-muted)',
             }}>
               {bookings.filter(b => b.status !== 'cancelled').length} session{bookings.filter(b => b.status !== 'cancelled').length !== 1 ? 's' : ''}
             </span>
@@ -228,7 +228,7 @@ export default function CounselorClientDetailPage() {
               borderLeft: '3px solid var(--nhlb-blush)',
             }}>
               <p style={{
-                fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic',
+                fontFamily: 'Playfair Display, serif', fontStyle: 'italic',
                 fontSize: '0.95rem', color: 'var(--nhlb-text)', margin: 0, lineHeight: 1.5,
               }}>
                 &ldquo;{client.brief_reason}&rdquo;
@@ -245,13 +245,13 @@ export default function CounselorClientDetailPage() {
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
               <h3 style={{
-                fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem',
+                fontFamily: 'Playfair Display, serif', fontSize: '1.3rem',
                 fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0,
               }}>
                 HIPAA Intake
               </h3>
               {hipaaCompletedAt && (
-                <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)' }}>
+                <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)' }}>
                   Completed {format(new Date(hipaaCompletedAt), "MMM d, yyyy 'at' h:mm a")}
                 </span>
               )}
@@ -259,38 +259,38 @@ export default function CounselorClientDetailPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               {hipaaData.health_history && (
                 <div>
-                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>HEALTH HISTORY</p>
-                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', margin: 0, lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>{hipaaData.health_history}</p>
+                  <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>HEALTH HISTORY</p>
+                  <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', margin: 0, lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>{hipaaData.health_history}</p>
                 </div>
               )}
               {hipaaData.current_medications && (
                 <div>
-                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>CURRENT MEDICATIONS</p>
-                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', margin: 0, lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>{hipaaData.current_medications}</p>
+                  <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>CURRENT MEDICATIONS</p>
+                  <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', margin: 0, lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>{hipaaData.current_medications}</p>
                 </div>
               )}
               {hipaaData.allergies && (
                 <div>
-                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>ALLERGIES</p>
-                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', margin: 0, lineHeight: 1.6 }}>{hipaaData.allergies}</p>
+                  <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>ALLERGIES</p>
+                  <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', margin: 0, lineHeight: 1.6 }}>{hipaaData.allergies}</p>
                 </div>
               )}
               {(hipaaData.emergency_contact_name || hipaaData.emergency_contact_phone) && (
                 <div style={{ padding: '14px 18px', backgroundColor: 'var(--nhlb-cream-dark)', borderRadius: 8 }}>
-                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 6px' }}>EMERGENCY CONTACT</p>
-                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', fontWeight: 700, color: 'var(--nhlb-text)', margin: '0 0 2px' }}>
+                  <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 6px' }}>EMERGENCY CONTACT</p>
+                  <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', fontWeight: 700, color: 'var(--nhlb-text)', margin: '0 0 2px' }}>
                     {hipaaData.emergency_contact_name}
                     {hipaaData.emergency_contact_relationship && (
                       <span style={{ fontWeight: 400, color: 'var(--nhlb-muted)' }}> ({hipaaData.emergency_contact_relationship})</span>
                     )}
                   </p>
                   {hipaaData.emergency_contact_phone && (
-                    <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', margin: 0 }}>{hipaaData.emergency_contact_phone}</p>
+                    <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', margin: 0 }}>{hipaaData.emergency_contact_phone}</p>
                   )}
                 </div>
               )}
               {hipaaData.consent_given && (
-                <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: '#065F46', margin: 0 }}>✓ HIPAA consent acknowledged</p>
+                <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', color: '#065F46', margin: 0 }}>✓ HIPAA consent acknowledged</p>
               )}
             </div>
           </div>
@@ -298,14 +298,14 @@ export default function CounselorClientDetailPage() {
 
         {/* Session History */}
         <h3 style={{
-          fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem',
+          fontFamily: 'Playfair Display, serif', fontSize: '1.3rem',
           fontWeight: 600, color: 'var(--nhlb-red-dark)', marginBottom: 16,
         }}>
           Session History
         </h3>
 
         {bookings.length === 0 ? (
-          <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>No sessions yet</p>
+          <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>No sessions yet</p>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {bookings.map(b => {
@@ -322,19 +322,19 @@ export default function CounselorClientDetailPage() {
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                        <span style={{ fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem', color: 'var(--nhlb-text)' }}>
+                        <span style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem', color: 'var(--nhlb-text)' }}>
                           {format(new Date(b.scheduled_at), 'MMM d, yyyy')} at {format(new Date(b.scheduled_at), 'h:mm a')}
                         </span>
                         <span style={{
                           ...STATUS_STYLES[b.status],
                           padding: '2px 8px', borderRadius: 20, fontSize: '0.65rem',
-                          fontWeight: 700, fontFamily: 'Lato, sans-serif', textTransform: 'capitalize',
+                          fontWeight: 700, fontFamily: 'Raleway, sans-serif', textTransform: 'capitalize',
                         }}>
                           {b.status.replace('_', ' ')}
                         </span>
                         <span style={{
                           padding: '2px 8px', borderRadius: 20, fontSize: '0.65rem',
-                          fontFamily: 'Lato, sans-serif',
+                          fontFamily: 'Raleway, sans-serif',
                           backgroundColor: b.type === 'VIRTUAL' ? '#EFF6FF' : 'var(--nhlb-cream-dark)',
                           color: b.type === 'VIRTUAL' ? '#1D4ED8' : 'var(--nhlb-muted)',
                         }}>
@@ -343,13 +343,13 @@ export default function CounselorClientDetailPage() {
                         {hasNotes && (
                           <span style={{
                             padding: '2px 8px', borderRadius: 20, fontSize: '0.6rem', fontWeight: 700,
-                            fontFamily: 'Lato, sans-serif', backgroundColor: '#FEF3C7', color: '#92400E',
+                            fontFamily: 'Raleway, sans-serif', backgroundColor: '#FEF3C7', color: '#92400E',
                           }}>
                             Has Notes
                           </span>
                         )}
                       </div>
-                      <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: 0 }}>
+                      <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: 0 }}>
                         {b.donation_amount_cents > 0 ? `$${(b.donation_amount_cents / 100).toFixed(2)} donation` : ''}
                       </p>
                     </div>
@@ -360,7 +360,7 @@ export default function CounselorClientDetailPage() {
                         border: `1px solid ${hasNotes ? '#FEF3C7' : 'var(--nhlb-border)'}`,
                         backgroundColor: hasNotes ? '#FEF3C7' : 'white',
                         color: hasNotes ? '#92400E' : 'var(--nhlb-muted)',
-                        fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem', cursor: 'pointer',
+                        fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.7rem', cursor: 'pointer',
                       }}>
                         {isExpanded ? 'Close Notes' : hasNotes ? 'Edit Notes' : 'Add Notes'}
                       </button>
@@ -374,7 +374,7 @@ export default function CounselorClientDetailPage() {
                       backgroundColor: 'var(--nhlb-cream-dark)', borderRadius: 8,
                     }}>
                       <p style={{
-                        fontFamily: 'Lato, sans-serif', fontSize: '0.8rem',
+                        fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem',
                         color: 'var(--nhlb-text)', margin: 0, lineHeight: 1.5,
                       }}>
                         {(note?.content ?? '').length > 200
@@ -383,9 +383,9 @@ export default function CounselorClientDetailPage() {
                       </p>
                       {note?.private_notes && (
                         <div style={{ marginTop: 6, paddingTop: 6, borderTop: '1px solid var(--nhlb-blush-light)' }}>
-                          <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.06em', color: '#1D4ED8', margin: '0 0 2px' }}>PRIVATE</p>
+                          <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.06em', color: '#1D4ED8', margin: '0 0 2px' }}>PRIVATE</p>
                           <p style={{
-                            fontFamily: 'Lato, sans-serif', fontSize: '0.8rem',
+                            fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem',
                             color: 'var(--nhlb-text)', margin: 0, lineHeight: 1.5, fontStyle: 'italic',
                           }}>
                             {note.private_notes.length > 150

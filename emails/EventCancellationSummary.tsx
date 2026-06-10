@@ -1,5 +1,5 @@
 import {
-  Html, Head, Body, Container, Section,
+  Html, Head, Body, Container, Section, Img,
   Text, Heading, Hr, Link
 } from '@react-email/components'
 import type { Event } from '../src/types'
@@ -31,31 +31,34 @@ export function EventCancellationSummaryEmail({
   return (
     <Html>
       <Head />
-      <Body style={{ fontFamily: 'Georgia, serif', background: '#FDFAF8', padding: '40px 0' }}>
+      <Body style={{ fontFamily: 'Georgia, serif', background: '#FAF6F5', padding: '40px 0' }}>
         <Container style={{ background: '#fff', borderRadius: 8, padding: '40px', maxWidth: 520 }}>
-          <Text style={{ color: '#B8311F', fontSize: 22, fontWeight: 'bold', margin: '0 0 4px', fontFamily: 'Georgia, serif' }}>
+          <Section style={{ backgroundColor: '#763535', borderRadius: 8, padding: '20px 24px', textAlign: 'center', marginBottom: 24 }}>
+            <Img src="https://rgssitykmtunydrbuuhc.supabase.co/storage/v1/object/public/NHLB_Images/No-Heart-Left-Behind-Horizontal-White.svg" alt="No Heart Left Behind" width="220" style={{ margin: '0 auto', display: 'block' }} />
+          </Section>
+          <Text style={{ color: '#A90113', fontSize: 22, fontWeight: 'bold', margin: '0 0 4px', fontFamily: 'Georgia, serif' }}>
             Event Cancelled — Summary
           </Text>
-          <Text style={{ color: '#9A5A50', marginTop: 0, fontFamily: 'Arial, sans-serif', fontSize: 13 }}>
+          <Text style={{ color: '#8A6A62', marginTop: 0, fontFamily: 'Arial, sans-serif', fontSize: 13 }}>
             No Heart Left Behind — Admin Notification
           </Text>
-          <Hr style={{ borderColor: '#F0E0D8', margin: '24px 0' }} />
+          <Hr style={{ borderColor: '#FCEEE7', margin: '24px 0' }} />
 
           <Section>
-            <Text style={{ color: '#3D1A14', fontSize: 15, margin: '4px 0' }}>
+            <Text style={{ color: '#241F1E', fontSize: 15, margin: '4px 0' }}>
               <strong>Event:</strong> {event.title}
             </Text>
-            <Text style={{ color: '#3D1A14', fontSize: 15, margin: '4px 0' }}>
+            <Text style={{ color: '#241F1E', fontSize: 15, margin: '4px 0' }}>
               <strong>Date:</strong> {date}
             </Text>
-            <Text style={{ color: '#3D1A14', fontSize: 15, margin: '4px 0' }}>
+            <Text style={{ color: '#241F1E', fontSize: 15, margin: '4px 0' }}>
               <strong>Cancelled:</strong> {cancelledBy === 'auto' ? 'Automatically (minimum not met by deadline)' : 'Manually by admin'}
             </Text>
           </Section>
 
-          <Hr style={{ borderColor: '#F0E0D8', margin: '24px 0' }} />
+          <Hr style={{ borderColor: '#FCEEE7', margin: '24px 0' }} />
 
-          <Heading style={{ color: '#3D1A14', fontFamily: 'Georgia, serif', fontSize: 16, marginBottom: 8 }}>
+          <Heading style={{ color: '#241F1E', fontFamily: 'Georgia, serif', fontSize: 16, marginBottom: 8 }}>
             Registration Summary
           </Heading>
           <Section style={{ background: '#F5F5F5', borderRadius: 6, padding: '16px 20px' }}>
@@ -69,15 +72,15 @@ export function EventCancellationSummaryEmail({
             <Text style={{ fontSize: 14, fontFamily: 'Arial, sans-serif', margin: '4px 0', color: '#333' }}>
               Free registrations: <strong>{totalRegistrants - refundsIssued - refundsFailed}</strong>
             </Text>
-            <Text style={{ fontSize: 14, fontFamily: 'Arial, sans-serif', margin: '4px 0', color: refundsFailed > 0 ? '#B8311F' : '#333' }}>
+            <Text style={{ fontSize: 14, fontFamily: 'Arial, sans-serif', margin: '4px 0', color: refundsFailed > 0 ? '#A90113' : '#333' }}>
               Refunds failed: <strong>{refundsFailed}</strong>
             </Text>
           </Section>
 
           {failedRefunds.length > 0 && (
             <>
-              <Hr style={{ borderColor: '#F0E0D8', margin: '24px 0' }} />
-              <Heading style={{ color: '#B8311F', fontFamily: 'Georgia, serif', fontSize: 16, marginBottom: 8 }}>
+              <Hr style={{ borderColor: '#FCEEE7', margin: '24px 0' }} />
+              <Heading style={{ color: '#A90113', fontFamily: 'Georgia, serif', fontSize: 16, marginBottom: 8 }}>
                 Failed Refunds — Manual Action Required
               </Heading>
               {failedRefunds.map((r, i) => (
@@ -88,16 +91,16 @@ export function EventCancellationSummaryEmail({
             </>
           )}
 
-          <Hr style={{ borderColor: '#F0E0D8', margin: '24px 0' }} />
+          <Hr style={{ borderColor: '#FCEEE7', margin: '24px 0' }} />
 
           <Link
             href={`${baseUrl}/admin/events`}
-            style={{ color: '#B8311F', fontSize: 14, fontFamily: 'Arial, sans-serif' }}
+            style={{ color: '#A90113', fontSize: 14, fontFamily: 'Arial, sans-serif' }}
           >
             View in dashboard →
           </Link>
 
-          <Text style={{ color: '#D4A898', fontSize: 12, fontFamily: 'Arial, sans-serif', marginTop: 32 }}>
+          <Text style={{ color: '#E5C4B8', fontSize: 12, fontFamily: 'Arial, sans-serif', marginTop: 32 }}>
             No Heart Left Behind &copy; {new Date().getFullYear()}
           </Text>
         </Container>

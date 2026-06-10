@@ -165,7 +165,7 @@ export default function AdminBookingsPage() {
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
         }}>
           <span style={{ fontSize: '1.1rem' }}>📞</span>
-          <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', fontWeight: 700, color: '#633806' }}>
+          <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', fontWeight: 700, color: '#633806' }}>
             {callPendingCount} session{callPendingCount !== 1 ? 's' : ''} awaiting intake call
           </span>
         </div>
@@ -183,7 +183,7 @@ export default function AdminBookingsPage() {
                   borderColor: filter === s ? 'var(--nhlb-red)' : 'var(--nhlb-border)',
                   backgroundColor: filter === s ? 'var(--nhlb-red)' : 'white',
                   color: filter === s ? 'white' : 'var(--nhlb-muted)',
-                  fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                  fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700,
                   letterSpacing: '0.03em', textTransform: 'capitalize', cursor: 'pointer',
                 }}>
                 {s === 'all' ? 'All' : s.replace('_', ' ')}
@@ -198,7 +198,7 @@ export default function AdminBookingsPage() {
                   borderColor: counselorFilter !== 'all' ? 'var(--nhlb-red)' : 'var(--nhlb-border)',
                   backgroundColor: counselorFilter !== 'all' ? 'var(--nhlb-red)' : 'white',
                   color: counselorFilter !== 'all' ? 'white' : 'var(--nhlb-muted)',
-                  fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                  fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700,
                   cursor: 'pointer', appearance: 'none',
                   paddingRight: 28, backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'6\'%3E%3Cpath d=\'M0 0l5 6 5-6z\' fill=\'%239A5A50\'/%3E%3C/svg%3E")',
                   backgroundRepeat: 'no-repeat', backgroundPosition: 'right 10px center',
@@ -217,7 +217,7 @@ export default function AdminBookingsPage() {
                 borderColor: view === v.key ? 'var(--nhlb-red)' : 'var(--nhlb-border)',
                 backgroundColor: view === v.key ? 'var(--nhlb-red)' : 'white',
                 color: view === v.key ? 'white' : 'var(--nhlb-muted)',
-                fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer',
+                fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer',
               }}>{v.label}</button>
             ))}
           </div>
@@ -227,29 +227,29 @@ export default function AdminBookingsPage() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <button onClick={() => setWeekStart(addDays(weekStart, -7))} style={{ background: 'none', border: '1px solid var(--nhlb-border)', borderRadius: 6, padding: '4px 10px', cursor: 'pointer', fontSize: '0.85rem', color: 'var(--nhlb-muted)' }}>&larr;</button>
-            <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: 'var(--nhlb-text)', minWidth: 180, textAlign: 'center' }}>
+            <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: 'var(--nhlb-text)', minWidth: 180, textAlign: 'center' }}>
               {format(weekStart, 'MMM d')} &ndash; {format(addDays(weekStart, 6), 'MMM d, yyyy')}
             </span>
             <button onClick={() => setWeekStart(addDays(weekStart, 7))} style={{ background: 'none', border: '1px solid var(--nhlb-border)', borderRadius: 6, padding: '4px 10px', cursor: 'pointer', fontSize: '0.85rem', color: 'var(--nhlb-muted)' }}>&rarr;</button>
-            <button onClick={() => { setWeekStart(startOfWeek(new Date(), { weekStartsOn: 1 })); setListFilterDay(null) }} style={{ padding: '4px 12px', borderRadius: 6, border: '1px solid var(--nhlb-border)', backgroundColor: 'white', color: 'var(--nhlb-muted)', fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer' }}>Today</button>
+            <button onClick={() => { setWeekStart(startOfWeek(new Date(), { weekStartsOn: 1 })); setListFilterDay(null) }} style={{ padding: '4px 12px', borderRadius: 6, border: '1px solid var(--nhlb-border)', backgroundColor: 'white', color: 'var(--nhlb-muted)', fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer' }}>Today</button>
           </div>
           {view === 'week' && <CounselorLegend names={counselorNames} colorMap={counselorColorMap} />}
           {view === 'list' && listFilterDay && (
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: 'var(--nhlb-red-dark)' }}>
+              <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: 'var(--nhlb-red-dark)' }}>
                 {format(listFilterDay, 'EEEE, MMMM d, yyyy')}
               </span>
               <button onClick={() => setListFilterDay(null)} style={{
                 padding: '4px 12px', borderRadius: 6, border: '1px solid var(--nhlb-border)',
                 backgroundColor: 'white', color: 'var(--nhlb-muted)',
-                fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer',
+                fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer',
               }}>Show All</button>
             </div>
           )}
         </div>
 
         {loading ? (
-          <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>
+          <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>
             Loading sessions...
           </p>
         ) : (
@@ -266,14 +266,14 @@ export default function AdminBookingsPage() {
                       color: isToday(day) ? 'white' : 'var(--nhlb-text)',
                       borderLeft: '1px solid var(--nhlb-border)',
                     }}>
-                      <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.06em', margin: 0 }}>{format(day, 'EEE').toUpperCase()}</p>
-                      <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '1rem', fontWeight: 700, margin: 0 }}>{format(day, 'd')}</p>
+                      <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.06em', margin: 0 }}>{format(day, 'EEE').toUpperCase()}</p>
+                      <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '1rem', fontWeight: 700, margin: 0 }}>{format(day, 'd')}</p>
                     </div>
                   ))}
                 </div>
                 {HOURS.map(hour => (
                   <div key={hour} style={{ display: 'grid', gridTemplateColumns: '60px repeat(7, 1fr)', minHeight: 60, borderBottom: '1px solid var(--nhlb-border)' }}>
-                    <div style={{ padding: '4px 8px', fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)', textAlign: 'right', borderRight: '1px solid var(--nhlb-border)' }}>
+                    <div style={{ padding: '4px 8px', fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)', textAlign: 'right', borderRight: '1px solid var(--nhlb-border)' }}>
                       {hour > 12 ? hour - 12 : hour}{hour >= 12 ? 'pm' : 'am'}
                     </div>
                     {weekDays.map(day => {
@@ -298,7 +298,7 @@ export default function AdminBookingsPage() {
             {/* ── List View ── */}
             {view === 'list' && (
               visibleBookings.length === 0 ? (
-                <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem', color: 'var(--nhlb-muted)' }}>No sessions found</p>
+                <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Playfair Display, serif', fontSize: '1.3rem', color: 'var(--nhlb-muted)' }}>No sessions found</p>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   {visibleBookings.map(b => {
@@ -319,31 +319,31 @@ export default function AdminBookingsPage() {
                         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
                           <div style={{ flex: 1 }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
-                              <span style={{ fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.9rem', color: 'var(--nhlb-red-dark)' }}>
+                              <span style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.9rem', color: 'var(--nhlb-red-dark)' }}>
                                 {format(new Date(b.scheduled_at), 'EEE, MMM d')} at {format(new Date(b.scheduled_at), 'h:mm a')}
                               </span>
                               <span style={{
                                 backgroundColor: ss.bg, color: ss.text,
                                 padding: '2px 8px', borderRadius: 20, fontSize: '0.65rem', fontWeight: 700,
-                                fontFamily: 'Lato, sans-serif', textTransform: 'capitalize',
+                                fontFamily: 'Raleway, sans-serif', textTransform: 'capitalize',
                               }}>
                                 {b.status.replace('_', ' ')}
                               </span>
                               {b.is_recurring && (
-                                <span style={{ backgroundColor: '#D1FAE5', color: '#065F46', padding: '2px 8px', borderRadius: 20, fontSize: '0.6rem', fontWeight: 700, fontFamily: 'Lato, sans-serif' }}>
+                                <span style={{ backgroundColor: '#D1FAE5', color: '#065F46', padding: '2px 8px', borderRadius: 20, fontSize: '0.6rem', fontWeight: 700, fontFamily: 'Raleway, sans-serif' }}>
                                   ↻ Recurring
                                 </span>
                               )}
                               {b.series_index > 1 && (
-                                <span style={{ backgroundColor: '#F3F4F6', color: '#6B7280', padding: '2px 8px', borderRadius: 20, fontSize: '0.6rem', fontWeight: 700, fontFamily: 'Lato, sans-serif' }}>
+                                <span style={{ backgroundColor: '#F3F4F6', color: '#6B7280', padding: '2px 8px', borderRadius: 20, fontSize: '0.6rem', fontWeight: 700, fontFamily: 'Raleway, sans-serif' }}>
                                   Session #{b.series_index}
                                 </span>
                               )}
                             </div>
-                            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '1rem', fontWeight: 700, color: 'var(--nhlb-text)', margin: '0 0 2px' }}>
+                            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '1rem', fontWeight: 700, color: 'var(--nhlb-text)', margin: '0 0 2px' }}>
                               {b.client?.first_name} {b.client?.last_name}
                             </p>
-                            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: 0 }}>
+                            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: 0 }}>
                               {b.type === 'VIRTUAL' ? '💻 Virtual' : '🏠 In Person'}
                               {' · '}{b.client?.service_type}
                               {b.counselor?.name ? ` · ${b.counselor.name}` : ''}
@@ -352,7 +352,7 @@ export default function AdminBookingsPage() {
                               {b.donation_amount_cents > 0 ? ` · $${(b.donation_amount_cents / 100).toFixed(2)} donation` : ''}
                             </p>
                             {b.type === 'VIRTUAL' && b.counselor?.zoom_link && (
-                              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: '#1D4ED8', margin: '4px 0 0' }}>
+                              <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', color: '#1D4ED8', margin: '4px 0 0' }}>
                                 <a href={b.counselor.zoom_link} target="_blank" rel="noopener noreferrer" style={{ color: '#1D4ED8', textDecoration: 'none' }}>Join Zoom</a>
                                 {b.counselor.zoom_meeting_id && <> · ID: {b.counselor.zoom_meeting_id}</>}
                                 {b.counselor.zoom_passcode && <> · Passcode: {b.counselor.zoom_passcode}</>}
@@ -380,7 +380,7 @@ export default function AdminBookingsPage() {
                                     cursor: futureBlock ? 'not-allowed' : 'pointer',
                                     backgroundColor: STATUS_STYLES[a]?.bg ?? '#F3F4F6',
                                     color: STATUS_STYLES[a]?.text ?? '#374151',
-                                    fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem',
+                                    fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.7rem',
                                     opacity: futureBlock ? 0.4 : 1,
                                   }}>
                                   {ACTION_LABELS[a] ?? a}
@@ -392,7 +392,7 @@ export default function AdminBookingsPage() {
                                 style={{
                                   padding: '6px 12px', borderRadius: 6, cursor: 'pointer',
                                   border: '1px solid #FECACA', backgroundColor: 'white', color: '#DC2626',
-                                  fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem',
+                                  fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.7rem',
                                 }}>
                                 Cancel
                               </button>
@@ -400,7 +400,7 @@ export default function AdminBookingsPage() {
                             <a href={`/admin/bookings/clients/${b.client_id}`} style={{
                               padding: '6px 12px', borderRadius: 6, border: '1px solid var(--nhlb-border)',
                               backgroundColor: 'white', color: 'var(--nhlb-muted)', textDecoration: 'none',
-                              fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.7rem',
+                              fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.7rem',
                               display: 'inline-flex', alignItems: 'center',
                             }}>View client</a>
                           </div>
@@ -411,7 +411,7 @@ export default function AdminBookingsPage() {
                           <div style={{ marginTop: 12 }}>
                             <button onClick={() => setExpandedPreCall(isPreCallOpen ? null : b.id)} style={{
                               background: 'none', border: 'none', cursor: 'pointer', padding: 0,
-                              fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                              fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700,
                               color: '#633806', letterSpacing: '0.06em',
                             }}>
                               {isPreCallOpen ? '▾' : '▸'} PRE-CALL NOTES
@@ -426,12 +426,12 @@ export default function AdminBookingsPage() {
                                   onChange={e => setLocalPreCallNotes(prev => ({ ...prev, [b.id]: e.target.value }))}
                                   rows={2}
                                   placeholder="Notes from the intake phone call..."
-                                  style={{ width: '100%', border: '1px solid #E3A008', borderRadius: 6, padding: '8px 12px', fontSize: '0.85rem', fontFamily: 'Lato, sans-serif', color: '#633806', background: 'white', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}
+                                  style={{ width: '100%', border: '1px solid #E3A008', borderRadius: 6, padding: '8px 12px', fontSize: '0.85rem', fontFamily: 'Raleway, sans-serif', color: '#633806', background: 'white', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}
                                 />
                                 <button
                                   onClick={() => saveNotes(b.id, 'pre_call_notes')}
                                   disabled={savingNotes[`${b.id}_pre_call_notes`]}
-                                  style={{ marginTop: 6, padding: '5px 14px', borderRadius: 6, border: 'none', cursor: 'pointer', backgroundColor: '#633806', color: 'white', fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.72rem', opacity: savingNotes[`${b.id}_pre_call_notes`] ? 0.6 : 1 }}>
+                                  style={{ marginTop: 6, padding: '5px 14px', borderRadius: 6, border: 'none', cursor: 'pointer', backgroundColor: '#633806', color: 'white', fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.72rem', opacity: savingNotes[`${b.id}_pre_call_notes`] ? 0.6 : 1 }}>
                                   {savingNotes[`${b.id}_pre_call_notes`] ? 'Saving...' : 'Save pre-call notes'}
                                 </button>
                               </div>
@@ -444,7 +444,7 @@ export default function AdminBookingsPage() {
                           <div style={{ marginTop: 8 }}>
                             <button onClick={() => setExpandedSessionNotes(isSessionNotesOpen ? null : b.id)} style={{
                               background: 'none', border: 'none', cursor: 'pointer', padding: 0,
-                              fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                              fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700,
                               color: '#085041', letterSpacing: '0.06em',
                             }}>
                               {isSessionNotesOpen ? '▾' : '▸'} SESSION NOTES
@@ -459,12 +459,12 @@ export default function AdminBookingsPage() {
                                   onChange={e => setLocalSessionNotes(prev => ({ ...prev, [b.id]: e.target.value }))}
                                   rows={2}
                                   placeholder="Summary of the session, progress, follow-up..."
-                                  style={{ width: '100%', border: '1px solid #34D399', borderRadius: 6, padding: '8px 12px', fontSize: '0.85rem', fontFamily: 'Lato, sans-serif', color: '#085041', background: 'white', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}
+                                  style={{ width: '100%', border: '1px solid #34D399', borderRadius: 6, padding: '8px 12px', fontSize: '0.85rem', fontFamily: 'Raleway, sans-serif', color: '#085041', background: 'white', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}
                                 />
                                 <button
                                   onClick={() => saveNotes(b.id, 'session_notes')}
                                   disabled={savingNotes[`${b.id}_session_notes`]}
-                                  style={{ marginTop: 6, padding: '5px 14px', borderRadius: 6, border: 'none', cursor: 'pointer', backgroundColor: '#085041', color: 'white', fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.72rem', opacity: savingNotes[`${b.id}_session_notes`] ? 0.6 : 1 }}>
+                                  style={{ marginTop: 6, padding: '5px 14px', borderRadius: 6, border: 'none', cursor: 'pointer', backgroundColor: '#085041', color: 'white', fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.72rem', opacity: savingNotes[`${b.id}_session_notes`] ? 0.6 : 1 }}>
                                   {savingNotes[`${b.id}_session_notes`] ? 'Saving...' : 'Save session notes'}
                                 </button>
                               </div>
@@ -492,12 +492,12 @@ export default function AdminBookingsPage() {
             width: '90%', boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
           }}>
             <h3 style={{
-              fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem',
+              fontFamily: 'Playfair Display, serif', fontSize: '1.3rem',
               fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px',
             }}>
               Complete Session
             </h3>
-            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', margin: '0 0 20px' }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', margin: '0 0 20px' }}>
               {completeModal.name} &mdash; Would you like to add session notes?
             </p>
             <textarea
@@ -507,7 +507,7 @@ export default function AdminBookingsPage() {
               rows={4}
               style={{
                 width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-                padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
+                padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Raleway, sans-serif',
                 color: 'var(--nhlb-text)', background: 'white', outline: 'none', resize: 'vertical',
                 boxSizing: 'border-box', marginBottom: 20,
               }}
@@ -516,14 +516,14 @@ export default function AdminBookingsPage() {
               <button onClick={() => setCompleteModal(null)} style={{
                 padding: '10px 20px', borderRadius: 8, border: '1px solid var(--nhlb-border)',
                 backgroundColor: 'white', color: 'var(--nhlb-muted)',
-                fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', cursor: 'pointer',
+                fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', cursor: 'pointer',
               }}>
                 Cancel
               </button>
               <button onClick={handleCompleteConfirm} style={{
                 padding: '10px 20px', borderRadius: 8, border: 'none',
                 backgroundColor: '#065F46', color: 'white',
-                fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
+                fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
               }}>
                 Complete Session
               </button>
@@ -537,7 +537,7 @@ export default function AdminBookingsPage() {
         <div style={{
           position: 'fixed', bottom: 32, left: '50%', transform: 'translateX(-50%)',
           backgroundColor: '#065F46', color: 'white', padding: '14px 28px',
-          borderRadius: 12, fontFamily: 'Lato, sans-serif', fontSize: '0.875rem',
+          borderRadius: 12, fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem',
           fontWeight: 700, boxShadow: '0 8px 30px rgba(0,0,0,0.18)', zIndex: 10000,
           display: 'flex', alignItems: 'center', gap: 10,
           animation: 'fadeInUp 0.25s ease-out',
@@ -568,7 +568,7 @@ function BookingChip({ booking: b, colorMap }: {
       opacity: cancelled ? 0.5 : 1,
     }}>
       <span style={{
-        fontFamily: 'Lato, sans-serif', fontWeight: 700,
+        fontFamily: 'Raleway, sans-serif', fontWeight: 700,
         fontSize: '0.68rem', color: 'var(--nhlb-text)',
         lineHeight: 1.3, display: 'block',
         overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis',
@@ -576,7 +576,7 @@ function BookingChip({ booking: b, colorMap }: {
         {b.client?.first_name} {b.client?.last_name?.[0]}.
       </span>
       <span style={{
-        fontFamily: 'Lato, sans-serif', fontSize: '0.58rem',
+        fontFamily: 'Raleway, sans-serif', fontSize: '0.58rem',
         color: 'var(--nhlb-muted)', lineHeight: 1.2, display: 'block',
       }}>
         {cName.split(' ')[0]}
@@ -596,7 +596,7 @@ function CounselorLegend({ names, colorMap }: {
       {names.map(name => name && (
         <div key={name} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
           <div style={{ width: 10, height: 10, borderRadius: 2, backgroundColor: colorMap[name]?.border }} />
-          <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)' }}>{name}</span>
+          <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)' }}>{name}</span>
         </div>
       ))}
     </div>

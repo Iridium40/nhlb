@@ -52,7 +52,7 @@ export default function EventAttendeesPage() {
 
   if (loading) return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
+      <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
     </div>
   )
 
@@ -80,25 +80,25 @@ export default function EventAttendeesPage() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
           <div>
             <button onClick={() => router.push('/admin/events')} style={{
-              background: 'none', border: 'none', fontFamily: 'Lato, sans-serif',
+              background: 'none', border: 'none', fontFamily: 'Raleway, sans-serif',
               fontSize: '0.8rem', color: 'var(--nhlb-muted)', cursor: 'pointer', padding: 0, marginBottom: 8,
             }}>&larr; Back to Events</button>
             <h2 style={{
-              fontFamily: 'Cormorant Garamond, serif', fontSize: '1.5rem',
+              fontFamily: 'Playfair Display, serif', fontSize: '1.5rem',
               fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0,
             }}>{event?.title}</h2>
             {isCancelled && (
               <span style={{
                 display: 'inline-block', marginTop: 6, padding: '4px 10px',
                 backgroundColor: '#F3F4F6', border: '1px solid #D1D5DB', borderRadius: 6,
-                fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', fontWeight: 700, color: '#6B7280',
+                fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', fontWeight: 700, color: '#6B7280',
               }}>CANCELLED</span>
             )}
           </div>
           <a href={`/api/events/${eventId}/registrations/export`} style={{
             padding: '8px 18px', borderRadius: 8,
             backgroundColor: 'var(--nhlb-red)', color: 'white',
-            fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
+            fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.8rem',
             textDecoration: 'none',
           }}>
             Export CSV
@@ -112,10 +112,10 @@ export default function EventAttendeesPage() {
             borderRadius: 12, padding: '16px 20px', marginBottom: 20,
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-              <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', fontWeight: 700, color: 'var(--nhlb-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+              <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', fontWeight: 700, color: 'var(--nhlb-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                 Attendance
               </span>
-              <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', fontWeight: 700, color: 'var(--nhlb-text)' }}>
+              <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', fontWeight: 700, color: 'var(--nhlb-text)' }}>
                 {regCount}{minCap > 0 ? ` / ${minCap} min` : ''}{maxCap > 0 ? ` / ${maxCap} max` : ''}
               </span>
             </div>
@@ -132,7 +132,7 @@ export default function EventAttendeesPage() {
               }} />
             </div>
             {minCap > 0 && regCount < minCap && !isCancelled && (
-              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#DC2626', marginTop: 8, marginBottom: 0 }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: '#DC2626', marginTop: 8, marginBottom: 0 }}>
                 {minCap - regCount} more needed to meet minimum
                 {event?.cancellation_deadline && (
                   <> by {format(new Date(event.cancellation_deadline), 'MMM d, h:mm a')}</>
@@ -140,7 +140,7 @@ export default function EventAttendeesPage() {
               </p>
             )}
             {minCap > 0 && regCount >= minCap && (
-              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#059669', marginTop: 8, marginBottom: 0 }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: '#059669', marginTop: 8, marginBottom: 0 }}>
                 Minimum met
               </p>
             )}
@@ -153,10 +153,10 @@ export default function EventAttendeesPage() {
             background: 'white', border: '1px solid var(--nhlb-border)',
             borderRadius: 12, padding: '20px', textAlign: 'center',
           }}>
-            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0 }}>
+            <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0 }}>
               {confirmed.length}
             </p>
-            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)', margin: '4px 0 0' }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)', margin: '4px 0 0' }}>
               Confirmed
             </p>
           </div>
@@ -164,10 +164,10 @@ export default function EventAttendeesPage() {
             background: 'white', border: '1px solid var(--nhlb-border)',
             borderRadius: 12, padding: '20px', textAlign: 'center',
           }}>
-            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: '#D97706', margin: 0 }}>
+            <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '2rem', fontWeight: 600, color: '#D97706', margin: 0 }}>
               {pending.length}
             </p>
-            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)', margin: '4px 0 0' }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)', margin: '4px 0 0' }}>
               Pending
             </p>
           </div>
@@ -175,10 +175,10 @@ export default function EventAttendeesPage() {
             background: 'white', border: '1px solid var(--nhlb-border)',
             borderRadius: 12, padding: '20px', textAlign: 'center',
           }}>
-            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: '#065F46', margin: 0 }}>
+            <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '2rem', fontWeight: 600, color: '#065F46', margin: 0 }}>
               ${(totalRevenue / 100).toFixed(2)}
             </p>
-            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)', margin: '4px 0 0' }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)', margin: '4px 0 0' }}>
               Total Collected
             </p>
           </div>
@@ -186,10 +186,10 @@ export default function EventAttendeesPage() {
             background: 'white', border: '1px solid var(--nhlb-border)',
             borderRadius: 12, padding: '20px', textAlign: 'center',
           }}>
-            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-muted)', margin: 0 }}>
+            <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-muted)', margin: 0 }}>
               {event ? format(new Date(event.event_date), 'MMM d') : '—'}
             </p>
-            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)', margin: '4px 0 0' }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)', margin: '4px 0 0' }}>
               Event Date
             </p>
           </div>
@@ -197,7 +197,7 @@ export default function EventAttendeesPage() {
 
         {/* Attendee table */}
         {active.length === 0 && refunded.length === 0 ? (
-          <p style={{ textAlign: 'center', padding: '40px 0', fontFamily: 'Cormorant Garamond, serif', fontSize: '1.2rem', color: 'var(--nhlb-muted)' }}>
+          <p style={{ textAlign: 'center', padding: '40px 0', fontFamily: 'Playfair Display, serif', fontSize: '1.2rem', color: 'var(--nhlb-muted)' }}>
             No registrations yet
           </p>
         ) : (
@@ -211,7 +211,7 @@ export default function EventAttendeesPage() {
                   {['Name', 'Email', 'Phone', 'Status', 'Paid', 'Registered'].map(h => (
                     <th key={h} style={{
                       padding: '10px 16px', textAlign: 'left',
-                      fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                      fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700,
                       letterSpacing: '0.06em', color: 'var(--nhlb-muted)',
                     }}>{h}</th>
                   ))}
@@ -228,24 +228,24 @@ export default function EventAttendeesPage() {
                   const sc = statusColors[r.status] ?? { bg: '#F3F4F6', text: '#6B7280' }
                   return (
                     <tr key={r.id} style={{ borderTop: i > 0 ? '1px solid var(--nhlb-border)' : 'none' }}>
-                      <td style={{ padding: '12px 16px', fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', fontWeight: 700, color: 'var(--nhlb-text)' }}>
+                      <td style={{ padding: '12px 16px', fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', fontWeight: 700, color: 'var(--nhlb-text)' }}>
                         {r.first_name} {r.last_name}
                       </td>
-                      <td style={{ padding: '12px 16px', fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)' }}>
+                      <td style={{ padding: '12px 16px', fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)' }}>
                         {r.email}
                       </td>
-                      <td style={{ padding: '12px 16px', fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)' }}>
+                      <td style={{ padding: '12px 16px', fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)' }}>
                         {r.phone ?? '—'}
                       </td>
                       <td style={{ padding: '12px 16px' }}>
                         <span style={{
                           display: 'inline-block', padding: '3px 10px', borderRadius: 20,
                           backgroundColor: sc.bg, color: sc.text,
-                          fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                          fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700,
                           textTransform: 'capitalize',
                         }}>{r.status}</span>
                       </td>
-                      <td style={{ padding: '12px 16px', fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)' }}>
+                      <td style={{ padding: '12px 16px', fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)' }}>
                         {r.amount_paid_cents > 0 ? `$${(r.amount_paid_cents / 100).toFixed(2)}` : 'Free'}
                         {r.refund_amount_cents ? (
                           <span style={{ display: 'block', fontSize: '0.7rem', color: '#5B21B6' }}>
@@ -253,7 +253,7 @@ export default function EventAttendeesPage() {
                           </span>
                         ) : null}
                       </td>
-                      <td style={{ padding: '12px 16px', fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)' }}>
+                      <td style={{ padding: '12px 16px', fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)' }}>
                         {format(new Date(r.created_at), 'MMM d, h:mm a')}
                       </td>
                     </tr>
@@ -270,16 +270,16 @@ export default function EventAttendeesPage() {
             background: 'white', border: '2px solid #FECACA',
             borderRadius: 12, padding: '24px', marginBottom: 32,
           }}>
-            <h3 style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', fontWeight: 700, color: '#B91C1C', margin: '0 0 8px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            <h3 style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', fontWeight: 700, color: '#B91C1C', margin: '0 0 8px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               Danger Zone
             </h3>
-            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', marginBottom: 16 }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', marginBottom: 16 }}>
               Cancelling will refund all paid registrations and email every registrant.
             </p>
             <button onClick={() => setShowCancelModal(true)} style={{
               padding: '10px 20px', borderRadius: 8, border: '1px solid #DC2626',
               backgroundColor: 'white', color: '#DC2626',
-              fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
+              fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
             }}>
               Cancel This Event
             </button>
@@ -292,11 +292,11 @@ export default function EventAttendeesPage() {
             background: '#F9FAFB', border: '1px solid #D1D5DB',
             borderRadius: 12, padding: '20px', marginBottom: 32,
           }}>
-            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: '#6B7280', margin: '0 0 6px' }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: '#6B7280', margin: '0 0 6px' }}>
               Cancelled {format(new Date(event.cancelled_at!), 'MMM d, yyyy \'at\' h:mm a')}
             </p>
             {event.cancellation_reason && (
-              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: '#4B5563', margin: 0, fontStyle: 'italic' }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: '#4B5563', margin: 0, fontStyle: 'italic' }}>
                 &ldquo;{event.cancellation_reason}&rdquo;
               </p>
             )}
@@ -316,34 +316,34 @@ export default function EventAttendeesPage() {
           }} onClick={e => e.stopPropagation()}>
             {cancelResult ? (
               <>
-                <h3 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.4rem', color: 'var(--nhlb-red-dark)', margin: '0 0 12px' }}>
+                <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.4rem', color: 'var(--nhlb-red-dark)', margin: '0 0 12px' }}>
                   Event Cancelled
                 </h3>
-                <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-text)', marginBottom: 8 }}>
+                <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-text)', marginBottom: 8 }}>
                   Refunds issued: {cancelResult.refundsIssued}
                 </p>
                 {cancelResult.refundsFailed > 0 && (
-                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: '#DC2626', marginBottom: 8 }}>
+                  <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', color: '#DC2626', marginBottom: 8 }}>
                     Refunds failed: {cancelResult.refundsFailed} (manual action required in Stripe)
                   </p>
                 )}
-                <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', marginBottom: 20 }}>
+                <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', marginBottom: 20 }}>
                   All registrants have been emailed. A summary has been sent to the admin.
                 </p>
                 <button onClick={() => { setShowCancelModal(false); setCancelResult(null) }} style={{
                   width: '100%', padding: '12px', borderRadius: 8, border: 'none',
                   backgroundColor: 'var(--nhlb-red)', color: 'white',
-                  fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem', cursor: 'pointer',
+                  fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem', cursor: 'pointer',
                 }}>
                   Done
                 </button>
               </>
             ) : (
               <>
-                <h3 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.4rem', color: '#B91C1C', margin: '0 0 12px' }}>
+                <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.4rem', color: '#B91C1C', margin: '0 0 12px' }}>
                   Cancel this event?
                 </h3>
-                <div style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', marginBottom: 16 }}>
+                <div style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', marginBottom: 16 }}>
                   <p style={{ margin: '0 0 8px' }}>This will:</p>
                   <ul style={{ margin: 0, paddingLeft: 20 }}>
                     <li>Cancel all {active.length} active registrations</li>
@@ -355,7 +355,7 @@ export default function EventAttendeesPage() {
 
                 <div style={{ marginBottom: 16 }}>
                   <label style={{
-                    display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.75rem',
+                    display: 'block', fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem',
                     fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase',
                     color: 'var(--nhlb-muted)', marginBottom: 6,
                   }}>Cancellation reason (shown to registrants)</label>
@@ -365,7 +365,7 @@ export default function EventAttendeesPage() {
                     rows={3}
                     style={{
                       width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-                      padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
+                      padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Raleway, sans-serif',
                       color: 'var(--nhlb-text)', resize: 'none', outline: 'none',
                     }}
                   />
@@ -378,7 +378,7 @@ export default function EventAttendeesPage() {
                     style={{
                       flex: 1, padding: '12px', borderRadius: 8, border: 'none',
                       backgroundColor: '#DC2626', color: 'white',
-                      fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.85rem',
+                      fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.85rem',
                       cursor: cancelling ? 'not-allowed' : 'pointer', opacity: cancelling ? 0.6 : 1,
                     }}
                   >
@@ -390,7 +390,7 @@ export default function EventAttendeesPage() {
                     style={{
                       padding: '12px 20px', borderRadius: 8,
                       border: '1px solid var(--nhlb-border)', backgroundColor: 'white',
-                      color: 'var(--nhlb-muted)', fontFamily: 'Lato, sans-serif',
+                      color: 'var(--nhlb-muted)', fontFamily: 'Raleway, sans-serif',
                       fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
                     }}
                   >

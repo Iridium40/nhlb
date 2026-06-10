@@ -30,10 +30,15 @@ export default function CounselorNav() {
     <>
       <div style={{
         backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
-        textAlign: 'center', fontSize: '0.75rem', letterSpacing: '0.05em',
-        padding: '7px 16px', fontFamily: 'Lato, sans-serif',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
+        padding: '10px 16px',
       }}>
-        Counselor Portal
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/logo-white.png" alt="No Heart Left Behind" style={{ height: 24, width: 'auto', display: 'block' }} />
+        <span style={{
+          fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase',
+          fontFamily: 'Raleway, sans-serif', color: 'rgba(255,255,255,0.75)',
+        }}>Counselor Portal</span>
       </div>
 
       <header style={{
@@ -46,7 +51,7 @@ export default function CounselorNav() {
             const active = isActive(item.href)
             return (
               <a key={item.href} href={item.href} style={{
-                fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', fontWeight: 700,
+                fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', fontWeight: 700,
                 color: active ? 'var(--nhlb-red-dark)' : 'var(--nhlb-muted)',
                 textDecoration: 'none',
                 borderBottom: active ? '2px solid var(--nhlb-red-dark)' : '2px solid transparent',
@@ -60,7 +65,7 @@ export default function CounselorNav() {
         </nav>
         <div style={{ position: 'absolute', right: 40, display: 'flex', gap: 10, alignItems: 'center' }}>
           <a href="/book" target="_blank" rel="noopener noreferrer" style={{
-            fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', fontWeight: 700,
+            fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', fontWeight: 700,
             color: 'white', backgroundColor: 'var(--nhlb-red)',
             padding: '6px 14px', borderRadius: 6, textDecoration: 'none',
           }}>
@@ -69,7 +74,7 @@ export default function CounselorNav() {
           <button onClick={handleLogout} style={{
             padding: '6px 14px', borderRadius: 6, border: '1px solid var(--nhlb-border)',
             backgroundColor: 'white', color: 'var(--nhlb-muted)',
-            fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', cursor: 'pointer',
+            fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', cursor: 'pointer',
           }}>Sign Out</button>
         </div>
       </header>

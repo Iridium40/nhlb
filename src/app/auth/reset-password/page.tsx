@@ -47,12 +47,12 @@ export default function ResetPasswordPage() {
   const S = {
     input: {
       width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-      padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
+      padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Raleway, sans-serif',
       color: 'var(--nhlb-text)', background: 'white', outline: 'none',
       boxSizing: 'border-box' as const,
     },
     label: {
-      display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.75rem',
+      display: 'block', fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem',
       fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' as const,
       color: 'var(--nhlb-muted)', marginBottom: 6,
     },
@@ -87,7 +87,7 @@ export default function ResetPasswordPage() {
       <div style={{
         backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
         textAlign: 'center', fontSize: '0.8rem', letterSpacing: '0.05em',
-        padding: '8px 16px', fontFamily: 'Lato, sans-serif',
+        padding: '8px 16px', fontFamily: 'Raleway, sans-serif',
       }}>
         No Heart Left Behind
       </div>
@@ -95,13 +95,12 @@ export default function ResetPasswordPage() {
       <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '60px 24px' }}>
         <div style={{ maxWidth: 420, width: '100%' }}>
           <div style={{ textAlign: 'center', marginBottom: 32 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="https://images.squarespace-cdn.com/content/v1/5e82146501b2e061b5579be0/1587480392593-WRDXDIU2H6V7O9536SHX/NHLBlogo.png?format=300w"
-              alt="NHLB" style={{ height: 56, width: 'auto', margin: '0 auto 16px' }}
-            />
+            <span style={{ display: 'inline-flex', backgroundColor: 'var(--nhlb-red-dark)', borderRadius: 10, padding: '10px 16px', marginBottom: 16 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo-white.png" alt="No Heart Left Behind" style={{ height: 32, width: 'auto', display: 'block' }} />
+            </span>
             <h1 style={{
-              fontFamily: 'Cormorant Garamond, serif', fontSize: '1.8rem',
+              fontFamily: 'Playfair Display, serif', fontSize: '1.8rem',
               fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0,
             }}>
               Set New Password
@@ -114,13 +113,13 @@ export default function ResetPasswordPage() {
               borderRadius: 12, padding: '24px', textAlign: 'center',
             }}>
               <p style={{
-                fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem',
+                fontFamily: 'Playfair Display, serif', fontSize: '1.3rem',
                 fontWeight: 600, color: '#065F46', margin: '0 0 12px',
               }}>
                 Password Updated
               </p>
               <p style={{
-                fontFamily: 'Lato, sans-serif', fontSize: '0.85rem',
+                fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem',
                 color: '#065F46', margin: '0 0 20px', lineHeight: 1.6,
               }}>
                 Your password has been changed successfully. You can now sign in with your new password.
@@ -129,7 +128,7 @@ export default function ResetPasswordPage() {
                 <a href="/book" style={{
                   padding: '10px 20px', borderRadius: 8,
                   backgroundColor: 'var(--nhlb-red)', color: 'white',
-                  fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.85rem',
+                  fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.85rem',
                   textDecoration: 'none',
                 }}>
                   Client Home
@@ -138,7 +137,7 @@ export default function ResetPasswordPage() {
                   padding: '10px 20px', borderRadius: 8,
                   backgroundColor: 'white', color: 'var(--nhlb-red-dark)',
                   border: '1px solid var(--nhlb-border)',
-                  fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.85rem',
+                  fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.85rem',
                   textDecoration: 'none',
                 }}>
                   Counselor Login
@@ -151,13 +150,13 @@ export default function ResetPasswordPage() {
               borderRadius: 12, padding: '28px', textAlign: 'center',
             }}>
               <p style={{
-                fontFamily: 'Lato, sans-serif', fontSize: '0.875rem',
+                fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem',
                 color: 'var(--nhlb-muted)', margin: '0 0 16px',
               }}>
                 Verifying your reset link...
               </p>
               <p style={{
-                fontFamily: 'Lato, sans-serif', fontSize: '0.8rem',
+                fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem',
                 color: 'var(--nhlb-muted)', margin: 0,
               }}>
                 If this page doesn&apos;t update, your reset link may have expired. Please request a new one.
@@ -172,7 +171,7 @@ export default function ResetPasswordPage() {
                 <div style={{
                   marginBottom: 16, padding: '12px 14px',
                   backgroundColor: '#FEF2F2', border: '1px solid #FECACA',
-                  borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: '#B91C1C',
+                  borderRadius: 8, fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: '#B91C1C',
                 }}>
                   {error}
                 </div>
@@ -204,7 +203,7 @@ export default function ResetPasswordPage() {
               <button onClick={handleSubmit} disabled={loading} style={{
                 width: '100%', padding: '14px 24px', borderRadius: 8, border: 'none',
                 backgroundColor: 'var(--nhlb-red)', color: 'white',
-                fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem',
+                fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem',
                 cursor: 'pointer', opacity: loading ? 0.6 : 1,
               }}>
                 {loading ? 'Updating...' : 'Update Password'}

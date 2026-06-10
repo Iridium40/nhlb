@@ -11,18 +11,18 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://nhlb.vercel.app'
 
 const S = {
   label: {
-    display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.75rem',
+    display: 'block', fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem',
     fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' as const,
     color: 'var(--nhlb-muted)', marginBottom: 4,
   } as React.CSSProperties,
   input: {
     width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-    padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
+    padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Raleway, sans-serif',
     color: 'var(--nhlb-text)', background: 'white', outline: 'none',
   } as React.CSSProperties,
   btn: (bg: string, color: string) => ({
     padding: '8px 18px', borderRadius: 8, border: 'none', cursor: 'pointer',
-    backgroundColor: bg, color, fontFamily: 'Lato, sans-serif',
+    backgroundColor: bg, color, fontFamily: 'Raleway, sans-serif',
     fontWeight: 700, fontSize: '0.8rem',
   } as React.CSSProperties),
 }
@@ -110,18 +110,18 @@ function EventPhotoControls({ event, onUpdated }: { event: Event; onUpdated: () 
         <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleUpload} disabled={uploading} style={{ display: 'none' }} />
       </label>
       <div style={{ display: 'flex', gap: 4, justifyContent: 'center', marginTop: 4 }}>
-        <label style={{ fontSize: '0.65rem', color: 'var(--nhlb-red)', cursor: 'pointer', fontFamily: 'Lato, sans-serif' }}>
+        <label style={{ fontSize: '0.65rem', color: 'var(--nhlb-red)', cursor: 'pointer', fontFamily: 'Raleway, sans-serif' }}>
           {uploading ? '...' : event.image_url ? 'Change' : 'Upload'}
           <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleUpload} disabled={uploading} style={{ display: 'none' }} />
         </label>
         {event.image_url && (
           <button onClick={handleRemove} disabled={uploading} style={{
             background: 'none', border: 'none', padding: 0, fontSize: '0.65rem',
-            color: '#DC2626', cursor: 'pointer', fontFamily: 'Lato, sans-serif',
+            color: '#DC2626', cursor: 'pointer', fontFamily: 'Raleway, sans-serif',
           }}>Remove</button>
         )}
       </div>
-      {error && <p style={{ fontSize: '0.6rem', color: '#DC2626', margin: '2px 0 0', fontFamily: 'Lato, sans-serif' }}>{error}</p>}
+      {error && <p style={{ fontSize: '0.6rem', color: '#DC2626', margin: '2px 0 0', fontFamily: 'Raleway, sans-serif' }}>{error}</p>}
     </div>
   )
 }
@@ -140,7 +140,7 @@ function AttendanceMeter({ current, min, max, compact }: {
   return (
     <div>
       {!compact && (
-        <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-text)', margin: '0 0 6px', fontWeight: 600 }}>
+        <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-text)', margin: '0 0 6px', fontWeight: 600 }}>
           Current registrations: {current}
         </p>
       )}
@@ -154,10 +154,10 @@ function AttendanceMeter({ current, min, max, compact }: {
         )}
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
-        <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.65rem', color: 'var(--nhlb-muted)' }}>
+        <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.65rem', color: 'var(--nhlb-muted)' }}>
           {min ? `Min: ${min}` : ''}
         </span>
-        <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.65rem', color: 'var(--nhlb-muted)' }}>
+        <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.65rem', color: 'var(--nhlb-muted)' }}>
           {max ? `Max: ${max}` : ''}
         </span>
       </div>
@@ -201,7 +201,7 @@ function SharePanel({ slug, title, compact }: { slug: string; title: string; com
   const pad = compact ? '12px 16px' : '16px 20px'
   const btnStyle: React.CSSProperties = {
     padding: '6px 12px', borderRadius: 6, border: '1px solid var(--nhlb-border)',
-    background: 'white', cursor: 'pointer', fontFamily: 'Lato, sans-serif',
+    background: 'white', cursor: 'pointer', fontFamily: 'Raleway, sans-serif',
     fontSize: '0.75rem', fontWeight: 600, color: 'var(--nhlb-text)',
     display: 'inline-flex', alignItems: 'center', gap: 4,
   }
@@ -211,10 +211,10 @@ function SharePanel({ slug, title, compact }: { slug: string; title: string; com
       background: 'var(--nhlb-cream)', borderRadius: 10, padding: pad,
       border: '1px solid var(--nhlb-border)', marginTop: compact ? 12 : 16,
     }}>
-      <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>
+      <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>
         Your event page is live at:
       </p>
-      <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', fontWeight: 700, color: 'var(--nhlb-red-dark)', margin: '0 0 12px', wordBreak: 'break-all' }}>
+      <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', fontWeight: 700, color: 'var(--nhlb-red-dark)', margin: '0 0 12px', wordBreak: 'break-all' }}>
         {url}
       </p>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
@@ -355,7 +355,7 @@ function EventForm({ event, onSaved, onCancel }: {
         />
         {slug && (
           <p style={{
-            fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)',
+            fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)',
             margin: '4px 0 0', wordBreak: 'break-all',
           }}>
             {BASE_URL}/events/{slug}
@@ -439,7 +439,7 @@ function EventForm({ event, onSaved, onCancel }: {
           style={S.input}
         />
         <p style={{
-          fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)',
+          fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)',
           margin: '4px 0 0', fontStyle: 'italic',
         }}>
           If minimum is not met by this date/time, the event will be flagged for cancellation.
@@ -465,7 +465,7 @@ function EventForm({ event, onSaved, onCancel }: {
           onChange={e => setIsPublished(e.target.checked)}
           style={{ width: 16, height: 16, accentColor: 'var(--nhlb-red)' }}
         />
-        <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem' }}>Published (visible to public)</span>
+        <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem' }}>Published (visible to public)</span>
       </label>
 
       {/* Attendance meter */}
@@ -481,7 +481,7 @@ function EventForm({ event, onSaved, onCancel }: {
 
       {/* Error */}
       {saveError && (
-        <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#DC2626', margin: '0 0 12px' }}>
+        <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: '#DC2626', margin: '0 0 12px' }}>
           {saveError}
         </p>
       )}
@@ -555,13 +555,13 @@ export default function AdminEventsPage() {
         )}
 
         {loading ? (
-          <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>
+          <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>
             Loading...
           </p>
         ) : events.length === 0 ? (
           <p style={{
             textAlign: 'center', padding: '60px 0',
-            fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem', color: 'var(--nhlb-muted)',
+            fontFamily: 'Playfair Display, serif', fontSize: '1.3rem', color: 'var(--nhlb-muted)',
           }}>
             No events yet
           </p>
@@ -588,14 +588,14 @@ export default function AdminEventsPage() {
                       {/* Title + badge */}
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                         <p style={{
-                          fontFamily: 'Cormorant Garamond, serif', fontSize: '1.2rem',
+                          fontFamily: 'Playfair Display, serif', fontSize: '1.2rem',
                           fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0,
                         }}>
                           {ev.title}
                         </p>
                         <span style={{
                           padding: '2px 10px', borderRadius: 20, fontSize: '0.7rem', fontWeight: 700,
-                          fontFamily: 'Lato, sans-serif',
+                          fontFamily: 'Raleway, sans-serif',
                           backgroundColor: (ev.is_published ?? ev.is_active) ? '#D1FAE5' : '#FEE2E2',
                           color: (ev.is_published ?? ev.is_active) ? '#065F46' : '#991B1B',
                         }}>
@@ -604,7 +604,7 @@ export default function AdminEventsPage() {
                       </div>
 
                       {/* Date + location */}
-                      <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-text)', margin: '0 0 6px' }}>
+                      <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-text)', margin: '0 0 6px' }}>
                         📅 {format(new Date(ev.event_date), 'EEE, MMM d, yyyy h:mm a')}
                         {ev.location ? ` · 📍 ${ev.location}` : ''}
                       </p>
@@ -615,7 +615,7 @@ export default function AdminEventsPage() {
                         return (
                           <span style={{
                             display: 'inline-block', padding: '2px 10px', borderRadius: 6,
-                            fontSize: '0.75rem', fontWeight: 600, fontFamily: 'Lato, sans-serif',
+                            fontSize: '0.75rem', fontWeight: 600, fontFamily: 'Raleway, sans-serif',
                             backgroundColor: status.bg, color: status.color, marginBottom: 8,
                           }}>
                             {status.text}

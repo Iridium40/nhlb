@@ -16,17 +16,17 @@ type Step = 'loading' | 'blocked' | 'schedule' | 'payment' | 'checkout'
 const S = {
   input: {
     width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-    padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
+    padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Raleway, sans-serif',
     color: 'var(--nhlb-text)', background: 'white', outline: 'none',
   } as React.CSSProperties,
   label: {
-    display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.75rem',
+    display: 'block', fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem',
     fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' as const,
     color: 'var(--nhlb-muted)', marginBottom: 6,
   } as React.CSSProperties,
   btn: {
     width: '100%', backgroundColor: 'var(--nhlb-red)', color: 'white',
-    fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem',
+    fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem',
     letterSpacing: '0.05em', padding: '14px 24px', borderRadius: 8,
     border: 'none', cursor: 'pointer',
   } as React.CSSProperties,
@@ -36,7 +36,7 @@ export default function ReturningClientPage() {
   return (
     <Suspense fallback={
       <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
+        <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
       </div>
     }>
       <ReturningClientInner />
@@ -230,7 +230,7 @@ function ReturningClientInner() {
   if (step === 'loading') {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
+        <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
       </div>
     )
   }
@@ -240,7 +240,7 @@ function ReturningClientInner() {
       <div style={{
         backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
         textAlign: 'center', fontSize: '0.8rem', letterSpacing: '0.05em',
-        padding: '8px 16px', fontFamily: 'Lato, sans-serif',
+        padding: '8px 16px', fontFamily: 'Raleway, sans-serif',
       }}>
         Returning Client
       </div>
@@ -250,11 +250,11 @@ function ReturningClientInner() {
         padding: '0 40px', display: 'flex', alignItems: 'center', height: 64,
       }}>
         <a href="/book" style={{
-          fontFamily: 'Lato, sans-serif', fontSize: '0.85rem',
+          fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem',
           color: 'var(--nhlb-muted)', textDecoration: 'none',
         }}>&larr; Back</a>
         <h1 style={{
-          fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem',
+          fontFamily: 'Playfair Display, serif', fontSize: '1.3rem',
           fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 0 20px',
         }}>Welcome Back</h1>
       </header>
@@ -265,7 +265,7 @@ function ReturningClientInner() {
           <div style={{
             marginBottom: 24, padding: '14px 16px',
             backgroundColor: '#FEF2F2', border: '1px solid #FECACA',
-            borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: '#B91C1C',
+            borderRadius: 8, fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', color: '#B91C1C',
           }}>
             {error}
           </div>
@@ -282,13 +282,13 @@ function ReturningClientInner() {
               📅
             </div>
             <h2 style={{
-              fontFamily: 'Cormorant Garamond, serif', fontSize: '1.8rem',
+              fontFamily: 'Playfair Display, serif', fontSize: '1.8rem',
               fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 12px',
             }}>
               You already have an upcoming session
             </h2>
             <p style={{
-              fontFamily: 'Lato, sans-serif', fontSize: '0.95rem',
+              fontFamily: 'Raleway, sans-serif', fontSize: '0.95rem',
               color: 'var(--nhlb-muted)', lineHeight: 1.6, margin: '0 0 28px',
             }}>
               You can reschedule or cancel your current session before booking a new one.
@@ -297,7 +297,7 @@ function ReturningClientInner() {
               <button onClick={() => router.push('/book/my-sessions')} style={{
                 padding: '14px 28px', borderRadius: 8, border: 'none',
                 backgroundColor: 'var(--nhlb-red)', color: 'white',
-                fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem',
+                fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem',
                 cursor: 'pointer',
               }}>
                 View My Sessions
@@ -306,7 +306,7 @@ function ReturningClientInner() {
                 padding: '14px 28px', borderRadius: 8,
                 border: '1px solid var(--nhlb-border)', backgroundColor: 'white',
                 color: 'var(--nhlb-muted)',
-                fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem',
+                fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem',
                 cursor: 'pointer',
               }}>
                 Back
@@ -318,7 +318,7 @@ function ReturningClientInner() {
         {/* Schedule */}
         {step === 'schedule' && client && (
           <div>
-            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
               Welcome back, {client.first_name}!
             </h2>
             {assignedCounselor && (
@@ -339,7 +339,7 @@ function ReturningClientInner() {
                     </svg>
                   )}
                 </div>
-                <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', margin: 0 }}>
+                <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', margin: 0 }}>
                   Scheduling with <strong style={{ color: 'var(--nhlb-red-dark)' }}>{assignedCounselor.name}</strong>
                 </p>
               </div>
@@ -363,18 +363,18 @@ function ReturningClientInner() {
                       borderRadius: 10, transition: 'all 0.12s', opacity: disabled ? 0.5 : 1,
                     }}>
                     <span style={{ fontSize: '1.2rem', display: 'block', marginBottom: 4 }}>{emoji}</span>
-                    <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', fontWeight: 700 }}>{label}</span>
+                    <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', fontWeight: 700 }}>{label}</span>
                   </button>
                 )
               })}
             </div>
 
             {loadingSlots ? (
-              <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>
+              <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>
                 Loading available times...
               </p>
             ) : Object.keys(groupedSlots).length === 0 ? (
-              <p style={{ textAlign: 'center', padding: '40px 0', fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>
+              <p style={{ textAlign: 'center', padding: '40px 0', fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>
                 No available slots right now.
               </p>
             ) : (
@@ -382,7 +382,7 @@ function ReturningClientInner() {
                 {Object.entries(groupedSlots).map(([day, daySlots]) => (
                   <div key={day} style={{ marginBottom: 24 }}>
                     <p style={{
-                      fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                      fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700,
                       letterSpacing: '0.1em', textTransform: 'uppercase',
                       color: 'var(--nhlb-muted)', marginBottom: 10,
                     }}>{day}</p>
@@ -390,7 +390,7 @@ function ReturningClientInner() {
                       {daySlots.map(slot => (
                         <button key={slot.start} onClick={() => selectSlot(slot)} style={{
                           padding: '10px 4px', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-                          backgroundColor: 'white', fontFamily: 'Lato, sans-serif',
+                          backgroundColor: 'white', fontFamily: 'Raleway, sans-serif',
                           fontSize: '0.8rem', color: 'var(--nhlb-text)', cursor: 'pointer', transition: 'all 0.12s',
                         }}
                         onMouseEnter={e => {
@@ -417,7 +417,7 @@ function ReturningClientInner() {
         {/* Payment */}
         {step === 'payment' && selectedSlot && client && (
           <div>
-            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
               Love Offering
             </h2>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
@@ -437,7 +437,7 @@ function ReturningClientInner() {
                   </svg>
                 )}
               </div>
-              <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', lineHeight: 1.7, margin: 0 }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', lineHeight: 1.7, margin: 0 }}>
                 {sessionType === 'VIRTUAL' ? '💻 Virtual' : '🏠 In-person'} session on{' '}
                 <strong style={{ color: 'var(--nhlb-red-dark)' }}>
                   {format(new Date(selectedSlot.start), 'EEE, MMM d')} at {format(new Date(selectedSlot.start), 'h:mm a')}
@@ -445,7 +445,7 @@ function ReturningClientInner() {
                 with {selectedSlot.counselorName}
               </p>
             </div>
-            <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', marginBottom: 24 }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)', fontSize: '0.875rem', marginBottom: 24 }}>
               Minimum $10 love offering.
             </p>
 
@@ -459,7 +459,7 @@ function ReturningClientInner() {
                     borderRadius: 8,
                     backgroundColor: donationAmount === amt ? 'var(--nhlb-red)' : 'white',
                     color: donationAmount === amt ? 'white' : 'var(--nhlb-text)',
-                    fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem', cursor: 'pointer',
+                    fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem', cursor: 'pointer',
                   }}>
                     ${amt}
                   </button>
@@ -468,7 +468,7 @@ function ReturningClientInner() {
               <div style={{ position: 'relative' }}>
                 <span style={{
                   position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)',
-                  fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)',
+                  fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)',
                 }}>$</span>
                 <input type="number" min="10" step="1" value={donationAmount}
                   onChange={e => setDonationAmount(e.target.value)}
@@ -497,16 +497,16 @@ function ReturningClientInner() {
                         width: 36, height: 24, borderRadius: 4,
                         backgroundColor: '#F3F4F6', display: 'flex',
                         alignItems: 'center', justifyContent: 'center',
-                        fontFamily: 'Lato, sans-serif', fontSize: '0.6rem',
+                        fontFamily: 'Raleway, sans-serif', fontSize: '0.6rem',
                         fontWeight: 700, color: '#374151', textTransform: 'uppercase',
                         flexShrink: 0,
                       }}>
                         {card.brand}
                       </div>
-                      <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', fontWeight: 600, color: 'var(--nhlb-text)' }}>
+                      <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', fontWeight: 600, color: 'var(--nhlb-text)' }}>
                         •••• {card.last4}
                       </span>
-                      <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)', marginLeft: 'auto' }}>
+                      <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)', marginLeft: 'auto' }}>
                         {String(card.expMonth).padStart(2, '0')}/{card.expYear}
                       </span>
                     </button>
@@ -519,7 +519,7 @@ function ReturningClientInner() {
                       border: `2px solid ${useNewCard ? 'var(--nhlb-red)' : 'var(--nhlb-border)'}`,
                       backgroundColor: useNewCard ? 'var(--nhlb-cream)' : 'white',
                       cursor: 'pointer', textAlign: 'left', width: '100%',
-                      fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-text)',
+                      fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-text)',
                     }}
                   >
                     + Use a new card
@@ -543,7 +543,7 @@ function ReturningClientInner() {
 
             <button onClick={() => { setStep('schedule'); setSelectedSlot(null) }} style={{
               display: 'block', margin: '16px auto 0', background: 'none', border: 'none',
-              fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)', cursor: 'pointer',
+              fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)', cursor: 'pointer',
             }}>&larr; Choose a different time</button>
           </div>
         )}
@@ -551,21 +551,21 @@ function ReturningClientInner() {
         {/* Stripe Checkout */}
         {step === 'checkout' && clientSecret && bookingId && selectedSlot && (
           <div>
-            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
+            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px' }}>
               Complete Payment
             </h2>
             <div style={{
               background: 'white', border: '1px solid var(--nhlb-border)',
               borderRadius: 12, padding: '20px', marginBottom: 20,
             }}>
-              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>
                 Love offering for your session with <strong style={{ color: 'var(--nhlb-red-dark)' }}>{selectedSlot.counselorName}</strong>
               </p>
-              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)', margin: 0 }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)', margin: 0 }}>
                 <strong style={{ color: 'var(--nhlb-red-dark)' }}>{format(new Date(selectedSlot.start), 'EEEE, MMMM d')}</strong> at <strong style={{ color: 'var(--nhlb-red-dark)' }}>{format(new Date(selectedSlot.start), 'h:mm a')}</strong>
               </p>
             </div>
-            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.5rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', marginBottom: 20 }}>
+            <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.5rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', marginBottom: 20 }}>
               ${parseFloat(donationAmount).toFixed(2)}
             </p>
             <div style={{
@@ -619,7 +619,7 @@ function BookingPaymentForm({ bookingId }: { bookingId: string }) {
         <div style={{
           marginTop: 12, padding: '10px 14px',
           backgroundColor: '#FEF2F2', border: '1px solid #FECACA',
-          borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#B91C1C',
+          borderRadius: 8, fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: '#B91C1C',
         }}>
           {error}
         </div>
@@ -629,7 +629,7 @@ function BookingPaymentForm({ bookingId }: { bookingId: string }) {
         disabled={!stripe || submitting}
         style={{
           width: '100%', backgroundColor: 'var(--nhlb-red)', color: 'white',
-          fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem',
+          fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem',
           letterSpacing: '0.05em', padding: '14px 24px', borderRadius: 8,
           border: 'none', cursor: submitting ? 'not-allowed' : 'pointer',
           marginTop: 20, opacity: submitting ? 0.6 : 1,

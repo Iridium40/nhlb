@@ -127,13 +127,13 @@ export default function CounselorProfilePage() {
 
   const S = {
     label: {
-      display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.7rem',
+      display: 'block', fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem',
       fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' as const,
       color: 'var(--nhlb-muted)', marginBottom: 6,
     } as React.CSSProperties,
     input: {
       width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-      padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
+      padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Raleway, sans-serif',
       color: 'var(--nhlb-text)', background: 'white', outline: 'none',
       boxSizing: 'border-box' as const,
     } as React.CSSProperties,
@@ -145,7 +145,7 @@ export default function CounselorProfilePage() {
 
   if (loading) return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>Loading profile...</p>
+      <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>Loading profile...</p>
     </div>
   )
 
@@ -155,11 +155,11 @@ export default function CounselorProfilePage() {
 
       <div style={{ maxWidth: 700, margin: '0 auto', padding: '32px 24px' }}>
         <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: 20, gap: 8 }}>
-          {saved && <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#065F46', fontWeight: 700 }}>Saved</span>}
+          {saved && <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: '#065F46', fontWeight: 700 }}>Saved</span>}
           <button onClick={handleSave} disabled={saving} style={{
             padding: '8px 20px', borderRadius: 8, border: 'none',
             backgroundColor: 'var(--nhlb-red)', color: 'white',
-            fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
+            fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.8rem',
             cursor: 'pointer', opacity: saving ? 0.6 : 1,
           }}>
             {saving ? 'Saving...' : 'Save Changes'}
@@ -170,7 +170,7 @@ export default function CounselorProfilePage() {
           <div style={{
             marginBottom: 16, padding: '12px 16px',
             backgroundColor: '#FEF2F2', border: '1px solid #FECACA',
-            borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: '#B91C1C',
+            borderRadius: 8, fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: '#B91C1C',
           }}>
             {error}
           </div>
@@ -178,7 +178,7 @@ export default function CounselorProfilePage() {
 
         {/* Basic info */}
         <div style={S.card}>
-          <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.15rem', color: 'var(--nhlb-red-dark)', margin: '0 0 20px' }}>
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.15rem', color: 'var(--nhlb-red-dark)', margin: '0 0 20px' }}>
             Basic Information
           </h2>
 
@@ -204,7 +204,7 @@ export default function CounselorProfilePage() {
                 <label style={{
                   padding: '7px 16px', borderRadius: 8, border: '1px solid var(--nhlb-border)',
                   backgroundColor: 'white', color: 'var(--nhlb-text)',
-                  fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.75rem',
+                  fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.75rem',
                   cursor: uploading ? 'not-allowed' : 'pointer', opacity: uploading ? 0.6 : 1,
                   textAlign: 'center',
                 }}>
@@ -221,7 +221,7 @@ export default function CounselorProfilePage() {
                   <button onClick={handlePhotoRemove} disabled={removing} style={{
                     padding: '7px 16px', borderRadius: 8,
                     border: '1px solid #FECACA', backgroundColor: '#FEF2F2',
-                    color: '#B91C1C', fontFamily: 'Lato, sans-serif',
+                    color: '#B91C1C', fontFamily: 'Raleway, sans-serif',
                     fontWeight: 700, fontSize: '0.75rem',
                     cursor: removing ? 'not-allowed' : 'pointer',
                     opacity: removing ? 0.6 : 1,
@@ -229,7 +229,7 @@ export default function CounselorProfilePage() {
                     {removing ? 'Removing...' : 'Remove Photo'}
                   </button>
                 )}
-                <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.65rem', color: 'var(--nhlb-muted)' }}>
+                <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.65rem', color: 'var(--nhlb-muted)' }}>
                   JPEG, PNG, or WebP · Max 5 MB
                 </span>
               </div>
@@ -257,7 +257,7 @@ export default function CounselorProfilePage() {
 
         {/* Contact info */}
         <div style={S.card}>
-          <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.15rem', color: 'var(--nhlb-red-dark)', margin: '0 0 20px' }}>
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.15rem', color: 'var(--nhlb-red-dark)', margin: '0 0 20px' }}>
             Contact Information
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
@@ -274,7 +274,7 @@ export default function CounselorProfilePage() {
             <label style={S.label}>Zoom Link</label>
             <input value={zoomLink} onChange={e => setZoomLink(e.target.value)} style={S.input}
               placeholder="https://zoom.us/j/..." />
-            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)', margin: '6px 0 0', fontStyle: 'italic' }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)', margin: '6px 0 0', fontStyle: 'italic' }}>
               Your personal Zoom meeting room link
             </p>
           </div>
@@ -283,7 +283,7 @@ export default function CounselorProfilePage() {
               <label style={S.label}>Meeting ID</label>
               <input value={zoomMeetingId} onChange={e => setZoomMeetingId(e.target.value)} style={S.input}
                 placeholder="636 585 7340" />
-              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)', margin: '6px 0 0', fontStyle: 'italic' }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)', margin: '6px 0 0', fontStyle: 'italic' }}>
                 Your Zoom meeting ID number
               </p>
             </div>
@@ -291,7 +291,7 @@ export default function CounselorProfilePage() {
               <label style={S.label}>Passcode</label>
               <input value={zoomPasscode} onChange={e => setZoomPasscode(e.target.value)} style={S.input}
                 placeholder="202020" />
-              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)', margin: '6px 0 0', fontStyle: 'italic' }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)', margin: '6px 0 0', fontStyle: 'italic' }}>
                 Meeting passcode (if required)
               </p>
             </div>
@@ -300,7 +300,7 @@ export default function CounselorProfilePage() {
 
         {/* Specialties */}
         <div style={S.card}>
-          <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.15rem', color: 'var(--nhlb-red-dark)', margin: '0 0 16px' }}>
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.15rem', color: 'var(--nhlb-red-dark)', margin: '0 0 16px' }}>
             Specialties
           </h2>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
@@ -312,7 +312,7 @@ export default function CounselorProfilePage() {
                   borderColor: active ? 'var(--nhlb-red)' : 'var(--nhlb-border)',
                   backgroundColor: active ? 'var(--nhlb-red)' : 'white',
                   color: active ? 'white' : 'var(--nhlb-muted)',
-                  fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', fontWeight: 700,
+                  fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', fontWeight: 700,
                   cursor: 'pointer',
                 }}>
                   {s}
@@ -352,7 +352,7 @@ export default function CounselorProfilePage() {
                 style={{
                   padding: '10px 20px', borderRadius: 8, border: 'none',
                   backgroundColor: 'var(--nhlb-red)', color: 'white',
-                  fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
+                  fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.8rem',
                   cursor: 'pointer', whiteSpace: 'nowrap',
                 }}
               >
@@ -363,12 +363,12 @@ export default function CounselorProfilePage() {
 
           {specialties.filter(s => !SPECIALTY_OPTIONS.includes(s)).length > 0 && (
             <div style={{ marginTop: 14 }}>
-              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)', margin: '0 0 6px' }}>Custom specialties:</p>
+              <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)', margin: '0 0 6px' }}>Custom specialties:</p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                 {specialties.filter(s => !SPECIALTY_OPTIONS.includes(s)).map(s => (
                   <span key={s} style={{
                     padding: '4px 12px', borderRadius: 20, backgroundColor: '#EFF6FF',
-                    color: '#1D4ED8', fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                    color: '#1D4ED8', fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700,
                     display: 'inline-flex', alignItems: 'center', gap: 6,
                   }}>
                     {s}

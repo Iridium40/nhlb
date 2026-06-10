@@ -44,7 +44,7 @@ export default async function EventsPage() {
       <div style={{
         backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
         textAlign: 'center', fontSize: '0.8rem', letterSpacing: '0.05em',
-        padding: '8px 16px', fontFamily: 'Lato, sans-serif',
+        padding: '8px 16px', fontFamily: 'Raleway, sans-serif',
       }}>
         Let&apos;s Build Hope &amp; Healing TOGETHER!
       </div>
@@ -56,20 +56,19 @@ export default async function EventsPage() {
       }}>
         <a href="https://www.noheartleftbehind.com" target="_blank" rel="noopener noreferrer"
           style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://images.squarespace-cdn.com/content/v1/5e82146501b2e061b5579be0/1587480392593-WRDXDIU2H6V7O9536SHX/NHLBlogo.png?format=300w"
-            alt="No Heart Left Behind" style={{ height: 56, width: 'auto' }}
-          />
+          <span style={{ display: 'inline-flex', backgroundColor: 'var(--nhlb-red-dark)', borderRadius: 10, padding: '10px 16px' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo-white.png" alt="No Heart Left Behind" style={{ height: 34, width: 'auto', display: 'block' }} />
+          </span>
         </a>
         <nav style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
           <Link href="/book" style={{
-            fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
+            fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.8rem',
             color: 'var(--nhlb-muted)', textDecoration: 'none',
           }}>Book a Session</Link>
           <Link href="/donate" style={{
             backgroundColor: 'var(--nhlb-red)', color: 'white',
-            fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
+            fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.8rem',
             letterSpacing: '0.06em', padding: '8px 20px', borderRadius: 4,
             textDecoration: 'none',
           }}>Donate</Link>
@@ -78,18 +77,18 @@ export default async function EventsPage() {
 
       <main style={{ flex: 1, maxWidth: 800, width: '100%', margin: '0 auto', padding: '48px 24px 80px' }}>
         <h1 style={{
-          fontFamily: 'Cormorant Garamond, serif', fontSize: 'clamp(2rem, 5vw, 2.5rem)',
+          fontFamily: 'Playfair Display, serif', fontSize: 'clamp(2rem, 5vw, 2.5rem)',
           fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 8px',
         }}>
           Upcoming Events
         </h1>
-        <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', marginBottom: 40 }}>
+        <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)', marginBottom: 40 }}>
           Join us for community events, workshops, and gatherings.
         </p>
 
         {events.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '60px 0' }}>
-            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem', color: 'var(--nhlb-muted)' }}>
+            <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.3rem', color: 'var(--nhlb-muted)' }}>
               No upcoming events right now. Check back soon!
             </p>
           </div>
@@ -117,26 +116,26 @@ export default async function EventsPage() {
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16 }}>
                         <div style={{ flex: 1 }}>
                           <p style={{
-                            fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                            fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700,
                             letterSpacing: '0.06em', textTransform: 'uppercase',
                             color: 'var(--nhlb-muted)', margin: '0 0 4px',
                           }}>
                             {format(new Date(event.event_date), 'EEEE, MMMM d, yyyy')}
                           </p>
                           <h2 style={{
-                            fontFamily: 'Cormorant Garamond, serif', fontSize: '1.4rem',
+                            fontFamily: 'Playfair Display, serif', fontSize: '1.4rem',
                             fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 6px',
                           }}>
                             {event.title}
                           </h2>
                           {event.location && (
-                            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>
+                            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>
                               📍 {event.location}
                             </p>
                           )}
                           {event.description && (
                             <p style={{
-                              fontFamily: 'Lato, sans-serif', fontSize: '0.85rem',
+                              fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem',
                               color: 'var(--nhlb-muted)', margin: '8px 0 0', lineHeight: 1.5,
                             }}>
                               {event.description.replace(/<[^>]+>/g, '').length > 150
@@ -148,27 +147,27 @@ export default async function EventsPage() {
                         <div style={{ textAlign: 'right', flexShrink: 0 }}>
                           {event.registration_fee_cents > 0 ? (
                             <p style={{
-                              fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '1.1rem',
+                              fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '1.1rem',
                               color: 'var(--nhlb-red-dark)', margin: '0 0 2px',
                             }}>
                               ${(event.registration_fee_cents / 100).toFixed(2)}
                             </p>
                           ) : (
                             <p style={{
-                              fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.85rem',
+                              fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.85rem',
                               color: '#065F46', margin: '0 0 2px',
                             }}>
                               Free
                             </p>
                           )}
                           {event.registration_fee_cents > 0 && (
-                            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)', margin: 0 }}>
+                            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', color: 'var(--nhlb-muted)', margin: 0 }}>
                               {event.fee_label}
                             </p>
                           )}
                           {atCapacity && (
                             <p style={{
-                              fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                              fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700,
                               color: '#B91C1C', margin: '8px 0 0',
                             }}>
                               Registration closed
@@ -176,7 +175,7 @@ export default async function EventsPage() {
                           )}
                           {!atCapacity && (
                             <p style={{
-                              fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', fontWeight: 700,
+                              fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', fontWeight: 700,
                               color: 'var(--nhlb-red)', margin: '8px 0 0',
                             }}>
                               Register →
@@ -194,7 +193,7 @@ export default async function EventsPage() {
       </main>
 
       <footer style={{ backgroundColor: 'var(--nhlb-blush)', padding: '24px 48px', color: 'white' }}>
-        <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', margin: 0 }}>
+        <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', margin: 0 }}>
           No Heart Left Behind &copy; {new Date().getFullYear()} &ensp;&middot;&ensp; 985-264-8808
         </p>
       </footer>

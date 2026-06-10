@@ -42,22 +42,22 @@ export default function CounselorLoginPage() {
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', flexDirection: 'column' }}>
       <div style={{
         backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
-        textAlign: 'center', fontSize: '0.8rem', letterSpacing: '0.05em',
-        padding: '8px 16px', fontFamily: 'Lato, sans-serif',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
+        padding: '12px 16px',
       }}>
-        Counselor Portal
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/logo-white.png" alt="No Heart Left Behind" style={{ height: 26, width: 'auto', display: 'block' }} />
+        <span style={{
+          fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase',
+          fontFamily: 'Raleway, sans-serif', color: 'rgba(255,255,255,0.75)',
+        }}>Counselor Portal</span>
       </div>
 
       <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '60px 24px' }}>
         <div style={{ maxWidth: 400, width: '100%' }}>
           <div style={{ textAlign: 'center', marginBottom: 32 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="https://images.squarespace-cdn.com/content/v1/5e82146501b2e061b5579be0/1587480392593-WRDXDIU2H6V7O9536SHX/NHLBlogo.png?format=300w"
-              alt="NHLB" style={{ height: 64, width: 'auto', margin: '0 auto 16px' }}
-            />
             <h1 style={{
-              fontFamily: 'Cormorant Garamond, serif', fontSize: '1.8rem',
+              fontFamily: 'Playfair Display, serif', fontSize: '1.8rem',
               fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0,
             }}>
               Counselor Sign In
@@ -68,7 +68,7 @@ export default function CounselorLoginPage() {
             <div style={{
               marginBottom: 16, padding: '12px 14px',
               backgroundColor: '#FEF2F2', border: '1px solid #FECACA',
-              borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: '#B91C1C',
+              borderRadius: 8, fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: '#B91C1C',
             }}>
               {error}
             </div>
@@ -80,7 +80,7 @@ export default function CounselorLoginPage() {
           }}>
             <div style={{ marginBottom: 16 }}>
               <label style={{
-                display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.75rem',
+                display: 'block', fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem',
                 fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase',
                 color: 'var(--nhlb-muted)', marginBottom: 6,
               }}>Email</label>
@@ -88,13 +88,13 @@ export default function CounselorLoginPage() {
                 onKeyDown={e => e.key === 'Enter' && handleLogin()}
                 style={{
                   width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-                  padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
+                  padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Raleway, sans-serif',
                   color: 'var(--nhlb-text)', background: 'white', outline: 'none',
                 }} className="input-brand" placeholder="counselor@noheartleftbehind.com" />
             </div>
             <div style={{ marginBottom: 24 }}>
               <label style={{
-                display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.75rem',
+                display: 'block', fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem',
                 fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase',
                 color: 'var(--nhlb-muted)', marginBottom: 6,
               }}>Password</label>
@@ -103,7 +103,7 @@ export default function CounselorLoginPage() {
                   onKeyDown={e => e.key === 'Enter' && handleLogin()}
                   style={{
                     width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-                    padding: '10px 14px', paddingRight: 40, fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
+                    padding: '10px 14px', paddingRight: 40, fontSize: '0.875rem', fontFamily: 'Raleway, sans-serif',
                     color: 'var(--nhlb-text)', background: 'white', outline: 'none',
                     boxSizing: 'border-box',
                   }} className="input-brand" />
@@ -119,7 +119,7 @@ export default function CounselorLoginPage() {
             <button onClick={handleLogin} disabled={loading} style={{
               width: '100%', padding: '14px 24px', borderRadius: 8, border: 'none',
               backgroundColor: 'var(--nhlb-red)', color: 'white',
-              fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem',
+              fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem',
               cursor: 'pointer', opacity: loading ? 0.6 : 1,
             }} className="btn-primary">
               {loading ? 'Signing in...' : 'Sign In'}
@@ -127,7 +127,7 @@ export default function CounselorLoginPage() {
 
             <div style={{ textAlign: 'center', marginTop: 14 }}>
               <a href="/counselor/forgot-password" style={{
-                fontFamily: 'Lato, sans-serif', fontSize: '0.8rem',
+                fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem',
                 color: 'var(--nhlb-red)', textDecoration: 'none',
               }}>
                 Forgot your password?
@@ -136,7 +136,7 @@ export default function CounselorLoginPage() {
           </div>
 
           <p style={{
-            fontFamily: 'Lato, sans-serif', fontSize: '0.8rem',
+            fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem',
             color: 'var(--nhlb-muted)', textAlign: 'center', marginTop: 20,
           }}>
             Need an account? Contact the administrator to set up your counselor login.

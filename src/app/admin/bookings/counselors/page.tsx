@@ -12,18 +12,18 @@ const HOURS = Array.from({ length: 12 }, (_, i) => {
 
 const S = {
   label: {
-    display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.75rem',
+    display: 'block', fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem',
     fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' as const,
     color: 'var(--nhlb-muted)', marginBottom: 4,
   } as React.CSSProperties,
   input: {
     width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-    padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
+    padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Raleway, sans-serif',
     color: 'var(--nhlb-text)', background: 'white', outline: 'none',
   } as React.CSSProperties,
   btn: (bg: string, color: string) => ({
     padding: '8px 18px', borderRadius: 8, border: 'none', cursor: 'pointer',
-    backgroundColor: bg, color, fontFamily: 'Lato, sans-serif',
+    backgroundColor: bg, color, fontFamily: 'Raleway, sans-serif',
     fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.04em',
   } as React.CSSProperties),
 }
@@ -66,7 +66,7 @@ function AvailabilityEditor({ counselorId }: { counselorId: string }) {
     await load()
   }
 
-  if (loading) return <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)' }}>Loading hours...</p>
+  if (loading) return <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)' }}>Loading hours...</p>
 
   const grouped = DAYS.map((day, i) => ({
     day,
@@ -77,18 +77,18 @@ function AvailabilityEditor({ counselorId }: { counselorId: string }) {
   return (
     <div style={{ marginTop: 12 }}>
       {grouped.length === 0 && (
-        <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', fontStyle: 'italic' }}>
+        <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', fontStyle: 'italic' }}>
           No availability set
         </p>
       )}
       {grouped.map(g => (
         <div key={g.dayNum} style={{ marginBottom: 8 }}>
-          <span style={{ fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem', color: 'var(--nhlb-text)' }}>
+          <span style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.8rem', color: 'var(--nhlb-text)' }}>
             {g.day}
           </span>
           {g.windows.map(w => (
             <div key={w.id} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginLeft: 12 }}>
-              <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)' }}>
+              <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)' }}>
                 {w.start_time.slice(0, 5)} &ndash; {w.end_time.slice(0, 5)}
               </span>
               <button onClick={() => removeSlot(w.id)} style={{
@@ -190,7 +190,7 @@ function CounselorForm({ counselor, onSaved, onCancel }: {
       <div style={{ marginBottom: 16 }}><label style={S.label}>Specialties (comma-separated)</label><input value={specialties} onChange={e => setSpecialties(e.target.value)} style={S.input} placeholder="marriage, family, trauma" /></div>
       <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', marginBottom: 20 }}>
         <input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} style={{ width: 16, height: 16, accentColor: 'var(--nhlb-red)' }} />
-        <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem' }}>Active (visible to clients)</span>
+        <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem' }}>Active (visible to clients)</span>
       </label>
       <div style={{ display: 'flex', gap: 8 }}>
         <button onClick={handleSave} disabled={saving || !name || !title} style={S.btn('var(--nhlb-red)', 'white')}>
@@ -228,7 +228,7 @@ function CreateLoginForm({ counselor, onDone }: { counselor: Counselor; onDone: 
   if (success) return (
     <div style={{
       marginTop: 12, padding: '12px 16px', backgroundColor: '#D1FAE5',
-      borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: '#065F46',
+      borderRadius: 8, fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: '#065F46',
     }}>
       Login created! {counselor.name} can now sign in at <strong>/counselor/login</strong>
     </div>
@@ -236,11 +236,11 @@ function CreateLoginForm({ counselor, onDone }: { counselor: Counselor; onDone: 
 
   return (
     <div style={{ marginTop: 12, padding: '16px', backgroundColor: 'var(--nhlb-cream-dark)', borderRadius: 8 }}>
-      <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 10px' }}>
+      <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 10px' }}>
         CREATE COUNSELOR LOGIN
       </p>
       {error && (
-        <div style={{ marginBottom: 10, padding: '8px 12px', backgroundColor: '#FEF2F2', border: '1px solid #FECACA', borderRadius: 6, fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#B91C1C' }}>
+        <div style={{ marginBottom: 10, padding: '8px 12px', backgroundColor: '#FEF2F2', border: '1px solid #FECACA', borderRadius: 6, fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: '#B91C1C' }}>
           {error}
         </div>
       )}
@@ -357,7 +357,7 @@ function CounselorCard({ counselor, onEdit, onRefresh }: {
             </label>
             <div style={{ display: 'flex', gap: 4, justifyContent: 'center', marginTop: 4 }}>
               <label style={{
-                fontFamily: 'Lato, sans-serif', fontSize: '0.6rem', color: 'var(--nhlb-red)',
+                fontFamily: 'Raleway, sans-serif', fontSize: '0.6rem', color: 'var(--nhlb-red)',
                 cursor: 'pointer', fontWeight: 700,
               }}>
                 {uploading ? '...' : counselor.photo_url ? 'Change' : 'Upload'}
@@ -367,24 +367,24 @@ function CounselorCard({ counselor, onEdit, onRefresh }: {
               {counselor.photo_url && (
                 <button onClick={handlePhotoRemove} disabled={uploading} style={{
                   background: 'none', border: 'none', padding: 0, cursor: 'pointer',
-                  fontFamily: 'Lato, sans-serif', fontSize: '0.6rem', color: '#DC2626', fontWeight: 700,
+                  fontFamily: 'Raleway, sans-serif', fontSize: '0.6rem', color: '#DC2626', fontWeight: 700,
                 }}>Remove</button>
               )}
             </div>
             {photoError && (
-              <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.6rem', color: '#DC2626', margin: '4px 0 0', maxWidth: 80 }}>
+              <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.6rem', color: '#DC2626', margin: '4px 0 0', maxWidth: 80 }}>
                 {photoError}
               </p>
             )}
           </div>
           <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0 }}>
+            <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.2rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0 }}>
               {counselor.name}
             </p>
             <span style={{
               padding: '2px 10px', borderRadius: 20, fontSize: '0.7rem', fontWeight: 700,
-              fontFamily: 'Lato, sans-serif',
+              fontFamily: 'Raleway, sans-serif',
               backgroundColor: counselor.is_active ? '#D1FAE5' : '#FEE2E2',
               color: counselor.is_active ? '#065F46' : '#991B1B',
             }}>
@@ -392,19 +392,19 @@ function CounselorCard({ counselor, onEdit, onRefresh }: {
             </span>
             <span style={{
               padding: '2px 10px', borderRadius: 20, fontSize: '0.65rem', fontWeight: 700,
-              fontFamily: 'Lato, sans-serif',
+              fontFamily: 'Raleway, sans-serif',
               backgroundColor: hasLogin ? '#EFF6FF' : '#FEF3C7',
               color: hasLogin ? '#1D4ED8' : '#92400E',
             }}>
               {hasLogin ? 'Has Login' : 'No Login'}
             </span>
           </div>
-          <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: '0 0 6px' }}>{counselor.title}</p>
-          {counselor.email && <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: '2px 0' }}>{counselor.email}</p>}
-          {counselor.phone && <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: '2px 0' }}>{counselor.phone}</p>}
-          {counselor.zoom_link && <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: '#1D4ED8', margin: '2px 0', wordBreak: 'break-all' }}>Zoom: {counselor.zoom_link}</p>}
+          <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: '0 0 6px' }}>{counselor.title}</p>
+          {counselor.email && <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: '2px 0' }}>{counselor.email}</p>}
+          {counselor.phone && <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: '2px 0' }}>{counselor.phone}</p>}
+          {counselor.zoom_link && <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', color: '#1D4ED8', margin: '2px 0', wordBreak: 'break-all' }}>Zoom: {counselor.zoom_link}</p>}
           {(counselor.zoom_meeting_id || counselor.zoom_passcode) && (
-            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)', margin: '2px 0' }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem', color: 'var(--nhlb-muted)', margin: '2px 0' }}>
               {counselor.zoom_meeting_id && <>ID: {counselor.zoom_meeting_id}</>}
               {counselor.zoom_meeting_id && counselor.zoom_passcode && ' · '}
               {counselor.zoom_passcode && <>Passcode: {counselor.zoom_passcode}</>}
@@ -416,7 +416,7 @@ function CounselorCard({ counselor, onEdit, onRefresh }: {
                 <span key={s} style={{
                   padding: '2px 10px', backgroundColor: 'var(--nhlb-cream-dark)',
                   color: 'var(--nhlb-muted)', borderRadius: 20, fontSize: '0.7rem',
-                  fontFamily: 'Lato, sans-serif', textTransform: 'capitalize',
+                  fontFamily: 'Raleway, sans-serif', textTransform: 'capitalize',
                 }}>{s}</span>
               ))}
             </div>
@@ -443,7 +443,7 @@ function CounselorCard({ counselor, onEdit, onRefresh }: {
           onClick={() => setExpanded(!expanded)}
           style={{
             background: 'none', border: 'none', cursor: 'pointer',
-            fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700,
+            fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', fontWeight: 700,
             color: 'var(--nhlb-red)', padding: 0,
           }}
         >
@@ -489,9 +489,9 @@ export default function CounselorsPage() {
         )}
 
         {loading ? (
-          <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
+          <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
         ) : counselors.length === 0 ? (
-          <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem', color: 'var(--nhlb-muted)' }}>
+          <p style={{ textAlign: 'center', padding: '60px 0', fontFamily: 'Playfair Display, serif', fontSize: '1.3rem', color: 'var(--nhlb-muted)' }}>
             No counselors yet
           </p>
         ) : (

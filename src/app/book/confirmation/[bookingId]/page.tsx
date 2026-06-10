@@ -28,7 +28,7 @@ export default async function ConfirmationPage({
       <div style={{
         backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
         textAlign: 'center', fontSize: '0.8rem', letterSpacing: '0.05em',
-        padding: '8px 16px', fontFamily: 'Lato, sans-serif',
+        padding: '8px 16px', fontFamily: 'Raleway, sans-serif',
       }}>
         No Heart Left Behind &mdash; Session Confirmed
       </div>
@@ -38,7 +38,7 @@ export default async function ConfirmationPage({
         padding: '0 40px', display: 'flex', alignItems: 'center', height: 56,
       }}>
         <a href="/book" style={{
-          fontFamily: 'Lato, sans-serif', fontSize: '0.85rem',
+          fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem',
           color: 'var(--nhlb-muted)', textDecoration: 'none',
         }}>&larr; Back to Home</a>
       </header>
@@ -56,15 +56,15 @@ export default async function ConfirmationPage({
           </div>
 
           <h1 style={{
-            fontFamily: 'Cormorant Garamond, serif', fontSize: '2.25rem',
+            fontFamily: 'Playfair Display, serif', fontSize: '2.25rem',
             fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 12px',
           }}>
             You&apos;re all set!
           </h1>
-          <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', marginBottom: 4 }}>
+          <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)', marginBottom: 4 }}>
             A confirmation has been sent to
           </p>
-          <p style={{ fontFamily: 'Lato, sans-serif', fontWeight: 700, color: 'var(--nhlb-red-dark)', marginBottom: 24 }}>
+          <p style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 700, color: 'var(--nhlb-red-dark)', marginBottom: 24 }}>
             {booking.client?.email}
           </p>
 
@@ -75,20 +75,20 @@ export default async function ConfirmationPage({
           }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
               <div>
-                <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>DATE</p>
-                <p style={{ fontFamily: 'Lato, sans-serif', fontWeight: 700, color: 'var(--nhlb-text)', margin: 0 }}>{date}</p>
+                <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>DATE</p>
+                <p style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 700, color: 'var(--nhlb-text)', margin: 0 }}>{date}</p>
               </div>
               <div>
-                <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>TIME</p>
-                <p style={{ fontFamily: 'Lato, sans-serif', fontWeight: 700, color: 'var(--nhlb-text)', margin: 0 }}>{time}</p>
+                <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>TIME</p>
+                <p style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 700, color: 'var(--nhlb-text)', margin: 0 }}>{time}</p>
               </div>
               <div>
-                <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>COUNSELOR</p>
-                <p style={{ fontFamily: 'Lato, sans-serif', fontWeight: 700, color: 'var(--nhlb-text)', margin: 0 }}>{booking.counselor?.name}</p>
+                <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>COUNSELOR</p>
+                <p style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 700, color: 'var(--nhlb-text)', margin: 0 }}>{booking.counselor?.name}</p>
               </div>
               <div>
-                <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>FORMAT</p>
-                <p style={{ fontFamily: 'Lato, sans-serif', fontWeight: 700, color: 'var(--nhlb-text)', margin: 0 }}>
+                <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '0 0 4px' }}>FORMAT</p>
+                <p style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 700, color: 'var(--nhlb-text)', margin: 0 }}>
                   {booking.type === 'VIRTUAL' ? '💻 Virtual' : '🏠 In Person'}
                 </p>
               </div>
@@ -96,13 +96,13 @@ export default async function ConfirmationPage({
 
             {booking.type === 'IN_PERSON' && (
               <div style={{ borderTop: '1px solid var(--nhlb-border)', paddingTop: 16 }}>
-                <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-text)', margin: '0 0 4px' }}>
+                <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-text)', margin: '0 0 4px' }}>
                   📍 430 N. Jefferson Ave, Covington, LA 70433
                 </p>
-                <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-text)', margin: '0 0 4px' }}>
+                <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-text)', margin: '0 0 4px' }}>
                   📞 985-264-8808
                 </p>
-                <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-text)', margin: 0 }}>
+                <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-text)', margin: 0 }}>
                   ✉️ reconnectus@yahoo.com
                 </p>
               </div>
@@ -110,11 +110,11 @@ export default async function ConfirmationPage({
 
             {booking.type === 'VIRTUAL' && (
               <div style={{ borderTop: '1px solid var(--nhlb-border)', paddingTop: 16 }}>
-                <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: 'var(--nhlb-text)', margin: '0 0 8px' }}>
+                <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: 'var(--nhlb-text)', margin: '0 0 8px' }}>
                   💻 Virtual Session Details
                 </p>
                 {booking.counselor?.zoom_link && (
-                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', margin: '0 0 4px' }}>
+                  <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', margin: '0 0 4px' }}>
                     <strong>Join:</strong>{' '}
                     <a href={booking.counselor.zoom_link} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--nhlb-red)' }}>
                       {booking.counselor.zoom_link}
@@ -122,17 +122,17 @@ export default async function ConfirmationPage({
                   </p>
                 )}
                 {booking.counselor?.zoom_meeting_id && (
-                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', margin: '0 0 4px' }}>
+                  <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', margin: '0 0 4px' }}>
                     <strong>Meeting ID:</strong> {booking.counselor.zoom_meeting_id}
                   </p>
                 )}
                 {booking.counselor?.zoom_passcode && (
-                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', margin: '0 0 4px' }}>
+                  <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)', margin: '0 0 4px' }}>
                     <strong>Passcode:</strong> {booking.counselor.zoom_passcode}
                   </p>
                 )}
                 {!booking.counselor?.zoom_link && (
-                  <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', margin: 0, fontStyle: 'italic' }}>
+                  <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)', margin: 0, fontStyle: 'italic' }}>
                     Your counselor will send a meeting link before your session.
                   </p>
                 )}
@@ -141,7 +141,7 @@ export default async function ConfirmationPage({
           </div>
 
           <p style={{
-            fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)',
+            fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-muted)',
             marginBottom: 32, lineHeight: 1.6,
           }}>
             Please check your email for a HIPAA intake form. Completing it before your session helps us serve you better.
@@ -150,7 +150,7 @@ export default async function ConfirmationPage({
           <a href="/book" style={{
             display: 'inline-block', padding: '12px 28px',
             backgroundColor: 'var(--nhlb-red)', color: 'white',
-            fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem',
+            fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem',
             borderRadius: 8, textDecoration: 'none',
           }}>
             Book Another Session
@@ -158,15 +158,15 @@ export default async function ConfirmationPage({
 
           <div style={{
             marginTop: 32, padding: '16px 20px',
-            background: '#FDFAF8', border: '1px solid var(--nhlb-border)',
+            background: '#FAF6F5', border: '1px solid var(--nhlb-border)',
             borderRadius: 8, textAlign: 'left',
           }}>
-            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: '0 0 8px', lineHeight: 1.5 }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)', margin: '0 0 8px', lineHeight: 1.5 }}>
               Need to cancel? You may cancel online up to 24 hours before your appointment.
               For cancellations within 24 hours, please call <strong style={{ color: 'var(--nhlb-red-dark)' }}>985-264-8808</strong>.
             </p>
             <a href={`/book/cancel?id=${bookingId}&email=${encodeURIComponent(booking.client?.email ?? '')}`} style={{
-              fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', fontWeight: 700,
+              fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', fontWeight: 700,
               color: 'var(--nhlb-red)', textDecoration: 'underline',
             }}>
               Cancel this appointment
@@ -174,7 +174,7 @@ export default async function ConfirmationPage({
           </div>
 
           <p style={{
-            fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic',
+            fontFamily: 'Playfair Display, serif', fontStyle: 'italic',
             fontSize: '1rem', color: 'var(--nhlb-muted)', marginTop: 48,
           }}>
             &ldquo;As a man thinks in his heart, so is he.&rdquo;<br />

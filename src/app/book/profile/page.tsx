@@ -7,18 +7,18 @@ import Link from 'next/link'
 const S = {
   input: {
     width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-    padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
+    padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Raleway, sans-serif',
     color: 'var(--nhlb-text)', background: 'white', outline: 'none',
     boxSizing: 'border-box' as const,
   },
   inputReadonly: {
     width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-    padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
+    padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Raleway, sans-serif',
     color: 'var(--nhlb-muted)', background: '#F9FAFB', outline: 'none',
     boxSizing: 'border-box' as const,
   },
   label: {
-    display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.75rem',
+    display: 'block', fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem',
     fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' as const,
     color: 'var(--nhlb-muted)', marginBottom: 6,
   },
@@ -94,7 +94,7 @@ export default function ProfilePage() {
   if (loading) {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
+        <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
       </div>
     )
   }
@@ -104,7 +104,7 @@ export default function ProfilePage() {
       <div style={{
         backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
         textAlign: 'center', fontSize: '0.8rem', letterSpacing: '0.05em',
-        padding: '8px 16px', fontFamily: 'Lato, sans-serif',
+        padding: '8px 16px', fontFamily: 'Raleway, sans-serif',
       }}>
         My Profile
       </div>
@@ -114,11 +114,11 @@ export default function ProfilePage() {
         padding: '0 40px', display: 'flex', alignItems: 'center', height: 64,
       }}>
         <Link href="/book" style={{
-          fontFamily: 'Lato, sans-serif', fontSize: '0.85rem',
+          fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem',
           color: 'var(--nhlb-muted)', textDecoration: 'none',
         }}>&larr; Back</Link>
         <h1 style={{
-          fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem',
+          fontFamily: 'Playfair Display, serif', fontSize: '1.3rem',
           fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 0 20px',
         }}>My Profile</h1>
       </header>
@@ -127,7 +127,7 @@ export default function ProfilePage() {
         <div style={{
           position: 'fixed', top: 20, left: '50%', transform: 'translateX(-50%)',
           backgroundColor: '#065F46', color: 'white', padding: '12px 24px',
-          borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.875rem',
+          borderRadius: 8, fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem',
           fontWeight: 600, zIndex: 50, boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
         }}>
           {toast}
@@ -140,7 +140,7 @@ export default function ProfilePage() {
           borderRadius: 12, padding: '28px',
         }}>
           <h2 style={{
-            fontFamily: 'Cormorant Garamond, serif', fontSize: '1.5rem',
+            fontFamily: 'Playfair Display, serif', fontSize: '1.5rem',
             fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 24px',
           }}>
             Personal Information
@@ -150,7 +150,7 @@ export default function ProfilePage() {
             <div style={{
               marginBottom: 20, padding: '12px 14px',
               backgroundColor: '#FEF2F2', border: '1px solid #FECACA',
-              borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: '#B91C1C',
+              borderRadius: 8, fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: '#B91C1C',
             }}>
               {error}
             </div>
@@ -183,7 +183,7 @@ export default function ProfilePage() {
             width: '100%', padding: '14px 24px', borderRadius: 8, border: 'none',
             backgroundColor: hasChanges ? 'var(--nhlb-red)' : 'var(--nhlb-blush-light)',
             color: hasChanges ? 'white' : 'var(--nhlb-muted)',
-            fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem',
+            fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem',
             cursor: hasChanges ? 'pointer' : 'not-allowed',
             opacity: saving ? 0.6 : 1,
           }}>

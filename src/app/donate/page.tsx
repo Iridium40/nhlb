@@ -15,11 +15,11 @@ const FUNDS: { key: Fund; icon: string; desc: string }[] = [
 const S = {
   input: {
     width: '100%', border: '1px solid var(--nhlb-border)', borderRadius: 8,
-    padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Lato, sans-serif',
+    padding: '10px 14px', fontSize: '0.875rem', fontFamily: 'Raleway, sans-serif',
     color: 'var(--nhlb-text)', background: 'white', outline: 'none',
   } as React.CSSProperties,
   label: {
-    display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.75rem',
+    display: 'block', fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem',
     fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' as const,
     color: 'var(--nhlb-muted)', marginBottom: 6,
   } as React.CSSProperties,
@@ -71,7 +71,7 @@ export default function DonatePage() {
         <div style={{
           backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
           textAlign: 'center', fontSize: '0.8rem', letterSpacing: '0.05em',
-          padding: '8px 16px', fontFamily: 'Lato, sans-serif',
+          padding: '8px 16px', fontFamily: 'Raleway, sans-serif',
         }}>Thank You!</div>
         <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '60px 24px' }}>
           <div style={{ maxWidth: 480, textAlign: 'center' }}>
@@ -83,25 +83,25 @@ export default function DonatePage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h1 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2.25rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 12px' }}>
+            <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '2.25rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 12px' }}>
               Thank you for your generosity!
             </h1>
-            <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', marginBottom: 8 }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)', marginBottom: 8 }}>
               Your ${parseFloat(amount).toFixed(2)} donation to <strong>{FUND_LABELS[fund]}</strong> makes a difference.
             </p>
-            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: '1rem', color: 'var(--nhlb-muted)', marginTop: 32 }}>
+            <p style={{ fontFamily: 'Playfair Display, serif', fontStyle: 'italic', fontSize: '1rem', color: 'var(--nhlb-muted)', marginTop: 32 }}>
               &ldquo;God loves a cheerful giver.&rdquo; &mdash; 2 Corinthians 9:7
             </p>
             <div style={{ marginTop: 32, display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
               <Link href="/events" style={{
                 padding: '10px 20px', borderRadius: 8, border: '1px solid var(--nhlb-border)',
-                fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
+                fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.8rem',
                 color: 'var(--nhlb-muted)', textDecoration: 'none', backgroundColor: 'white',
               }}>View Events</Link>
               <Link href="/book" style={{
                 padding: '10px 20px', borderRadius: 8,
                 backgroundColor: 'var(--nhlb-red)', color: 'white',
-                fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem', textDecoration: 'none',
+                fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.8rem', textDecoration: 'none',
               }}>Book a Session</Link>
             </div>
           </div>
@@ -115,7 +115,7 @@ export default function DonatePage() {
       <div style={{
         backgroundColor: 'var(--nhlb-red-dark)', color: 'white',
         textAlign: 'center', fontSize: '0.8rem', letterSpacing: '0.05em',
-        padding: '8px 16px', fontFamily: 'Lato, sans-serif',
+        padding: '8px 16px', fontFamily: 'Raleway, sans-serif',
       }}>
         Let&apos;s Build Hope &amp; Healing TOGETHER!
       </div>
@@ -126,23 +126,25 @@ export default function DonatePage() {
         justifyContent: 'space-between', height: 80,
       }}>
         <a href="https://www.noheartleftbehind.com" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="https://images.squarespace-cdn.com/content/v1/5e82146501b2e061b5579be0/1587480392593-WRDXDIU2H6V7O9536SHX/NHLBlogo.png?format=300w" alt="NHLB" style={{ height: 56, width: 'auto' }} />
+          <span style={{ display: 'inline-flex', backgroundColor: 'var(--nhlb-red-dark)', borderRadius: 10, padding: '10px 16px' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo-white.png" alt="No Heart Left Behind" style={{ height: 34, width: 'auto', display: 'block' }} />
+          </span>
         </a>
         <nav style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-          <Link href="/book" style={{ fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem', color: 'var(--nhlb-muted)', textDecoration: 'none' }}>Book a Session</Link>
-          <Link href="/events" style={{ fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem', color: 'var(--nhlb-muted)', textDecoration: 'none' }}>Events</Link>
+          <Link href="/book" style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.8rem', color: 'var(--nhlb-muted)', textDecoration: 'none' }}>Book a Session</Link>
+          <Link href="/events" style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.8rem', color: 'var(--nhlb-muted)', textDecoration: 'none' }}>Events</Link>
         </nav>
       </header>
 
       <main style={{ flex: 1, maxWidth: 600, width: '100%', margin: '0 auto', padding: '48px 24px 80px' }}>
         <h1 style={{
-          fontFamily: 'Cormorant Garamond, serif', fontSize: 'clamp(2rem, 5vw, 2.5rem)',
+          fontFamily: 'Playfair Display, serif', fontSize: 'clamp(2rem, 5vw, 2.5rem)',
           fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: '0 0 8px',
         }}>
           Give to the Ministry
         </h1>
-        <p style={{ fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)', lineHeight: 1.7, marginBottom: 32 }}>
+        <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)', lineHeight: 1.7, marginBottom: 32 }}>
           Your generous donation helps provide affordable, faith-based counseling and community support.
         </p>
 
@@ -159,11 +161,11 @@ export default function DonatePage() {
                 borderRadius: 10, transition: 'all 0.12s',
               }}>
                 <span style={{ fontSize: '1.1rem' }}>{f.icon}</span>{' '}
-                <span style={{ fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.85rem' }}>
+                <span style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.85rem' }}>
                   {FUND_LABELS[f.key]}
                 </span>
                 <span style={{
-                  display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.75rem',
+                  display: 'block', fontFamily: 'Raleway, sans-serif', fontSize: '0.75rem',
                   opacity: 0.8, marginTop: 2,
                 }}>{f.desc}</span>
               </button>
@@ -182,7 +184,7 @@ export default function DonatePage() {
                 borderRadius: 8,
                 backgroundColor: amount === amt ? 'var(--nhlb-red)' : 'white',
                 color: amount === amt ? 'white' : 'var(--nhlb-text)',
-                fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.875rem', cursor: 'pointer',
+                fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem', cursor: 'pointer',
               }}>
                 ${amt}
               </button>
@@ -191,7 +193,7 @@ export default function DonatePage() {
           <div style={{ position: 'relative' }}>
             <span style={{
               position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)',
-              fontFamily: 'Lato, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)',
+              fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem', color: 'var(--nhlb-muted)',
             }}>$</span>
             <input type="number" min="1" step="1" value={amount} onChange={e => setAmount(e.target.value)}
               style={{ ...S.input, paddingLeft: 28 }} className="input-brand" />
@@ -202,7 +204,7 @@ export default function DonatePage() {
         <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', marginBottom: 16 }}>
           <input type="checkbox" checked={isAnonymous} onChange={e => setIsAnonymous(e.target.checked)}
             style={{ width: 16, height: 16, accentColor: 'var(--nhlb-red)' }} />
-          <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.875rem' }}>Give anonymously</span>
+          <span style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.875rem' }}>Give anonymously</span>
         </label>
 
         {!isAnonymous && (
@@ -223,7 +225,7 @@ export default function DonatePage() {
           <div style={{
             marginBottom: 20, padding: '14px 16px',
             backgroundColor: '#FEF3C7', border: '1px solid #FCD34D',
-            borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: '#92400E',
+            borderRadius: 8, fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: '#92400E',
           }}>
             Payment integration pending &mdash; donation will be recorded without payment processing.
           </div>
@@ -233,14 +235,14 @@ export default function DonatePage() {
           <div style={{
             marginBottom: 16, padding: '12px 14px',
             backgroundColor: '#FEF2F2', border: '1px solid #FECACA',
-            borderRadius: 8, fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: '#B91C1C',
+            borderRadius: 8, fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: '#B91C1C',
           }}>{error}</div>
         )}
 
         <button onClick={handleDonate} disabled={submitting} style={{
           width: '100%', padding: '16px 24px', borderRadius: 8, border: 'none',
           backgroundColor: 'var(--nhlb-red)', color: 'white',
-          fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '1rem',
+          fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '1rem',
           cursor: 'pointer', opacity: submitting ? 0.6 : 1,
         }} className="btn-primary">
           {submitting ? 'Processing...' : `Give $${parseFloat(amount || '0').toFixed(2)} to ${FUND_LABELS[fund]}`}
@@ -248,7 +250,7 @@ export default function DonatePage() {
 
         <blockquote style={{
           borderLeft: '3px solid var(--nhlb-blush)', paddingLeft: 16, margin: '32px 0 0',
-          fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic',
+          fontFamily: 'Playfair Display, serif', fontStyle: 'italic',
           fontSize: '1.05rem', color: 'var(--nhlb-muted)', lineHeight: 1.6,
         }}>
           &ldquo;Each of you should give what you have decided in your heart to give, not reluctantly or under compulsion, for God loves a cheerful giver.&rdquo;
@@ -259,7 +261,7 @@ export default function DonatePage() {
       </main>
 
       <footer style={{ backgroundColor: 'var(--nhlb-blush)', padding: '24px 48px', color: 'white' }}>
-        <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', margin: 0 }}>
+        <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', margin: 0 }}>
           No Heart Left Behind &copy; {new Date().getFullYear()} &ensp;&middot;&ensp; 985-264-8808
         </p>
       </footer>

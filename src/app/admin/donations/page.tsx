@@ -61,7 +61,7 @@ export default function AdminDonationsPage() {
           <a href={exportUrl()} style={{
             padding: '8px 18px', borderRadius: 8,
             backgroundColor: 'var(--nhlb-red)', color: 'white',
-            fontFamily: 'Lato, sans-serif', fontWeight: 700, fontSize: '0.8rem',
+            fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.8rem',
             textDecoration: 'none',
           }}>
             Export CSV for Taxes
@@ -74,10 +74,10 @@ export default function AdminDonationsPage() {
             background: 'white', border: '1px solid var(--nhlb-border)',
             borderRadius: 12, padding: '20px', textAlign: 'center',
           }}>
-            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.8rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0 }}>
+            <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.8rem', fontWeight: 600, color: 'var(--nhlb-red-dark)', margin: 0 }}>
               ${(summary.total_cents / 100).toFixed(2)}
             </p>
-            <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '4px 0 0' }}>
+            <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '4px 0 0' }}>
               TOTAL ({summary.count} donations)
             </p>
           </div>
@@ -88,10 +88,10 @@ export default function AdminDonationsPage() {
                 background: 'white', border: '1px solid var(--nhlb-border)',
                 borderRadius: 12, padding: '20px', textAlign: 'center',
               }}>
-                <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.6rem', fontWeight: 600, color: FUND_COLORS[f].text, margin: 0 }}>
+                <p style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.6rem', fontWeight: 600, color: FUND_COLORS[f].text, margin: 0 }}>
                   ${((data?.total_cents ?? 0) / 100).toFixed(2)}
                 </p>
-                <p style={{ fontFamily: 'Lato, sans-serif', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '4px 0 0' }}>
+                <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', margin: '4px 0 0' }}>
                   {FUND_LABELS[f].toUpperCase()} ({data?.count ?? 0})
                 </p>
               </div>
@@ -107,7 +107,7 @@ export default function AdminDonationsPage() {
         }}>
           <div>
             <label style={{
-              display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.7rem',
+              display: 'block', fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem',
               fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', marginBottom: 4,
             }}>FUND</label>
             <div style={{ display: 'flex', gap: 4 }}>
@@ -118,7 +118,7 @@ export default function AdminDonationsPage() {
                     borderColor: fundFilter === f ? 'var(--nhlb-red)' : 'var(--nhlb-border)',
                     backgroundColor: fundFilter === f ? 'var(--nhlb-red)' : 'white',
                     color: fundFilter === f ? 'white' : 'var(--nhlb-muted)',
-                    fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                    fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700,
                     cursor: 'pointer',
                   }}>
                   {f === 'ALL' ? 'All' : FUND_LABELS[f]}
@@ -128,25 +128,25 @@ export default function AdminDonationsPage() {
           </div>
           <div>
             <label style={{
-              display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.7rem',
+              display: 'block', fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem',
               fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', marginBottom: 4,
             }}>FROM</label>
             <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)}
               style={{
                 border: '1px solid var(--nhlb-border)', borderRadius: 8,
-                padding: '6px 10px', fontSize: '0.8rem', fontFamily: 'Lato, sans-serif',
+                padding: '6px 10px', fontSize: '0.8rem', fontFamily: 'Raleway, sans-serif',
                 color: 'var(--nhlb-text)',
               }} />
           </div>
           <div>
             <label style={{
-              display: 'block', fontFamily: 'Lato, sans-serif', fontSize: '0.7rem',
+              display: 'block', fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem',
               fontWeight: 700, letterSpacing: '0.06em', color: 'var(--nhlb-muted)', marginBottom: 4,
             }}>TO</label>
             <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)}
               style={{
                 border: '1px solid var(--nhlb-border)', borderRadius: 8,
-                padding: '6px 10px', fontSize: '0.8rem', fontFamily: 'Lato, sans-serif',
+                padding: '6px 10px', fontSize: '0.8rem', fontFamily: 'Raleway, sans-serif',
                 color: 'var(--nhlb-text)',
               }} />
           </div>
@@ -156,7 +156,7 @@ export default function AdminDonationsPage() {
                 style={{
                   padding: '6px 10px', borderRadius: 6, border: '1px solid var(--nhlb-border)',
                   backgroundColor: 'white', color: 'var(--nhlb-muted)',
-                  fontFamily: 'Lato, sans-serif', fontSize: '0.65rem', fontWeight: 700,
+                  fontFamily: 'Raleway, sans-serif', fontSize: '0.65rem', fontWeight: 700,
                   cursor: 'pointer',
                 }}>
                 {r.label}
@@ -167,9 +167,9 @@ export default function AdminDonationsPage() {
 
         {/* Donation list */}
         {loading ? (
-          <p style={{ textAlign: 'center', padding: '40px 0', fontFamily: 'Lato, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
+          <p style={{ textAlign: 'center', padding: '40px 0', fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
         ) : donations.length === 0 ? (
-          <p style={{ textAlign: 'center', padding: '40px 0', fontFamily: 'Cormorant Garamond, serif', fontSize: '1.2rem', color: 'var(--nhlb-muted)' }}>
+          <p style={{ textAlign: 'center', padding: '40px 0', fontFamily: 'Playfair Display, serif', fontSize: '1.2rem', color: 'var(--nhlb-muted)' }}>
             No donations found for this period
           </p>
         ) : (
@@ -183,7 +183,7 @@ export default function AdminDonationsPage() {
                   {['Date', 'Donor', 'Amount', 'Fund', 'Status'].map(h => (
                     <th key={h} style={{
                       padding: '10px 16px', textAlign: 'left',
-                      fontFamily: 'Lato, sans-serif', fontSize: '0.7rem', fontWeight: 700,
+                      fontFamily: 'Raleway, sans-serif', fontSize: '0.7rem', fontWeight: 700,
                       letterSpacing: '0.06em', color: 'var(--nhlb-muted)',
                     }}>{h}</th>
                   ))}
@@ -194,13 +194,13 @@ export default function AdminDonationsPage() {
                   const fundKey = (d.fund ?? 'GENERAL') as Fund
                   return (
                     <tr key={d.id} style={{ borderTop: i > 0 ? '1px solid var(--nhlb-border)' : 'none' }}>
-                      <td style={{ padding: '12px 16px', fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)' }}>
+                      <td style={{ padding: '12px 16px', fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)' }}>
                         {format(new Date(d.created_at), 'MMM d, yyyy')}
                       </td>
-                      <td style={{ padding: '12px 16px', fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)' }}>
+                      <td style={{ padding: '12px 16px', fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', color: 'var(--nhlb-text)' }}>
                         {d.is_anonymous ? <em style={{ color: 'var(--nhlb-muted)' }}>Anonymous</em> : d.donor_name || d.donor_email || '—'}
                       </td>
-                      <td style={{ padding: '12px 16px', fontFamily: 'Lato, sans-serif', fontSize: '0.85rem', fontWeight: 700, color: 'var(--nhlb-text)' }}>
+                      <td style={{ padding: '12px 16px', fontFamily: 'Raleway, sans-serif', fontSize: '0.85rem', fontWeight: 700, color: 'var(--nhlb-text)' }}>
                         ${(d.amount_cents / 100).toFixed(2)}
                       </td>
                       <td style={{ padding: '12px 16px' }}>
@@ -209,12 +209,12 @@ export default function AdminDonationsPage() {
                           backgroundColor: FUND_COLORS[fundKey].bg,
                           color: FUND_COLORS[fundKey].text,
                           padding: '2px 10px', borderRadius: 20, fontSize: '0.7rem', fontWeight: 700,
-                          fontFamily: 'Lato, sans-serif',
+                          fontFamily: 'Raleway, sans-serif',
                         }}>
                           {FUND_LABELS[fundKey]}
                         </span>
                       </td>
-                      <td style={{ padding: '12px 16px', fontFamily: 'Lato, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)' }}>
+                      <td style={{ padding: '12px 16px', fontFamily: 'Raleway, sans-serif', fontSize: '0.8rem', color: 'var(--nhlb-muted)' }}>
                         {d.stripe_status === 'succeeded' ? '✓ Paid' : d.stripe_status === 'dev_mode' ? 'Dev' : d.stripe_status ?? '—'}
                       </td>
                     </tr>
