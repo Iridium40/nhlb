@@ -206,7 +206,7 @@ export default function CounselorProfilePage() {
                     fontSize: '1rem',
                     letterSpacing: '0.03em',
                     padding: '14px 40px',
-                    borderRadius: 8,
+                    borderRadius: 9999,
                     textDecoration: 'none',
                     boxShadow: '0 4px 12px rgba(139, 69, 90, 0.3)',
                     transition: 'transform 0.2s, box-shadow 0.2s',

@@ -202,7 +202,7 @@ export default function BookLanding() {
                     display: 'block', width: '100%', padding: '20px 24px',
                     backgroundColor: 'var(--nhlb-red)', color: 'white',
                     fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '1rem',
-                    letterSpacing: '0.04em', borderRadius: 12, border: 'none',
+                    letterSpacing: '0.04em', borderRadius: 9999, border: 'none',
                     cursor: 'pointer',
                   }}>
                     Book a Session
@@ -217,7 +217,7 @@ export default function BookLanding() {
                   backgroundColor: 'white', color: 'var(--nhlb-red-dark)',
                   border: '2px solid var(--nhlb-border)',
                   fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.95rem',
-                  letterSpacing: '0.04em', borderRadius: 12, cursor: 'pointer',
+                  letterSpacing: '0.04em', borderRadius: 9999, cursor: 'pointer',
                 }}>
                   My Sessions
                 </button>
@@ -228,7 +228,7 @@ export default function BookLanding() {
                     backgroundColor: 'white', color: 'var(--nhlb-text)',
                     border: '1px solid var(--nhlb-border)',
                     fontFamily: 'Raleway, sans-serif', fontWeight: 600, fontSize: '0.85rem',
-                    borderRadius: 10, cursor: 'pointer',
+                    borderRadius: 9999, cursor: 'pointer',
                   }}>
                     My Profile
                   </button>
@@ -237,7 +237,7 @@ export default function BookLanding() {
                     backgroundColor: 'white', color: 'var(--nhlb-text)',
                     border: '1px solid var(--nhlb-border)',
                     fontFamily: 'Raleway, sans-serif', fontWeight: 600, fontSize: '0.85rem',
-                    borderRadius: 10, cursor: 'pointer',
+                    borderRadius: 9999, cursor: 'pointer',
                   }}>
                     Payment Methods
                   </button>
@@ -253,7 +253,7 @@ export default function BookLanding() {
                 display: 'block', padding: '20px 24px',
                 backgroundColor: 'var(--nhlb-red)', color: 'white',
                 fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '1rem',
-                letterSpacing: '0.04em', borderRadius: 12, textDecoration: 'none',
+                letterSpacing: '0.04em', borderRadius: 9999, textDecoration: 'none',
               }}>
                 I&apos;m a New Client
                 <span style={{ display: 'block', fontWeight: 400, fontSize: '0.8rem', opacity: 0.85, marginTop: 4 }}>
@@ -266,7 +266,7 @@ export default function BookLanding() {
                 backgroundColor: 'white', color: 'var(--nhlb-red-dark)',
                 border: '2px solid var(--nhlb-border)',
                 fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '1rem',
-                letterSpacing: '0.04em', borderRadius: 12, cursor: 'pointer',
+                letterSpacing: '0.04em', borderRadius: 9999, cursor: 'pointer',
                 textAlign: 'center',
               }}>
                 Returning Client? Sign In
@@ -341,7 +341,7 @@ export default function BookLanding() {
                 </div>
 
                 <button onClick={handleSignIn} disabled={loggingIn} style={{
-                  width: '100%', padding: '14px 24px', borderRadius: 8, border: 'none',
+                  width: '100%', padding: '14px 24px', borderRadius: 9999, border: 'none',
                   backgroundColor: 'var(--nhlb-red)', color: 'white',
                   fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.875rem',
                   cursor: 'pointer', opacity: loggingIn ? 0.6 : 1,

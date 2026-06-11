@@ -86,7 +86,7 @@ label:has(input[type="radio"]:checked) .session-format-option span {
   font-size: 0.875rem;
   letter-spacing: 0.04em;
   padding: 0.875rem 1.5rem;
-  border-radius: 0.5rem;
+  border-radius: 9999px;
   border: none;
   cursor: pointer;
   transition: background-color 0.15s ease, transform 0.1s ease;
