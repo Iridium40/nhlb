@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import SharePanel from '@/components/SharePanel'
 
@@ -19,11 +19,13 @@ interface CounselorProfile {
 
 export default function CounselorProfilePage() {
   const params = useParams()
+  const router = useRouter()
   const slug = params?.slug as string
 
   const [counselor, setCounselor] = useState<CounselorProfile | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [showBookingModal, setShowBookingModal] = useState(false)
 
   useEffect(() => {
     if (!slug) return
@@ -195,8 +197,8 @@ export default function CounselorProfilePage() {
 
               {/* Appointment Button */}
               <div style={{ textAlign: 'center', marginBottom: 32 }}>
-                <Link
-                  href={`/book/new?counselorId=${counselor.id}`}
+                <button
+                  onClick={() => setShowBookingModal(true)}
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -209,7 +211,8 @@ export default function CounselorProfilePage() {
                     letterSpacing: '0.03em',
                     padding: '14px 32px',
                     borderRadius: 9999,
-                    textDecoration: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
                     boxShadow: '0 4px 12px rgba(139, 69, 90, 0.3)',
                     transition: 'transform 0.2s, box-shadow 0.2s',
                   }}
@@ -222,8 +225,133 @@ export default function CounselorProfilePage() {
                     <line x1="3" y1="10" x2="21" y2="10" />
                     <path d="M9 16l2 2 4-4" />
                   </svg>
-                </Link>
+                </button>
               </div>
+
+              {/* Booking Choice Modal */}
+              {showBookingModal && (
+                <div
+                  onClick={() => setShowBookingModal(false)}
+                  style={{
+                    position: 'fixed',
+                    inset: 0,
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 1000,
+                    padding: 20,
+                  }}
+                >
+                  <div
+                    onClick={e => e.stopPropagation()}
+                    style={{
+                      backgroundColor: 'white',
+                      borderRadius: 16,
+                      width: '100%',
+                      maxWidth: 400,
+                      overflow: 'hidden',
+                      boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
+                    }}
+                  >
+                    {/* Modal Header */}
+                    <div style={{
+                      backgroundColor: 'var(--nhlb-red-dark)',
+                      padding: '20px 24px',
+                      textAlign: 'center',
+                    }}>
+                      <h3 style={{
+                        fontFamily: 'Playfair Display, serif',
+                        fontSize: '1.25rem',
+                        fontWeight: 600,
+                        color: 'white',
+                        margin: 0,
+                      }}>
+                        Schedule with {counselor.name.split(' ')[0]}
+                      </h3>
+                    </div>
+
+                    {/* Modal Body */}
+                    <div style={{ padding: 24 }}>
+                      <p style={{
+                        fontFamily: 'Raleway, sans-serif',
+                        fontSize: '0.95rem',
+                        color: 'var(--nhlb-muted)',
+                        textAlign: 'center',
+                        margin: '0 0 24px',
+                      }}>
+                        Have you visited us before?
+                      </p>
+
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                        <button
+                          onClick={() => router.push(`/book/new?counselorId=${counselor.id}`)}
+                          style={{
+                            display: 'block',
+                            width: '100%',
+                            padding: '16px 20px',
+                            backgroundColor: 'var(--nhlb-red)',
+                            color: 'white',
+                            fontFamily: 'Raleway, sans-serif',
+                            fontWeight: 700,
+                            fontSize: '0.95rem',
+                            border: 'none',
+                            borderRadius: 9999,
+                            cursor: 'pointer',
+                            textAlign: 'center',
+                          }}
+                        >
+                          I&apos;m a New Client
+                          <span style={{ display: 'block', fontWeight: 400, fontSize: '0.8rem', opacity: 0.85, marginTop: 4 }}>
+                            First visit with No Heart Left Behind
+                          </span>
+                        </button>
+
+                        <button
+                          onClick={() => router.push(`/book/returning?counselorId=${counselor.id}`)}
+                          style={{
+                            display: 'block',
+                            width: '100%',
+                            padding: '16px 20px',
+                            backgroundColor: 'var(--nhlb-cream)',
+                            color: 'var(--nhlb-red-dark)',
+                            fontFamily: 'Raleway, sans-serif',
+                            fontWeight: 700,
+                            fontSize: '0.95rem',
+                            border: '2px solid var(--nhlb-border)',
+                            borderRadius: 9999,
+                            cursor: 'pointer',
+                            textAlign: 'center',
+                          }}
+                        >
+                          I&apos;m a Returning Client
+                          <span style={{ display: 'block', fontWeight: 400, fontSize: '0.8rem', color: 'var(--nhlb-muted)', marginTop: 4 }}>
+                            I already have an account
+                          </span>
+                        </button>
+                      </div>
+
+                      <button
+                        onClick={() => setShowBookingModal(false)}
+                        style={{
+                          display: 'block',
+                          width: '100%',
+                          marginTop: 16,
+                          padding: '12px',
+                          background: 'none',
+                          border: 'none',
+                          fontFamily: 'Raleway, sans-serif',
+                          fontSize: '0.85rem',
+                          color: 'var(--nhlb-muted)',
+                          cursor: 'pointer',
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Share Button */}
               <div style={{ textAlign: 'center' }}>

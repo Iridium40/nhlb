@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback, Suspense } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { format } from 'date-fns'
 import { loadStripe } from '@stripe/stripe-js'
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
@@ -46,6 +46,9 @@ export default function ReturningClientPage() {
 
 function ReturningClientInner() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const preselectedCounselorId = searchParams.get('counselorId')
+
   const [step, setStep] = useState<Step>('loading')
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
@@ -112,12 +115,13 @@ function ReturningClientInner() {
 
   const loadSlots = useCallback(async () => {
     setLoadingSlots(true)
-    const counselorParam = assignedCounselor ? `&counselorId=${assignedCounselor.id}` : ''
+    const counselorId = preselectedCounselorId || assignedCounselor?.id
+    const counselorParam = counselorId ? `&counselorId=${counselorId}` : ''
     const res = await fetch(`/api/booking/availability?newClient=false${counselorParam}`)
     const json = await res.json()
     setSlots(json.slots ?? [])
     setLoadingSlots(false)
-  }, [assignedCounselor])
+  }, [assignedCounselor, preselectedCounselorId])
 
   useEffect(() => {
     if (step === 'schedule') loadSlots()
