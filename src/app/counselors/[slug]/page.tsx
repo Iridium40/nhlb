@@ -201,8 +201,8 @@ export default function CounselorProfilePage() {
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: 8,
-                    backgroundColor: 'var(--nhlb-cream)',
-                    color: 'var(--nhlb-red-dark)',
+                    backgroundColor: 'var(--nhlb-red-dark)',
+                    color: 'white',
                     fontFamily: 'Raleway, sans-serif',
                     fontWeight: 700,
                     fontSize: '1rem',
@@ -210,7 +210,7 @@ export default function CounselorProfilePage() {
                     padding: '14px 32px',
                     borderRadius: 9999,
                     textDecoration: 'none',
-                    boxShadow: '0 4px 12px rgba(139, 69, 90, 0.15)',
+                    boxShadow: '0 4px 12px rgba(139, 69, 90, 0.3)',
                     transition: 'transform 0.2s, box-shadow 0.2s',
                   }}
                 >
@@ -302,13 +302,27 @@ function Header() {
         </a>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
           <Link href="/book" style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 6,
+            backgroundColor: 'var(--nhlb-cream)',
+            color: 'var(--nhlb-red-dark)',
             fontFamily: 'Raleway, sans-serif',
             fontSize: '0.85rem',
-            color: 'var(--nhlb-text)',
+            fontWeight: 700,
+            letterSpacing: '0.04em',
+            padding: '10px 24px',
+            borderRadius: 9999,
             textDecoration: 'none',
-            fontWeight: 600,
           }}>
-            Book a Session
+            Schedule Appointment
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+              <path d="M9 16l2 2 4-4" />
+            </svg>
           </Link>
           <a
             href="https://www.noheartleftbehind.com/donate"
