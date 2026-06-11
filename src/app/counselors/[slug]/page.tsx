@@ -216,13 +216,15 @@ export default function CounselorProfilePage() {
                 </Link>
               </div>
 
-              {/* Share Panel */}
-              <SharePanel
-                url={profileUrl}
-                title={`Book a session with ${counselor.name} at No Heart Left Behind`}
-                description={counselor.bio || `Schedule a counseling session with ${counselor.name}.`}
-                label="Share this profile"
-              />
+              {/* Share Button */}
+              <div style={{ textAlign: 'center' }}>
+                <SharePanel
+                  url={profileUrl}
+                  title={`Book a session with ${counselor.name} at No Heart Left Behind`}
+                  description={counselor.bio || `Schedule a counseling session with ${counselor.name}.`}
+                  profileName={counselor.name}
+                />
+              </div>
             </div>
           </div>
 
