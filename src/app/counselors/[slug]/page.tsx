@@ -173,30 +173,6 @@ export default function CounselorProfilePage() {
                 </p>
               )}
 
-              {counselor.specialties && counselor.specialties.length > 0 && (
-                <div style={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  gap: 8,
-                  justifyContent: 'center',
-                  marginBottom: 24,
-                }}>
-                  {counselor.specialties.map((specialty, i) => (
-                    <span key={i} style={{
-                      backgroundColor: 'var(--nhlb-blush-light)',
-                      color: 'var(--nhlb-red-dark)',
-                      fontFamily: 'Raleway, sans-serif',
-                      fontSize: '0.75rem',
-                      fontWeight: 600,
-                      padding: '6px 12px',
-                      borderRadius: 20,
-                    }}>
-                      {specialty}
-                    </span>
-                  ))}
-                </div>
-              )}
-
               {counselor.bio && (
                 <div style={{
                   backgroundColor: 'var(--nhlb-cream)',
