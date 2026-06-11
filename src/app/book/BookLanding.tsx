@@ -1,15 +1,31 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, Suspense } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createSupabaseBrowserClient } from '@/lib/supabase-browser'
 import type { Client } from '@/types'
 
 type View = 'loading' | 'guest' | 'signin' | 'loggedIn'
 
 export default function BookLanding() {
+  return (
+    <Suspense fallback={
+      <div style={{ minHeight: '100vh', backgroundColor: 'var(--nhlb-cream)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p style={{ fontFamily: 'Raleway, sans-serif', color: 'var(--nhlb-muted)' }}>Loading...</p>
+      </div>
+    }>
+      <BookLandingInner />
+    </Suspense>
+  )
+}
+
+function BookLandingInner() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const counselorIdParam = searchParams.get('counselorId')
+  const signinParam = searchParams.get('signin')
+
   const [view, setView] = useState<View>('loading')
   const [client, setClient] = useState<Client | null>(null)
   const [hasActiveBooking, setHasActiveBooking] = useState(false)
@@ -27,14 +43,20 @@ export default function BookLanding() {
       if (json.client) {
         setClient(json.client)
         setHasActiveBooking(json.hasActiveBooking ?? false)
+        // If we have a counselorId param, redirect to returning booking
+        if (counselorIdParam) {
+          router.replace(`/book/returning?counselorId=${counselorIdParam}`)
+          return
+        }
         setView('loggedIn')
       } else {
-        setView('guest')
+        // Auto-show signin form if signin param is set
+        setView(signinParam === 'true' ? 'signin' : 'guest')
       }
     } catch {
-      setView('guest')
+      setView(signinParam === 'true' ? 'signin' : 'guest')
     }
-  }, [])
+  }, [counselorIdParam, signinParam, router])
 
   useEffect(() => { checkSession() }, [checkSession])
 
@@ -64,8 +86,15 @@ export default function BookLanding() {
 
     setClient(json.client)
     setHasActiveBooking(json.hasActiveBooking ?? false)
-    setView('loggedIn')
     setLoggingIn(false)
+
+    // If we have a counselorId param, redirect to returning booking
+    if (counselorIdParam) {
+      router.replace(`/book/returning?counselorId=${counselorIdParam}`)
+      return
+    }
+
+    setView('loggedIn')
   }
 
   const handleSignOut = async () => {

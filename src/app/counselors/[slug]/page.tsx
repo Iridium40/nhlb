@@ -308,7 +308,7 @@ export default function CounselorProfilePage() {
                         </button>
 
                         <button
-                          onClick={() => router.push(`/book/returning?counselorId=${counselor.id}`)}
+                          onClick={() => router.push(`/book?signin=true&counselorId=${counselor.id}`)}
                           style={{
                             display: 'block',
                             width: '100%',
@@ -326,7 +326,7 @@ export default function CounselorProfilePage() {
                         >
                           I&apos;m a Returning Client
                           <span style={{ display: 'block', fontWeight: 400, fontSize: '0.8rem', color: 'var(--nhlb-muted)', marginTop: 4 }}>
-                            I already have an account
+                            Sign in to book
                           </span>
                         </button>
                       </div>
