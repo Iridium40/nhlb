@@ -193,26 +193,35 @@ export default function CounselorProfilePage() {
                 </div>
               )}
 
-              {/* Book Button */}
+              {/* Appointment Button */}
               <div style={{ textAlign: 'center', marginBottom: 32 }}>
                 <Link
                   href={`/book/new?counselorId=${counselor.id}`}
                   style={{
-                    display: 'inline-block',
-                    backgroundColor: 'var(--nhlb-red)',
-                    color: 'white',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    backgroundColor: 'var(--nhlb-cream)',
+                    color: 'var(--nhlb-red-dark)',
                     fontFamily: 'Raleway, sans-serif',
                     fontWeight: 700,
                     fontSize: '1rem',
                     letterSpacing: '0.03em',
-                    padding: '14px 40px',
+                    padding: '14px 32px',
                     borderRadius: 9999,
                     textDecoration: 'none',
-                    boxShadow: '0 4px 12px rgba(139, 69, 90, 0.3)',
+                    boxShadow: '0 4px 12px rgba(139, 69, 90, 0.15)',
                     transition: 'transform 0.2s, box-shadow 0.2s',
                   }}
                 >
-                  Book a Session with {counselor.name.split(' ')[0]}
+                  Schedule an Appointment with {counselor.name.split(' ')[0]}
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                    <path d="M9 16l2 2 4-4" />
+                  </svg>
                 </Link>
               </div>
 
