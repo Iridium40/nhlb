@@ -564,12 +564,16 @@ function PageHeader() {
         </div>
         <nav style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
           <Link href="/donate" style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
             backgroundColor: 'var(--nhlb-red)', color: 'white',
-            fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.8rem',
-            letterSpacing: '0.06em', padding: '8px 20px', borderRadius: 4,
+            fontFamily: 'Raleway, sans-serif', fontWeight: 700, fontSize: '0.85rem',
+            letterSpacing: '0.04em', padding: '10px 24px', borderRadius: 9999,
             textDecoration: 'none',
           }}>
             Donate
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+            </svg>
           </Link>
         </nav>
       </header>
